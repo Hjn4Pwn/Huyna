@@ -211,7 +211,7 @@ int main(int argc, char **argv){
 </code></pre>
 <p>rốt cuộc là gì?</p>
 <p>Debug:</p>
-<pre><code class="language-shell">0x08048959 &lt;+128&gt;:	push   eax
+<pre><code class="language-python">0x08048959 &lt;+128&gt;:	push   eax
    0x0804895a &lt;+129&gt;:	call   0x80502f0 &lt;puts&gt;
    0x0804895f &lt;+134&gt;:	add    esp,0x10
    0x08048962 &lt;+137&gt;:	lea    eax,[ebp-0xa0]
@@ -267,7 +267,7 @@ int main(int argc, char **argv){
 b'0068732f6e69622f'
 </code></pre>
 <p>Với kiến trúc 32-bit:</p>
-<pre><code class="language-asm">xor eax,eax
+<pre><code class="language-python">xor eax,eax
 add eax,0x0b
 xor ecx,ecx
 xor edx,edx
