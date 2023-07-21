@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item affix "><a href="../../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item expanded "><a href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html" class="active">orw - basic shell code</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item affix "><li class="part-title">Docker</li></ol>
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item expanded "><a href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html" class="active">orw - basic shell code</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item affix "><li class="part-title">Docker</li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -173,6 +173,61 @@
 <p>Here is some code sample:</p>
 <pre><code class="language-js">console.log('Hello, World!');
 </code></pre>
+<pre><code class="language-console">    Arch:     i386-32-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX disabled
+    PIE:      No PIE (0x8048000)
+    RWX:      Has RWX segments
+</code></pre>
+<pre><code class="language-java">pwndbg&gt; disass main
+Dump of assembler code for function main:
+   0x080488d9 &lt;+0&gt;:	lea    ecx,[esp+0x4]
+   0x080488dd &lt;+4&gt;:	and    esp,0xfffffff0
+   0x080488e0 &lt;+7&gt;:	push   DWORD PTR [ecx-0x4]
+   0x080488e3 &lt;+10&gt;:	push   ebp
+   0x080488e4 &lt;+11&gt;:	mov    ebp,esp
+   0x080488e6 &lt;+13&gt;:	push   ebx
+   0x080488e7 &lt;+14&gt;:	push   ecx
+   0x080488e8 &lt;+15&gt;:	sub    esp,0xa0
+   0x080488ee &lt;+21&gt;:	call   0x8048780 &lt;__x86.get_pc_thunk.bx&gt;
+   0x080488f3 &lt;+26&gt;:	add    ebx,0x9170d
+   0x080488f9 &lt;+32&gt;:	mov    eax,0x80da498
+   0x080488ff &lt;+38&gt;:	mov    eax,DWORD PTR [eax]
+   0x08048901 &lt;+40&gt;:	push   0x0
+   0x08048903 &lt;+42&gt;:	push   0x2
+   0x08048905 &lt;+44&gt;:	push   0x0
+   0x08048907 &lt;+46&gt;:	push   eax
+   0x08048908 &lt;+47&gt;:	call   0x8050490 &lt;setvbuf&gt;
+   0x0804890d &lt;+52&gt;:	add    esp,0x10
+   0x08048910 &lt;+55&gt;:	call   0x806c600 &lt;getegid&gt;
+   0x08048915 &lt;+60&gt;:	mov    DWORD PTR [ebp-0xc],eax
+   0x08048918 &lt;+63&gt;:	sub    esp,0x4
+</code></pre>
+<pre><code class="language-ruby">pwndbg&gt; disass main
+Dump of assembler code for function main:
+   0x080488d9 &lt;+0&gt;:	lea    ecx,[esp+0x4]
+   0x080488dd &lt;+4&gt;:	and    esp,0xfffffff0
+   0x080488e0 &lt;+7&gt;:	push   DWORD PTR [ecx-0x4]
+   0x080488e3 &lt;+10&gt;:	push   ebp
+   0x080488e4 &lt;+11&gt;:	mov    ebp,esp
+   0x080488e6 &lt;+13&gt;:	push   ebx
+   0x080488e7 &lt;+14&gt;:	push   ecx
+   0x080488e8 &lt;+15&gt;:	sub    esp,0xa0
+   0x080488ee &lt;+21&gt;:	call   0x8048780 &lt;__x86.get_pc_thunk.bx&gt;
+   0x080488f3 &lt;+26&gt;:	add    ebx,0x9170d
+   0x080488f9 &lt;+32&gt;:	mov    eax,0x80da498
+   0x080488ff &lt;+38&gt;:	mov    eax,DWORD PTR [eax]
+   0x08048901 &lt;+40&gt;:	push   0x0
+   0x08048903 &lt;+42&gt;:	push   0x2
+   0x08048905 &lt;+44&gt;:	push   0x0
+   0x08048907 &lt;+46&gt;:	push   eax
+   0x08048908 &lt;+47&gt;:	call   0x8050490 &lt;setvbuf&gt;
+   0x0804890d &lt;+52&gt;:	add    esp,0x10
+   0x08048910 &lt;+55&gt;:	call   0x806c600 &lt;getegid&gt;
+   0x08048915 &lt;+60&gt;:	mov    DWORD PTR [ebp-0xc],eax
+   0x08048918 &lt;+63&gt;:	sub    esp,0x4
+</code></pre>
 <p>Here is an emebeded youtube video:</p>
 <div class="youtubeVideoWrapper">
   <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; + autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -186,6 +241,9 @@
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next" href="../../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -197,6 +255,9 @@
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next" href="../../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
