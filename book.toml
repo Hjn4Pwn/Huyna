@@ -1,0 +1,22 @@
+[book]
+authors = ["Hjn4"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Hjn4 Blog"
+
+[output.html]
+additional-css = ["theme/css/additional.css",]
+additional-js = []
+default-theme = "dark"
+preferred-dark-theme = "ayu"
+no-section-label = true
+site-url = "/"
+cname = "blog.cosmoplankton.studio"
+
+[output.html.print]
+enable = false
+
+[output.html.fold]
+enable = true
+level = 0
