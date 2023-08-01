@@ -388,6 +388,9 @@ Breakpoint 2 at 0x400770
 <p>Cơ mà cần nơi để return về. Nói là ret2libc thì cần leak được địa chỉ trong binary để tính ra libc base.</p>
 <p>Do đó ta lợi dùng hàm <strong>puts</strong></p>
 <p>đưa vào đó puts_got để puts in ra địa chỉ thật trên binary <em>chỗ này mình cũng chưa hiểu tại sao :(( chắc như là 1+1=2</em></p>
+<blockquote>
+<h4 id="ta-có-thể-sử-dụng-got_other_funcs-như-là-setresgid-chẳng-hạn"><a class="header" href="#ta-có-thể-sử-dụng-got_other_funcs-như-là-setresgid-chẳng-hạn">Ta có thể sử dụng got_other_funcs, như là <strong>setresgid</strong> chẳng hạn</a></h4>
+</blockquote>
 <p>Do đó ta cần gadget <strong>pop rdi ; ret</strong> và <strong>ret</strong></p>
 <pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/Here_libc$ ROPgadget --binary vuln | grep &quot;pop rdi ; ret&quot;
 0x0000000000400913 : pop rdi ; ret
