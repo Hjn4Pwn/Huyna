@@ -1,0 +1,491 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>calc - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../../favicon.svg">
+        <link rel="shortcut icon" href="../../../favicon.png">
+        <link rel="stylesheet" href="../../../css/variables.css">
+        <link rel="stylesheet" href="../../../css/general.css">
+        <link rel="stylesheet" href="../../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../../highlight.css">
+        <link rel="stylesheet" href="../../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - challenge 1</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/split_challenge.html">split - challenge 2</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - challenge 3</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - challenge 4</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - challenge 5</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item expanded "><a href="../../../blogs/PWN/Pwnable_tw/calc_challenge.html" class="active">calc</a></li><li class="chapter-item affix "><li class="part-title">Pico</li><li class="chapter-item "><a href="../../../blogs/PWN/Pico/herelibc_challenge.html">Here's a libc </a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item affix "><li class="part-title">Docker</li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="calc"><a class="header" href="#calc">calc</a></h1>
+<p>Đây là 1 bài khá là nặng về RE, và mình thì RE cực gà, nên mình sẽ làm chi tiết bài này, như tlinh xào con beat thì mình giã gạo chall này :))</p>
+<pre><code class="language-c">unsigned int calc()
+{
+  int v1[101]; // [esp+18h] [ebp-5A0h] BYREF
+  char s[1024]; // [esp+1ACh] [ebp-40Ch] BYREF
+  unsigned int v3; // [esp+5ACh] [ebp-Ch]
+
+  v3 = __readgsdword(20u);
+  while ( 1 )
+  {
+    bzero(s, 1024u);
+    if ( !get_expr((int)s, 1024) )
+      break;
+    init_pool(v1);
+    if ( parse_expr((int)s, v1) )
+    {
+      printf(&quot;%d\n&quot;, v1[v1[0]]);
+      fflush(stdout);
+    }
+  }
+  return __readgsdword(20u) ^ v3;
+}
+</code></pre>
+<p>Đầu tiên hàm bzero(s,1024) =&gt; tạo ra 1024 byte \x00 từ pointer s.</p>
+<p>Sau đấy gọi <em>get_expr</em> để nhận input</p>
+<pre><code class="language-c">int __cdecl get_expr(int s, int max_len_1024)
+{
+  int v2; // eax
+  char v4; // [esp+1Bh] [ebp-Dh] BYREF
+  int v5; // [esp+1Ch] [ebp-Ch]
+
+  v5 = 0;
+  while ( v5 &lt; max_len_1024 &amp;&amp; read(0, &amp;v4, 1) != -1 &amp;&amp; v4 != 10 )
+  {
+    if ( v4 == '+' || v4 == '-' || v4 == '*' || v4 == '/' || v4 == '%' || v4 &gt; '/' &amp;&amp; v4 &lt;= '9' )
+    {
+      v2 = v5++;
+      *(_BYTE *)(s + v2) = v4;
+    }
+  }
+  *(_BYTE *)(v5 + s) = 0;
+  return v5;
+}
+</code></pre>
+<p>Nhận vào từng byte 1 với <strong>read(0, &amp;v4, 1)</strong> lưu vào v4, nếu không thuộc <em>+-*/%0123456789</em> thì <strong>v5 = 0</strong> =&gt; return v5 = return 0, ra ngoài hàm main check !0 = 1 =&gt; thì tức là nhập khác các kí tự trên thì tèo.</p>
+<p>Nhận từng kí tự và gán vào chuỗi s từ vị trí số 0, và sau cùng thêm null vào cuối chuỗi. Ví dụ nếu là nhập 1+2 thì s trông như này <strong>&quot;1+2\x00&quot;</strong></p>
+<pre><code class="language-c">_DWORD *__cdecl init_pool(_DWORD *a1)
+{
+  _DWORD *result; // eax
+  int i; // [esp+Ch] [ebp-4h]
+
+  result = a1;
+  *a1 = 0;
+  for ( i = 0; i &lt;= 99; ++i )
+  {
+    result = a1;
+    a1[i + 1] = 0;
+  }
+  return result;
+}
+</code></pre>
+<p>Tiếp đến là hàm init_pool, hàm này thì khởi tạo mảng v1[101] với toàn bộ đều set = 0</p>
+<p>Tiếp đến có lẽ là hàm chính của chall này <strong>parse_expr((int)s, v1)</strong></p>
+<p>Ta sẽ phân tích từng đoạn code nhỏ </p>
+<pre><code class="language-c">if ( (unsigned int)(*(char *)(i + input_per_row) - 48) &gt; 9 )
+</code></pre>
+<p>Ở đây chính là kí tự của input - 48 &gt; 9, mà ta đã filter trước đó thì chỉ có <em>+-*/%0123456789</em> là pass đến đây, tuy nhiên thì với <strong>unsigned int</strong> và các số 0 -&gt; 9 thì hiển nhiên trừ 48 không thể lớn hơn 9 được, cùng lắm là bằng 9 thoi (57-48 = 9). Mà nên nhớ ở đây dùng unsigned, nếu lấy 47 - 48 = -1 rồi ép kiểu unsigned thì =&gt; chỉ có các phép tính là pass qua vòng if này. Oke vậy túm lại là ở vòng if này chỉ có các phép toán là vào đây thoi.</p>
+<pre><code class="language-c"> v7 = i + input_per_row - v4;
+      s1 = (char *)malloc(v7 + 1);
+      memcpy(s1, v4, v7);
+      s1[v7] = 0;
+      if ( !strcmp(s1, &quot;0&quot;) )
+      {
+        puts(&quot;prevent division by zero&quot;);
+        fflush(stdout);
+        return 0;
+      }
+</code></pre>
+<p>s1 = (char *)malloc(v7 + 1);: Cấp phát bộ nhớ động cho con trỏ s1 có kích thước v7 + 1 byte.</p>
+<p>memcpy(s1, v4, v7);: Sao chép v7 byte từ vùng bộ nhớ được chỉ định bởi pointer v4 vào vùng bộ nhớ được chỉ định bởi pointer s1.</p>
+<p>s1[v7] = 0;: Đặt giá trị null-terminated (ký tự null '\0') vào vị trí thứ v7 của s1, biến s1 thành một chuỗi</p>
+<p>giả dụ 1+2 thì i lúc này là 1 =&gt; v7 = 1 =&gt; s1 = 1+, s1[v7] = s1[1] = 0. Lúc này s = 1, tuy nhiên ở đây nếu s = 0 thì return để tránh việc divide by 0</p>
+<p>sau đấy thì convert s1 từ string to int gán vào biến <strong>num</strong></p>
+<pre><code class="language-c">num = atoi(s1);
+if ( num &gt; 0 )
+{
+v3 = (*v1)++;
+v1[v3 + 1] = num;
+}
+</code></pre>
+<p>Cụ thể thì ở đây v1 ban đầu ở point 0, xong gán cho v3, rồi mới ++1. Sau đấy v3+1 tức là gán biến num vào v1[1..] ở vị trí từ 1 trở đi, còn vị trí thứ 0 thì k bàn đến ở đây. Ví dụ 1+2 =&gt; v1[0] = 0, v1[1] = 1</p>
+<pre><code class="language-c">if ( *(_BYTE *)(i + input_per_row) &amp;&amp; (unsigned int)(*(char *)(i + 1 + input_per_row) - 48) &gt; 9 )
+{
+puts(&quot;expression error!&quot;);
+fflush(stdout);
+return 0;
+}
+
+</code></pre>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwnable_tw/calc$ ./calc
+=== Welcome to SECPROG calculator ===
+--
+expression error!
+++
+expression error!
+**
+expression error!
+/*
+expression error!
+</code></pre>
+<p>Nó kiểu như này, hiện tại đã là 1 phép tính mà thg kế bên lại phép tính nữa thì <del>error</del></p>
+<pre><code class="language-c">v4 = i + 1 + input_per_row;
+      if ( s[v6] )
+      {
+        switch ( *(_BYTE *)(i + input_per_row) )
+        {
+          case '%':
+          case '*':
+          case '/':
+            if ( s[v6] != '+' &amp;&amp; s[v6] != '-' )
+              goto LABEL_14;
+            s[++v6] = *(_BYTE *)(i + input_per_row);
+            break;
+          case '+':
+          case '-':
+LABEL_14:
+            eval(v1, s[v6]);
+            s[v6] = *(_BYTE *)(i + input_per_row);
+            break;
+          default:
+            eval(v1, s[v6--]);
+            break;
+        }
+      }
+      else
+      {
+        s[v6] = *(_BYTE *)(i + input_per_row);
+      }
+      if ( !*(_BYTE *)(i + input_per_row) )
+        break;
+</code></pre>
+<p>Như trên thì ta thấy thằng s được set toàn bằng 0 ở trên </p>
+<pre><code class="language-c">char s[100]; // [esp+38h] [ebp-70h] BYREF
+  unsigned int v11; // [esp+9Ch] [ebp-Ch]
+
+  v11 = __readgsdword(0x14u);
+  v4 = input_per_row;
+  v6 = 0;
+  bzero(s, 100u);
+</code></pre>
+<p>Do đó lúc này ta sẽ nhảy xuống thg <strong>else</strong> thì s[v6] sẽ được cập nhật chính là phép tính lúc này.</p>
+<p>Vậy ta giả dụ s[v6] đã tồn tại và vào vòng if xem sao.</p>
+<p>ta xem với case của phép tính hiện tại là '%', '*', '/': thì check xem là phép tính trước đó đã được lưu vào tại s[v6] có phải &quot;++, &quot;-&quot; không, nếu không thì nhảy đến label_14, nếu phải thì cập nhật s[v6+1] = phép tính hiện tại. Ví dụ 1+2*3 thì s[0] = &quot;+&quot; ;  s[1] = &quot;*&quot;</p>
+<p>Ta cùng đi xem label_14 có gì, label_14 này cũng thuộc các case &quot;+&quot; , &quot;-&quot;, do đó nếu phép tính hiện tại là + hoặc - thì cũng vào đây</p>
+<pre><code class="language-c">eval(v1, s[v6]);
+s[v6] = *(_BYTE *)(i + input_per_row);
+break;
+</code></pre>
+<p>ta thấy ở đây có gọi đến hàm <strong>eval</strong> sau đấy thì cập nhật s[v6] = phép tính hiện tại.</p>
+<p>Cùng đi vào hàm <strong>eval</strong> xem có gì hot:</p>
+<pre><code class="language-c">_DWORD *__cdecl eval(_DWORD *v1, char s_v6)
+{
+  _DWORD *result; // eax
+
+  if ( s_v6 == '+' )
+  {
+    v1[*v1 - 1] += v1[*v1];
+  }
+  else if ( s_v6 &gt; '+' )
+  {
+    if ( s_v6 == '-' )
+    {
+      v1[*v1 - 1] -= v1[*v1];
+    }
+    else if ( s_v6 == '/' )
+    {
+      v1[*v1 - 1] /= (int)v1[*v1];
+    }
+  }
+  else if ( s_v6 == '*' )
+  {
+    v1[*v1 - 1] *= v1[*v1];
+  }
+  result = v1;
+  --*v1;
+  return result;
+}
+</code></pre>
+<p>Đây có vẻ đơn giản chỉ là thực hiện phép tính thoi.  và kết quả được lưu vào vị trí v1[*v1-1]</p>
+<p>giả dụ 1+2=&gt; v1[1] =1 , v1[2]=1 =&gt; result =&gt; v1[1] = 3</p>
+<p>kết quả cuối cùng sẽ được lưu ở v1[v1[0]]
+Tuy nhiên khi check thì ta nhận thấy logic này bị sai:</p>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwnable_tw/calc$ ./calc
+=== Welcome to SECPROG calculator ===
+1+3*5/15-1
+1
+3*9+6+7%3
+40
+No time to waste!
+
+hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwnable_tw/calc$ python3
+Python 3.10.6 (main, May 29 2023, 11:10:38) [GCC 11.3.0] on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt; 3*9+6+7%3
+34
+
+</code></pre>
+<p>Oke giờ đây ta đã hiểu flow của chương trình, tuy nhiên ta cần check vài thứ:</p>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwnable_tw/calc$ ./calc
+=== Welcome to SECPROG calculator ===
++100
+0
++10
+0
++30
+0
++500
+0
++1000
+1999514170
+
+</code></pre>
+<p>Do đó ở đây ta sẽ check thử xem flow của chương trình nếu ta nhập <em><strong>+1000</strong></em> thì như nào</p>
+<p>Khi nhập như thế vào thì sẽ pass đoạn if đầu tiên với 
+i = 0, v7 = 0, s1 được khởi tạo mảng động kích thước 1 byte</p>
+<p>memcpy thì s1 sẽ chứa &quot;+&quot; và s[0] = &quot;+&quot;</p>
+<p>sau đấy duyệt đến '1' và '0' thì thoát khỏi vòng for nhảy vào while ở dưới cùng </p>
+<pre><code class="language-c">  while ( v6 &gt;= 0 )
+    eval(v1, s[v6--]);
+</code></pre>
+<p>Do là còn + chưa thực hiện. Lúc này vào eval thực hiện phép cộng thì hiện tại.v1[0]=1 (do v1[0] làm nhiệm vụ đếm tham số), v1[1] = 10, v1[0] = v1[0] + v1[10] = 11. Lúc thực thi eval trc khi return thì giảm v1[0] đi 1 nhầm biển hiện đã thực thi xong phép tính và giảm biến đếm tham số
+nên v[0] = 11 - 1</p>
+<p>và nên nhớ 1 điều <em><strong>kết quả cuối cùng sẽ được lưu ở v1[v1[0]]</strong></em>
+lúc này v1[0] = 10, lúc mà nó in ra kết quả thì nó in hẳn ra v1[10] như trên ta thấy v1[1000] đã bị leak ra như kia.</p>
+<p>Thế thì giờ có thể hình dung ta có thể leak địa chỉ với <em><strong>+ num</strong></em></p>
+<p>Và ở đây một lần nữa ta có:</p>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwnable_tw/calc$ ./calc
+=== Welcome to SECPROG calculator ===
++1000
+0
++500
+0
++300
+0
++400
+-389396
++400+1
+-389395
++400
+-389395
+</code></pre>
+<p>Này dường như ta vừa thay đổi giá trị tại địa chỉ thì phải. cùng check flow chương trình xem như nào.</p>
+<p>như này đã nhập +10 vào thì v[0]=10
+giờ ta sẽ thử +10+1, thì lúc đến 10 rồi ta vẫn còn duyệt tiếp chứ không nhảy đến while, duyệt gặp dấu +, lúc vào switch case, thì nhảy vào label_14 và thực hiện với phép tính s[v6] đã lưu trước đó </p>
+<p>eval v1[hiện tại] = 10, v1[trước đó] = 1 =&gt; v1[i-1] = 11 chính là v1[0]=11, for sure sau đấy giảm v1[0] đi 1 đơn vị =&gt; v1[0] = 10</p>
+<pre><code class="language-c">v1[*v1 - 1] += v1[*v1];
+</code></pre>
+<pre><code class="language-c">  --*v1;
+  return result;
+</code></pre>
+<p>Rồi chương trình duyệt tiếp và đi vào hàm eval để tính phép tính tiếp theo, v1[0] lúc này lên <strong>11</strong> do là có tham số mới, v1[giá trị v1[0] -1 ] += v1[1]
+nên khi đó là v1[11-1] += v1[11]</p>
+<p>v1[11] ở đây chính là = 1, do:</p>
+<pre><code class="language-c">if ( num &gt; 0 )
+{
+v3 = (*v1)++;
+v1[v3 + 1] = num;
+}
+</code></pre>
+<p>nên là lúc này nghiễm nhiên v1[10] được tăng thêm 1 đơn vị
+và lúc print ra thì in cái v1[v1[0]] thì in cái giá trị v1[10 ra] tức là in cái  giá trị ta đã thay đổi rồi ra.</p>
+<p>úi dồi ôi </p>
+<p>Còn phần exploit, tui đi gym về rồi viết tiếp </p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../../blogs/PWN/Pico/herelibc_challenge.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../../blogs/PWN/Pico/herelibc_challenge.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../../elasticlunr.min.js"></script>
+        <script src="../../../mark.min.js"></script>
+        <script src="../../../searcher.js"></script>
+
+        <script src="../../../clipboard.min.js"></script>
+        <script src="../../../highlight.js"></script>
+        <script src="../../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
