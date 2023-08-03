@@ -544,6 +544,7 @@ Continuing.
 <tr><td>v1[0]</td></tr>
 </tbody></table>
 </div>
+<p>ebp main func   <strong>&lt;- ebp calc func &lt;- v1[360]</strong></p>
 <p><strong>0x5A0 = 1440 = 360*4, với mảng kiểu int kiến trúc x86 =&gt; mỗi stack ứng với 4bytes =&gt; offset = 360</strong></p>
 <p>Đây chính là lý do mà v[360] =&gt; giá trị ebp main = prev_ebp</p>
 <p>Return address ngay trên prev_ebp =&gt; offset là 361, do đó từ offset 361 trở đi ta sẽ tiến hành ghi các gadgets.</p>
