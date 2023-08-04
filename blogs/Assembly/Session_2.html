@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Session 1 - Hjn4 Blog</title>
+        <title>Session 2 - Hjn4 Blog</title>
 
 
         <!-- Custom HTML head -->
@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - challenge 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - challenge 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - challenge 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - challenge 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - challenge 5</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item affix "><li class="part-title">Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pico/herelibc_challenge.html">Here's a libc </a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item expanded "><a href="../../blogs/Assembly/Session_1.html" class="active">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item affix "><li class="part-title">Docker</li></ol>
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - challenge 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - challenge 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - challenge 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - challenge 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - challenge 5</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item affix "><li class="part-title">Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pico/herelibc_challenge.html">Here's a libc </a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item expanded "><a href="../../blogs/Assembly/Session_2.html" class="active">Session 2</a></li><li class="chapter-item affix "><li class="part-title">Docker</li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -163,137 +163,124 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="session-1"><a class="header" href="#session-1">Session 1</a></h1>
-<p>Sau khi trải qua 1 kì test Binary thì mình nhận ra khả năng pwn của mình còn khá kém (maybe do mình chỉ mới bắt đầu). Hơn thế nữa là khả năng <strong>RE</strong>, đọc Assembly của mình quá kém nên là, mình sẽ bắt đầu viết về những cái mình học được ở chuỗi seri asm này.</p>
-<p>Oke now, let's go</p>
-<ol>
-<li>
-<p>segment data:</p>
-<ol>
-<li>section .data</li>
-<li>section .bss</li>
-</ol>
-</li>
-<li>
-<p>segment Code:</p>
-<ol>
-<li>section .text</li>
-</ol>
-</li>
-<li>
-<p>segment stack</p>
-</li>
-</ol>
-<h3 id="section-data"><a class="header" href="#section-data">section .data</a></h3>
-<p>Ở đây ta sẽ khai báo hằng và khai báo biến, các biến này được khởi tạo ngay khi khai báo <strong>(initialized variables)</strong></p>
-<blockquote>
-<h4 id="khai-báo--tên-biến--kiểu-dữ-liệu--giá-trị-khởi-tạo"><a class="header" href="#khai-báo--tên-biến--kiểu-dữ-liệu--giá-trị-khởi-tạo">Khai báo : Tên biến + kiểu dữ liệu + <em><strong>giá trị khởi tạo</strong></em></a></h4>
-</blockquote>
-<div class="table-wrapper"><table><thead><tr><th>type</th><th>num_bit variable</th></tr></thead><tbody>
-<tr><td>db</td><td>8-bit variable</td></tr>
-<tr><td>dw</td><td>16-bit variable</td></tr>
-<tr><td>dd</td><td>32-bit variable</td></tr>
-<tr><td>dq</td><td>64-bit variable</td></tr>
-<tr><td>ddq</td><td>128-bit variable (int)</td></tr>
-<tr><td>dt</td><td>128-bit variable (float)</td></tr>
-</tbody></table>
-</div>
-<p><strong>EX:</strong> a db 9</p>
+                        <h1 id="session-2"><a class="header" href="#session-2">Session 2</a></h1>
+<h3 id="data-movement"><a class="header" href="#data-movement">Data movement</a></h3>
 <ul>
 <li>
-<p>Times prefix</p>
-<p>start times 9 db '*'  <em>Tức là khai báo start có 9 vùng nhớ có 9 dấu *</em></p>
+<p>dword = double word = 32 bits</p>
+</li>
+<li>
+<p>qword = 64 bits</p>
+</li>
+<li>
+<p>mov dword [dValue], 27 : như là convert 27 sang giá trị 32bits</p>
+</li>
+<li>
+<p>không thể mov 2 ô nhớ, do đó cần thanh ghi trung gian:</p>
+<p>;bAns = bNum
+mov al, byte [bNum]
+mov [bAns], al</p>
 </li>
 </ul>
-<h3 id="section-bss"><a class="header" href="#section-bss">section .bss</a></h3>
-<p>Còn đây thì sẽ khai báo các biến chưa khởi tạo <strong>(uninitialized variables)</strong>. Tuy nhiên thì cứ nghiễm nhiên khởi tạo nó = 0 thì việc không có section .bss trong program là bình thường </p>
-<blockquote>
-<h4 id="tên-biến--kiểu-dữ-liệu--số-phần-tử"><a class="header" href="#tên-biến--kiểu-dữ-liệu--số-phần-tử">tên biến + kiểu dữ liệu + <em><strong>Số phần tử</strong></em></a></h4>
-</blockquote>
-<div class="table-wrapper"><table><thead><tr><th>type</th><th>num_bit variable</th></tr></thead><tbody>
-<tr><td>resb</td><td>8-bit variable</td></tr>
-<tr><td>resw</td><td>16-bit variable</td></tr>
-<tr><td>resd</td><td>32-bit variable</td></tr>
-<tr><td>resq</td><td>64-bit variable</td></tr>
-<tr><td>resdq</td><td>128-bit variable</td></tr>
+<h3 id="signed-extension"><a class="header" href="#signed-extension">Signed extension</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>instruction</th><th>Explanation</th></tr></thead><tbody>
+<tr><td>cbw</td><td>convert byte in <strong>al</strong> into word in <strong>ax</strong></td></tr>
+<tr><td>cwd</td><td>convert word in <strong>ax</strong> into dword in <strong>dx:ax</strong></td></tr>
+<tr><td>cwde</td><td>convert word in <strong>ax</strong> into dword in <strong>eax</strong></td></tr>
+<tr><td>cdq</td><td>convert dword in <strong>eax</strong> into qword in <strong>edx:eax</strong></td></tr>
+<tr><td>cdqe</td><td>convert dword in <strong>eax</strong> into qword in <strong>rax</strong></td></tr>
+<tr><td>cqo</td><td>convert dword in <strong>rax</strong> into qword in <strong>rdx:rax</strong></td></tr>
 </tbody></table>
 </div>
-<p><strong>EX:</strong> bArr resb 10</p>
-<h3 id="section-text"><a class="header" href="#section-text">section .text</a></h3>
-<p>Đây là section chứa code, tuy nhiên cần khai báo vị trí bắt đầu của chương trình, kiểu như trong C thì có hàm main, thì ở đây ta cần khai báo:</p>
-<pre><code class="language-shell">section .text
-    global _start   ; &lt;-- program entry
-
-_start:   ; &lt;-- label
-
-
-_exit:   ; &lt;-- label
-
-    mov eax, 1
-    int 0x80    ; &lt;-- systemcall
-                ; is comment
-</code></pre>
+<p>Lý mà có cwd rồi còn cwde trong khi nó tương tự nhau đều convert sang 32 bits, tuy nhiên nhu cầu xử lý 32bits đã có từ lâu lúc đấy chưa có thanh ghi eax, nên mới dùng cwd giá trị 32bits sẽ được chứa trong cặp dx:ax, tuy nhiên giờ cứ <strong>cwde</strong> mà quất</p>
+<p>Còn đây là các lệnh mở rộng hơn mà các vi xử lý sau này mới có:</p>
+<ul>
+<li>movsx <em><strong>reg16</strong></em> , <em><strong>op8</strong></em></li>
+<li>movsx <em><strong>reg32</strong></em> , <em><strong>op8</strong></em></li>
+<li>movsx <em><strong>reg32</strong></em> , <em><strong>op16</strong></em></li>
+<li>movsx <em><strong>reg64</strong></em> , <em><strong>op8</strong></em></li>
+<li>movsx <em><strong>reg64</strong></em> , <em><strong>op16</strong></em></li>
+<li>movsxd <em><strong>reg64</strong></em> , <em><strong>op32</strong></em></li>
+</ul>
+<p><em><strong>op</strong></em> là thanh ghi hay ô nhớ đều được</p>
+<h3 id="interger-arithmetic-instruction"><a class="header" href="#interger-arithmetic-instruction">Interger Arithmetic Instruction</a></h3>
 <ul>
 <li>
-<p>Ở đây thì khi ta viết số bình thường : <strong>10,15,190</strong> được hiểu là <em><strong>dec</strong></em>. Nếu muốn biểu diễn dạng <em><strong>hex</strong></em> thì cần <strong>0x10, 0x190</strong></p>
+<p>add <em><strong>dest</strong></em>, <em><strong>src</strong></em> : 2 toán hạng phải cùng kiểu</p>
 </li>
 <li>
-<p>Khai báo hằng: </p>
-<p>Format:  <em><strong>name</strong></em> equ <em><strong>value</strong></em> </p>
-<p>Ex: SIZE equ 1000</p>
+<p>inc <em><strong>operand</strong></em> : operand += 1</p>
+</li>
+<li>
+<p>sub <em><strong>dest</strong></em>, <em><strong>src</strong></em> : dest = dest - src , cả 2 phải cùng kiểu </p>
+</li>
+<li>
+<p>dec <em><strong>operand</strong></em> : operand -= 1</p>
 </li>
 </ul>
-<p>Về cơ bản thì khi khai báo hằng (thường viết in hoa), thì lúc compile thì những cái là tên hằng sẽ được thay bằng giá trị mà ta khai báo. Hằng thì không chiếm ô nhớ trong chương trình (?) </p>
-<h3 id="example"><a class="header" href="#example">Example</a></h3>
-<pre><code class="language-shell">section .data
-
-SYS_EXIT equ 1
-
-a db 17
-b db 9
-c db 0
-d dw 4096
-
-hello db &quot;HuyNa Hi&quot;, 10
-len equ $ - hello
-
-section .text
-    global _start
-
-_start:
-    mov al, [a]
-    add al, [b]
-    mov [c], al
-
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, hello
-    mov edx, len
-    int 0x80
-
-_exit:
-    mov eax,SYS_EXIT
-    int 0x80
-
-</code></pre>
-<p>Command for run:</p>
+<p>Nhân chia sẽ khá rắc rối, bởi kết quả nhân có thể vượt quá giới hạn ban đầu mỗi toán hạng</p>
+<p><em><strong>Phép nhân số không dấu</strong></em></p>
 <ul>
-<li><em><strong>nasm -f elf hello.asm</strong></em></li>
-<li><em><strong>ld -m elf_i386 -s -o hello hello.o</strong></em></li>
-<li><em><strong>./hello</strong></em></li>
+<li>mul <em><strong>src</strong></em></li>
+</ul>
+<p>Một toán hạng là source, vậy toán hạng còn lại mặc nhiên nằm trong thanh ghi A (al/ax/eax/rax)</p>
+<ul>
+<li>
+<p>case 1: al  * src (op8)  = ah al   &lt;=&gt; ax      = al*op8</p>
+</li>
+<li>
+<p>case 2: ax  * src (op16) = dx ax   &lt;=&gt; dx:ax   = ax*op16</p>
+</li>
+<li>
+<p>case 3: eax * src (op32) = edx eax &lt;=&gt; edx:eax = eax*op32</p>
+</li>
+<li>
+<p>case 4: rax * src (op64) = rdx rax &lt;=&gt; rdx:rax = rax*op64</p>
+</li>
+</ul>
+<p>Tùy theo toán hạng trong src mà lệnh <em>mul</em> sẽ nhân với giá trị lưu trữ tương ứng. Nếu như src là toán hạng 16 bits thì thg mul src nó sẽ đem src nhân với thanh ghi <em><strong>ax</strong></em></p>
+<p><em><strong>Phép nhân số có dấu</strong></em></p>
+<ul>
+<li>imul src ; tương đương với thg không dấu ở trên</li>
+<li>imul dest, src/imm32</li>
+<li>imul dest, src, imm32 ; dest = src * imm</li>
+</ul>
+<p>Trường hợp thứ 2 3 thì toán hạng phải nhỏ vì 16bits * 16bits được lưu vào 16 bits do đó nên là nếu nó lớn thì cờ tràn bật lên =&gt; kết quả sai</p>
+<p><em><strong>Phép chia</strong></em></p>
+<div class="table-wrapper"><table><thead><tr><th>instruction</th><th>Explanation</th></tr></thead><tbody>
+<tr><td>div op8(src)</td><td>byte: al(kết quả) = ax/src, số dư lưu vào ah</td></tr>
+<tr><td>div op16(src)</td><td>word: ax(kết quả) = dx:ax/src, số dư lưu vào dx</td></tr>
+<tr><td>div op32(src)</td><td>double: eax(kết quả) = edx:eax/src, số dư lưu vào edx</td></tr>
+<tr><td>div op64(src)</td><td>quad: rax(kết quả) = rdx:rax/src, số dư lưu vào rdx</td></tr>
+</tbody></table>
+</div>
+<p>idiv : với số có dấu cũng tương tự, túm gọn lại là giả dụ <strong>div số 8bit</strong> thì nghiễm nhiên lấy cái giá trị 16 bit tức là dx:ax đem chi cho src(8bits) lúc này cần lưu ý phải xor sạch dx (=0)trong trường hợp số bị chia không phải 16bits.</p>
+<p>Còn với việc số bị chia là số âm, thì thay vì để dx = 0 thì ta nên mở rộng số có dấu với các lệnh kiểu như <strong>cbw</strong> thì kết quả chia mới đúng được</p>
+<h3 id="logical-operations"><a class="header" href="#logical-operations">Logical operations</a></h3>
+<ul>
+<li>
+<p>and <em><strong>dest</strong></em>, <em><strong>src</strong></em>
+x&amp;1 = x ; x&amp;0 = 0 ; có thể &amp;0 để xóa bit đó đi</p>
+</li>
+<li>
+<p>or <em><strong>dest</strong></em>, <em><strong>src</strong></em>
+x|1 = 1 ; x|0 = x ; có thể dùng |1 để bật bit lên</p>
+</li>
+<li>
+<p>xor <em><strong>dest</strong></em>, <em><strong>src</strong></em>
+0^1 = 1 ; 1^1 = 0 ; có thể dùng lật bit, dùng mã hóa, vì a^b = c; thì c^b = a. </p>
+<p>Thêm nữa ta có thể khởi tạo giá trị cho thanh ghi bằng 0, xor ecx, ecx</p>
+</li>
 </ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../blogs/Assembly/Session_1.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../../blogs/Assembly/Session_2.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -301,13 +288,10 @@ _exit:
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../blogs/Assembly/Session_1.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../../blogs/Assembly/Session_2.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
             </nav>
 
         </div>
