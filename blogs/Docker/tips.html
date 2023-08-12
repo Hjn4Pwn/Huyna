@@ -164,6 +164,52 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="some-tips-for-ctf"><a class="header" href="#some-tips-for-ctf">Some tips for ctf</a></h1>
+<h3 id="một-số-lệnh-docker-thường"><a class="header" href="#một-số-lệnh-docker-thường">Một số lệnh docker thường</a></h3>
+<h4 id="Đối-với-wsl-để-chạy-được-lệnh-docker-cần-chạy-nền-docker-daemon-với-lệnh-sau-sudo-dockerd---iptablesfalse"><a class="header" href="#Đối-với-wsl-để-chạy-được-lệnh-docker-cần-chạy-nền-docker-daemon-với-lệnh-sau-sudo-dockerd---iptablesfalse">Đối với wsl, để chạy được lệnh docker cần chạy nền docker daemon với lệnh sau: <em><strong>sudo dockerd --iptables=false &amp;</strong></em></a></h4>
+<h4 id="build-và-run"><a class="header" href="#build-và-run">Build và run:</a></h4>
+<ul>
+<li>
+<p><strong>sudo docker build . -t &quot;tag-name&quot;</strong></p>
+</li>
+<li>
+<p><strong>sudo docker run --rm -p &quot;host-port&quot;:&quot;docker-port&quot; -it &quot;tag-name&quot;</strong></p>
+</li>
+<li>
+<p>*<strong>sudo docker run --rm -p &quot;host-port&quot;:&quot;docker-port&quot; --privileged -it &quot;tag-name&quot;</strong>#### // với red.pwn</p>
+</li>
+<li>
+<p><strong>sudo docker-compose up --build</strong></p>
+</li>
+</ul>
+<h4 id="liệt-kê-các-container-đang-chạy"><a class="header" href="#liệt-kê-các-container-đang-chạy">Liệt kê các container đang chạy:</a></h4>
+<ul>
+<li><strong>sudo docker ps</strong></li>
+</ul>
+<h4 id="thực-thi-lệnh-linux-trong-docker"><a class="header" href="#thực-thi-lệnh-linux-trong-docker">Thực thi lệnh linux trong docker:</a></h4>
+<ul>
+<li>
+<p><strong>sudo docker exec -it &quot;containter-id&quot; &quot;commands&quot;</strong></p>
+</li>
+<li>
+<p><strong>sudo docker-compose exec &quot;service-name&quot; &quot;commands&quot;</strong></p>
+</li>
+</ul>
+<h4 id="lấy-file-từ-docker-ra-host"><a class="header" href="#lấy-file-từ-docker-ra-host">Lấy file từ docker ra host:</a></h4>
+<ul>
+<li><strong>sudo docker cp &quot;container-id&quot;:&quot;path-to-file-in-docker&quot; &quot;path-to-file-in-host&quot;</strong> // ở môi trường ngoài docker</li>
+</ul>
+<h3 id="sau-khi-có-được-libc-thì-sẽ-tiến-hành-như-sau"><a class="header" href="#sau-khi-có-được-libc-thì-sẽ-tiến-hành-như-sau">Sau khi có được libc thì sẽ tiến hành như sau:</a></h3>
+<pre><code class="language-shell">pwninit --bin chall
+patchelf --set-interpreter ld-2.31.so chall
+patchelf --set-rpath . chall
+
+</code></pre>
+<h3 id="more"><a class="header" href="#more">More</a></h3>
+<ul>
+<li><a href="https://github.com/microsoft/WSL/issues/8516">gdb not able to debug</a></li>
+<li><a href="https://github.com/microsoft/WSL/issues/8450">Failed to start docker on WSL</a></li>
+<li><a href="https://www.youtube.com/watch?v=N4YuCvxeD5Y">video's very good for me</a></li>
+</ul>
 
                     </main>
 
