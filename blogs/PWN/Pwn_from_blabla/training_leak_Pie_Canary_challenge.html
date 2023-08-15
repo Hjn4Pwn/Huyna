@@ -236,7 +236,7 @@ End of assembler dump.
    0x0000555555555292 &lt;+58&gt;:    mov    eax,0x0
 
 </code></pre>
-<p>và 2 lệnh này chỉ khác nhau mỗi 1 byte cuối cùng. Oke vậy ta sẽ có ý tưởng ghi đè byte cuối cùng để ret về. Phải làm thế mà không ghi đè cả addr 8 bytes là do <em><strong>Pie</strong></em> đang được bật pie_base luôn đổi.</p>
+<p>và 2 lệnh này chỉ khác nhau mỗi 1 byte cuối cùng. Oke vậy ta sẽ có ý tưởng ghi đè byte cuối cùng để ret về. Phải làm thế mà không ghi đè cả addr 8 bytes là do <em><strong>Pie</strong></em> đang được bật, pie_base luôn đổi.</p>
 <p>Ở chall NoPie trước đó mình giải thì mình call back main, trước đó thì có gadget ret, để tránh movaps trong kiến trúc 64bits. Tuy nhiên còn 1 cách tránh stack alignment nữa là. Thay vì call thẳng cái địa chỉ của func như call ngay <strong>main, hay các hàm như printf, read, system</strong>, thì ta có thể call <strong>main + x</strong> miễn sao thỏa mãn rsp và rbp đã được update lại:</p>
 <pre><code class="language-shell">   0x0000555555555258 &lt;+0&gt;:     endbr64
    0x000055555555525c &lt;+4&gt;:     push   rbp
@@ -244,11 +244,11 @@ End of assembler dump.
    0x0000555555555260 &lt;+8&gt;:     mov    rax,QWORD PTR [rip+0x2db9]
 
 </code></pre>
-<p>Ví dụ ở đây thay vì call back <strong>main</strong>, ta sẽ call <strong>main + 8</strong> thế là bypass việc phải có gadget ret đằng trước. Mình đã vướn ở đây rất lâu ==&quot;</p>
+<p>Ví dụ ở đây thay vì call back <strong>main</strong>, ta sẽ call <strong>main + 8</strong> thế là bypass việc phải có gadget ret đằng trước. Mình đã vướn ở đây rất lâu ==&quot;, và mình cũng đã update thêm cách này ở chall NoPie</p>
 <p>Lý do mà phải tránh gadget ret đằng trước ở chall này mà chall trước lại k cần lăn tăn như vậy là vì, chall này Pie được bật mà hiện giờ thì vẫn chưa leak được pie_base, nên là các gadget toàn offset thoi ==&quot;. </p>
-<p>À, còn 1 vấn đề nữa là ở payload này, mình phải dùng <strong>send(payload)</strong> thay vì sendline() là vì với sendline sẽ mà gửi đủ byte như ta tính thì cái &quot;\n&quot; sẽ ghi đè mất byte kế tiếp thành <strong>0x0a</strong>.</p>
-<p>Sau khi pass được chỗ này thì mọi thứ trông dễ dàng hơn. giờ thì đến việc ta xem phải leak libc trước hay pie_base trước. Tại vì sau khi ta ghi đè trên stack thì nó vẫn ở đó, có nghĩa là payload ghi đè giá trị trên stack có chủ đích về sau <strong>buộc</strong> phải dài hơn payload trước đấy. </p>
-<p>ở chall NoPie trước ở payload thứ 3 này, mình đã leak addr của setbuffer ở stack thứ 4, tuy nhiên giờ có 1 vấn đề sau khi không call lại main mà call main+53 thì stack vẫn như cũ, tức là các stack bị ghi đè vẫn còn đó, nó đã ghi đè nốt chỗ stack mà ở chall trước mình leak setbuffer, nên giờ mình cần leak addr ở stack cao hơn.</p>
+<p>À, còn 1 vấn đề nữa là ở payload này, mình phải dùng <strong>send(payload)</strong> thay vì sendline() là vì với sendline thì sẽ gửi thêm <strong>&quot;\n&quot;</strong> làm ghi đè mất byte kế cuối thành <strong>0x0a</strong>.</p>
+<p>Sau khi pass được chỗ này thì mọi thứ trông dễ dàng hơn. giờ thì đến việc ta xem phải leak libc trước hay pie_base trước. Tại vì sau khi ta ghi đè trên stack thì nó vẫn ở đó, có nghĩa là payload ghi đè giá trị trên stack có chủ đích về sau <strong>buộc</strong> phải dài hơn payload trước đấy, chứ không thì chẳng thể leak được gì, do đều bị ghi đè cả rồi. </p>
+<p>chall NoPie trước ở payload thứ 3 này, mình đã leak addr của setbuffer ở stack thứ 4, tuy nhiên giờ có 1 vấn đề sau khi không call lại <strong>main</strong> mà call <strong>main+53</strong> thì stack vẫn như cũ, tức là các stack bị ghi đè vẫn còn đó, nó đã ghi đè nốt chỗ stack mà ở chall trước mình leak setbuffer, nên giờ mình cần leak addr ở stack cao hơn.</p>
 <p>Hơn nữa muốn leak pie_base thì cần phải leak được địa chỉ của các hàm như này:</p>
 <pre><code class="language-python">0x0000555555555000  _init
 0x0000555555555070  __cxa_finalize@plt
@@ -306,11 +306,11 @@ End of assembler dump.
 &gt;&gt;&gt; 0x7fff14ebfb58 - 0x7fff14ebfa60
 248
 </code></pre>
-<p>Như đã thấy thì để leak libc cần tới 248 bytes, nếu ghi đè hết 248 bytes trước thì ghi đè nốt mấy cái khác, do đó ta sẽ libc leak sau khi leak và calc pie_base( mình cũng đã update thêm cách solve chall NoPie. Tương tự như chall này).</p>
+<p>Như đã thấy thì để leak libc cần tới <em><strong>248 bytes</strong></em>, nếu ghi đè hết <em><strong>248 bytes</strong></em> trước thì ghi đè nốt mấy cái khác, do đó ta sẽ libc leak sau khi leak và calc pie_base( mình cũng đã update thêm cách solve chall NoPie. Tương tự như chall này).</p>
 <p>Thêm nữa thì stack <strong>0d:0068</strong> khá là đẹp với <strong>main</strong> tuy nhiên để đến đc đó cần tới <em><strong>104 bytes</strong></em>, mà chúng ta cần phải nhớ là payload2 để ret về <strong>main+53</strong> để tạo vòng lặp cho việc exploit thì chỉ có <em><strong>72 bytes</strong></em>. do đó để tránh lỗi thì ta sẽ chọn stack <strong>09:0048</strong>, tức là leak đc <strong>main+58</strong>, chỉ việc trừ <em><strong>58</strong></em> đi là có được main addr</p>
-<p>Sau khi có được main_addr thì ta trừ đi offset sẽ được pie_base, có pie_base thì sẽ tính được addr của các gadget  như <strong>ret, pop rdi</strong> cần thiết cho việc lấy shell.</p>
+<p>Sau khi có được <em>main_addr</em> thì ta trừ đi <em>offset của main func</em> sẽ được pie_base, có pie_base thì sẽ tính được addr của các gadget  như <strong>ret, pop rdi</strong> cần thiết cho việc lấy shell.</p>
 <p>Sau khi đã xong việc leak pie với payload3. Thì <strong>payload4 = payload2</strong> để 1 lần nữa call lại <strong>main+53</strong> tức là gọi <strong>passStore()</strong> </p>
-<p>Tiếp tục leak libc với payload5= 248 bytes</p>
+<p>Tiếp tục leak libc với <em><strong>payload5 = 248 bytes</strong></em></p>
 <p>payload6 sẽ giống chall trước đó, chỉ khác 1 chỗ là, ta cần tính addr của các gadget dựa vào pie_base. rồi lấy shell như trc.</p>
 <h3 id="exploit-code"><a class="header" href="#exploit-code">exploit code</a></h3>
 <pre><code class="language-python">from pwn import *
