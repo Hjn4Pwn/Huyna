@@ -1311,6 +1311,349 @@ r.interactive()
 
 </code></pre>
 <h2 id="chall1"><a class="header" href="#chall1">chall1</a></h2>
+<p><em><strong>chall này mình chưa giải ra</strong></em></p>
+<h3 id="file-5"><a class="header" href="#file-5">file</a></h3>
+<pre><code class="language-shell">▶ checksec chall1
+[*] '/mnt/d/pwn_myself/pwn_from_blabla/training/fmt/chall1/chall1'
+    Arch:     amd64-64-little
+    RELRO:    Full RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      PIE enabled
+
+</code></pre>
+<h3 id="source-3"><a class="header" href="#source-3">source</a></h3>
+<pre><code class="language-c">__int64 __fastcall main(int a1, char **a2, char **a3)
+{
+  char s[136]; // [rsp+0h] [rbp-90h] BYREF
+  unsigned __int64 v5; // [rsp+88h] [rbp-8h]
+
+  v5 = __readfsqword(0x28u);
+  setbuf(stdin, 0LL);
+  setbuf(stdout, 0LL);
+  setbuf(stderr, 0LL);
+  printf(&quot;Enter your name: &quot;);
+  fgets(s, 127, stdin);
+  printf(&quot;Hello &quot;);
+  printf(s);
+  putchar(10);
+  return 0LL;
+}
+
+
+unsigned __int64 __fastcall sub_12C8()
+{
+  __int64 v0; // rbp
+  int v2; // [rsp-134h] [rbp-13Ch]
+  unsigned __int64 i; // [rsp-130h] [rbp-138h]
+  unsigned __int64 j; // [rsp-128h] [rbp-130h]
+  __int64 v5; // [rsp-120h] [rbp-128h]
+  unsigned __int64 v6; // [rsp-10h] [rbp-18h]
+  _QWORD v7[2]; // [rsp-8h] [rbp-10h] BYREF
+
+  v7[0] = v0;
+  v6 = __readfsqword(0x28u);
+  srand(0);
+  v5 = rand() % 32;
+  for ( i = 0LL; i &lt;= 0x1F; ++i )
+    v7[i - 34] = calloc(1uLL, 0x80uLL);
+  for ( j = 0LL; j &lt;= 0x1F; ++j )
+  {
+    if ( j != v5 )
+      memset((void *)v7[j - 34], j + 65, 0x78uLL);
+  }
+  v2 = open(&quot;flag1.txt&quot;, 0);
+  if ( v2 &lt; 0 )
+    exit(-1);
+  if ( read(v2, (void *)v7[v5 - 34], 0x80uLL) &lt; 0 )
+    exit(-2);
+  close(v2);
+  return v6 - __readfsqword(0x28u);
+}
+
+
+</code></pre>
+<p>Chall này tốn mấy ngày của mình vẫn bế tắc.</p>
+<p>Nhớ lại lời dặn của thầy</p>
+<p>Hjn4 : Ai chơi mà chỉnh file :((</p>
+<p>Saye: </p>
+<pre><code>co
+may con suc vat ak'
+:&gt;
+</code></pre>
+<p>Cơ mà câu này thầy nói cho bài log_printer nhưng mình lại dùng cho luôn bài này, thành ra mình cứ nghĩ làm sao ovwrite được flag1.txt =&gt; flag.txt</p>
+<p>Xong cái đà suy nghĩ này đưa mình đi xa vcl :((, nếu đã ovw được rồi thì phải đọc lại nó, mà đã đọc lại thì phải nhập được nhiều lần mới xem được, blabla... xa mấy ngày. Cơ mà sau khi thầy D có check lại stack frame của mình thì có bảo là:</p>
+<p>Saye: </p>
+<pre><code>m cho t xem
+truoc khi call printf
+no trong nhu the nao
+debug state
+....
+a` ok
+neu ma bi vay la may m co van de roi
+qua lam chall2 di
+</code></pre>
+<p>Đây là flow program mà mình debug có được như sau:</p>
+<p>Đầu tiên chương trình sẽ chạy thẳng vào luôn hàm đọc file, đó là lý do mà không có file flag1.txt thì không chạy được, thầy D cũng diss mình 1 ver ngay chỗ nàyyy. </p>
+<p>Nó  random v5 % 32 (0 -&gt; 31) mà với cái seed = 0 nên là chạy bao lần thì các số được rand vẫn không đổi. Chỗ này ban đầu mình ngáo ngơ k để ý đi bf :((. Xong thì cấp phát bộ nhớ, gọi memset để set mỗi thg trong mảng v7 từ <strong>A =&gt; `</strong> , xong chừa lại cái index cho thg flag
+rồi ghi flag lưu vào đấy.
+Lúc này trên stack lúc này vẫn bthg như này :</p>
+<pre><code class="language-shell">pwndbg&gt; stack 100
+00:0000│ rsp 0x7fffffffdcf0 ◂— 0x300000000
+01:0008│     0x7fffffffdcf8 ◂— 0x20 /* ' ' */
+02:0010│     0x7fffffffdd00 ◂— 0x20 /* ' ' */
+03:0018│     0x7fffffffdd08 ◂— 0x7
+04:0020│     0x7fffffffdd10 —▸ 0x5555555592a0 ◂— 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+05:0028│     0x7fffffffdd18 —▸ 0x555555559330 ◂— 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'
+06:0030│     0x7fffffffdd20 —▸ 0x5555555593c0 ◂— 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'
+07:0038│     0x7fffffffdd28 —▸ 0x555555559450 ◂— 'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD'
+08:0040│     0x7fffffffdd30 —▸ 0x5555555594e0 ◂— 'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE'
+09:0048│     0x7fffffffdd38 —▸ 0x555555559570 ◂— 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
+0a:0050│     0x7fffffffdd40 —▸ 0x555555559600 ◂— 'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG'
+0b:0058│     0x7fffffffdd48 —▸ 0x555555559690 ◂— 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+0c:0060│     0x7fffffffdd50 —▸ 0x555555559720 ◂— 'IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII'
+0d:0068│     0x7fffffffdd58 —▸ 0x5555555597b0 ◂— 'JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ'
+0e:0070│     0x7fffffffdd60 —▸ 0x555555559840 ◂— 
+.......................
+.......................
+.......................
+1d:00e8│     0x7fffffffddd8 —▸ 0x55555555a0b0 ◂— 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ'
+1e:00f0│     0x7fffffffdde0 —▸ 0x55555555a140 ◂— '[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['
+1f:00f8│     0x7fffffffdde8 —▸ 0x55555555a1d0 ◂— '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
+20:0100│     0x7fffffffddf0 —▸ 0x55555555a260 ◂— ']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]'
+21:0108│     0x7fffffffddf8 —▸ 0x55555555a2f0 ◂— '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'
+22:0110│     0x7fffffffde00 —▸ 0x55555555a380 ◂— '________________________________________________________________________________________________________________________'
+23:0118│     0x7fffffffde08 —▸ 0x55555555a410 ◂— '````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````'
+24:0120│     0x7fffffffde10 ◂— 0x0
+25:0128│     0x7fffffffde18 ◂— 0x24007a7085aa7000
+26:0130│ rbp 0x7fffffffde20 ◂— 0x1
+27:0138│     0x7fffffffde28 —▸ 0x7ffff7db0ebb (__libc_start_main+251) ◂— mov rcx, r14
+
+</code></pre>
+<p>Chuỗi <strong>aaaaaaaa......aaaaaaaaa</strong> kẹp giữa G, I là nội dung file flag1.txt, ở vị trí mà giá trị random là 7.</p>
+<p>Tiếp theo trc khi gọi main, nó sẽ chạy qua 1 đống câu lệnh, cụ thể hơn tí thì nó đẩy flag tức <strong>aaaa...aaaaaa</strong> và chuỗi <strong>```.....```</strong> lên 2 thanh ghi. Xong rồi trừ rsp xuống, tạo stack frame mới cho hàm main. </p>
+<pre><code class="language-shell">────────────────────────────────────────────────────────────[ DISASM / x86-64 / set emulate on ]────────────────────────────────────────────────────────────
+   0x7ffff7daf6d0 &lt;_dl_audit_preinit@plt&gt;           endbr64
+ ► 0x7ffff7daf6d4 &lt;_dl_audit_preinit@plt+4&gt;         bnd jmp qword ptr [rip + 0x1f0add]   &lt;0x7ffff7daf350&gt;
+    ↓
+   0x7ffff7daf350                                   endbr64
+   0x7ffff7daf354                                   push   0xd
+   0x7ffff7daf359                                   bnd jmp 0x7ffff7daf000               &lt;0x7ffff7daf000&gt;
+    ↓
+   0x7ffff7daf000                                   push   qword ptr [rip + 0x1f1002]    &lt;_GLOBAL_OFFSET_TABLE_+8&gt;
+   0x7ffff7daf006                                   bnd jmp qword ptr [rip + 0x1f1003]   &lt;_dl_runtime_resolve_xsavec&gt;
+    ↓
+   0x7ffff7fd8d30 &lt;_dl_runtime_resolve_xsavec&gt;      endbr64
+   0x7ffff7fd8d34 &lt;_dl_runtime_resolve_xsavec+4&gt;    push   rbx
+   0x7ffff7fd8d35 &lt;_dl_runtime_resolve_xsavec+5&gt;    mov    rbx, rsp
+   0x7ffff7fd8d38 &lt;_dl_runtime_resolve_xsavec+8&gt;    and    rsp, 0xffffffffffffffc0
+─────────────────────────────────────────────────────────────────────────[ STACK ]──────────────────────────────────────────────────────────────────────────
+00:0000│ rsp 0x7fffffffde28 —▸ 0x7ffff7db0e2b (__libc_start_main+107) ◂— test ebx, ebx
+01:0008│     0x7fffffffde30 —▸ 0x7fffffffdea8 —▸ 0x7fffffffe169 ◂— 'SHELL=/bin/bash'
+02:0010│     0x7fffffffde38 —▸ 0x555555557d60 —▸ 0x555555555280 ◂— endbr64
+03:0018│     0x7fffffffde40 —▸ 0x7ffff7ffe2e0 —▸ 0x555555554000 ◂— 0x10102464c457f
+04:0020│     0x7fffffffde48 ◂— 0x0
+05:0028│     0x7fffffffde50 ◂— 0x0
+06:0030│     0x7fffffffde58 —▸ 0x5555555551e0 ◂— endbr64
+07:0038│     0x7fffffffde60 —▸ 0x7fffffffde90 ◂— 0x1
+───────────────────────────────────────────────────────────────────────[ BACKTRACE ]────────────────────────────────────────────────────────────────────────
+ ► 0   0x7ffff7daf6d4 _dl_audit_preinit@plt+4
+   1   0x7ffff7db0e2b __libc_start_main+107
+   2   0x555555555205
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+pwndbg&gt;
+0x00007ffff7daf350 in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+LEGEND: STACK | HEAP | CODE | DATA | RWX | RODATA
+───────────────────────────────────────────────────[ REGISTERS / show-flags off / show-compact-regs off ]───────────────────────────────────────────────────
+ RAX  0x0
+ RBX  0x0
+ RCX  0x555555557d60 —▸ 0x555555555280 ◂— endbr64
+ RDX  0x80
+ RDI  0x7ffff7ffe2e0 —▸ 0x555555554000 ◂— 0x10102464c457f
+ RSI  0x555555559690 ◂— 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+ R8   0x21001
+ R9   0x55555555a410 ◂— '````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````'
+ R10  0x0
+ R11  0x346
+ R12  0x7fffffffde98 —▸ 0x7fffffffe12c ◂— '/mnt/d/pwn_myself/pwn_from_blabla/training/fmt/chall1/chall1'
+ R13  0x55555555542f ◂— endbr64
+ R14  0x555555557d60 —▸ 0x555555555280 ◂— endbr64
+ R15  0x7ffff7ffd040 (_rtld_global) —▸ 0x7ffff7ffe2e0 —▸ 0x555555554000 ◂— 0x10102464c457f
+ RBP  0x1
+ RSP  0x7fffffffde28 —▸ 0x7ffff7db0e2b (__libc_start_main+107) ◂— test ebx, ebx
+*RIP  0x7ffff7daf350 ◂— endbr64
+────────────────────────────────────────────────────────────[ DISASM / x86-64 / set emulate on ]────────────────────────────────────────────────────────────
+
+
+</code></pre>
+<p>Tiếp đến mov thg khác vô thanh ghi đang chứa &quot;flag&quot;.</p>
+<pre><code class="language-shell">pwndbg&gt;
+124     in ../sysdeps/x86_64/dl-trampoline.h
+LEGEND: STACK | HEAP | CODE | DATA | RWX | RODATA
+───────────────────────────────────────────────────[ REGISTERS / show-flags off / show-compact-regs off ]───────────────────────────────────────────────────
+ RAX  0xee
+ RBX  0x7fffffffde10 ◂— 0x0
+ RCX  0x555555557d60 —▸ 0x555555555280 ◂— endbr64
+ RDX  0x0
+ RDI  0x7ffff7ffe2e0 —▸ 0x555555554000 ◂— 0x10102464c457f
+ RSI  0x555555559690 ◂— 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+ R8   0x21001
+ R9   0x55555555a410 ◂— '````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````'
+ R10  0x0
+ R11  0x346
+ R12  0x7fffffffde98 —▸ 0x7fffffffe12c ◂— '/mnt/d/pwn_myself/pwn_from_blabla/training/fmt/chall1/chall1'
+ R13  0x55555555542f ◂— endbr64
+ R14  0x555555557d60 —▸ 0x555555555280 ◂— endbr64
+ R15  0x7ffff7ffd040 (_rtld_global) —▸ 0x7ffff7ffe2e0 —▸ 0x555555554000 ◂— 0x10102464c457f
+ RBP  0x1
+ RSP  0x7fffffffd440 ◂— 0x0
+*RIP  0x7ffff7fd8da1 (_dl_runtime_resolve_xsavec+113) ◂— mov rsi, qword ptr [rbx + 0x10]
+────────────────────────────────────────────────────────────[ DISASM / x86-64 / set emulate on ]────────────────────────────────────────────────────────────
+   0x7ffff7fd8d7c &lt;_dl_runtime_resolve_xsavec+76&gt;     mov    qword ptr [rsp + 0x260], rdx
+   0x7ffff7fd8d84 &lt;_dl_runtime_resolve_xsavec+84&gt;     mov    qword ptr [rsp + 0x268], rdx
+   0x7ffff7fd8d8c &lt;_dl_runtime_resolve_xsavec+92&gt;     mov    qword ptr [rsp + 0x270], rdx
+   0x7ffff7fd8d94 &lt;_dl_runtime_resolve_xsavec+100&gt;    mov    qword ptr [rsp + 0x278], rdx
+   0x7ffff7fd8d9c &lt;_dl_runtime_resolve_xsavec+108&gt;    xsavec ptr [rsp + 0x40]
+ ► 0x7ffff7fd8da1 &lt;_dl_runtime_resolve_xsavec+113&gt;    mov    rsi, qword ptr [rbx + 0x10]
+   0x7ffff7fd8da5 &lt;_dl_runtime_resolve_xsavec+117&gt;    mov    rdi, qword ptr [rbx + 8]
+   0x7ffff7fd8da9 &lt;_dl_runtime_resolve_xsavec+121&gt;    call   _dl_fixup                &lt;_dl_fixup&gt;
+
+   0x7ffff7fd8dae &lt;_dl_runtime_resolve_xsavec+126&gt;    mov    r11, rax
+   0x7ffff7fd8db1 &lt;_dl_runtime_resolve_xsavec+129&gt;    mov    eax, 0xee
+   0x7ffff7fd8db6 &lt;_dl_runtime_resolve_xsavec+134&gt;    xor    edx, edx
+─────────────────────────────────────────────────────────────────────────[ STACK ]──────────────────────────────────────────────────────────────────────────
+190:0c80│  0x7fffffffeaa8 ◂— 'cal/share:/usr/share:/var/lib/snapd/desktop'
+191:0c88│  0x7fffffffeab0 ◂— 'e:/usr/share:/var/lib/snapd/desktop'
+192:0c90│  0x7fffffffeab8 ◂— 'hare:/var/lib/snapd/desktop'
+193:0c98│  0x7fffffffeac0 ◂— 'r/lib/snapd/desktop'
+194:0ca0│  0x7fffffffeac8 ◂— 'apd/desktop'
+195:0ca8│  0x7fffffffead0 ◂— 0x4854415000706f74 /* 'top' */
+196:0cb0│  0x7fffffffead8 ◂— 0x6c2f656d6f682f3d ('=/home/l')
+197:0cb8│  0x7fffffffeae0 ◂— 0x7765726278756e69 ('inuxbrew')
+───────────────────────────────────────────────────────────────────────[ BACKTRACE ]────────────────────────────────────────────────────────────────────────
+ ► 0   0x7ffff7fd8da1 _dl_runtime_resolve_xsavec+113
+   1   0x7ffff7db0e2b __libc_start_main+107
+   2   0x555555555205
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+pwndbg&gt;
+125     in ../sysdeps/x86_64/dl-trampoline.h
+LEGEND: STACK | HEAP | CODE | DATA | RWX | RODATA
+───────────────────────────────────────────────────[ REGISTERS / show-flags off / show-compact-regs off ]───────────────────────────────────────────────────
+ RAX  0xee
+ RBX  0x7fffffffde10 ◂— 0x0
+ RCX  0x555555557d60 —▸ 0x555555555280 ◂— endbr64
+ RDX  0x0
+ RDI  0x7ffff7ffe2e0 —▸ 0x555555554000 ◂— 0x10102464c457f
+*RSI  0xd
+ R8   0x21001
+ R9   0x55555555a410 ◂— '````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````'
+ R10  0x0
+ R11  0x346
+ R12  0x7fffffffde98 —▸ 0x7fffffffe12c ◂— '/mnt/d/pwn_myself/pwn_from_blabla/training/fmt/chall1/chall1'
+ R13  0x55555555542f ◂— endbr64
+ R14  0x555555557d60 —▸ 0x555555555280 ◂— endbr64
+ R15  0x7ffff7ffd040 (_rtld_global) —▸ 0x7ffff7ffe2e0 —▸ 0x555555554000 ◂— 0x10102464c457f
+ RBP  0x1
+ RSP  0x7fffffffd440 ◂— 0x0
+*RIP  0x7ffff7fd8da5 (_dl_runtime_resolve_xsavec+117) ◂— mov rdi, qword ptr [rbx + 8]
+
+</code></pre>
+<p>Gọi  main thì nhập chuỗi bthg, cơ mà thg <strong>`````</strong> vẫn còn nằm trên stack lúc nhập chuỗi tức là ở stack frame của hàm main, có thể leak bằng <strong>%41$s</strong> , nên ban đầu mình mới có ý định bruteforce, hoặc ghi đè giá trị random sao cho flag sẽ được ghi vào ở vị trí thay cho  <strong>```....```</strong>:</p>
+<p>đây là stack trước lúc call printf</p>
+<pre><code class="language-shell">───────────────────────────────────────────────────[ REGISTERS / show-flags off / show-compact-regs off ]───────────────────────────────────────────────────
+*RAX  0x0
+*RBX  0x0
+*RCX  0x7ffff7e9ba37 (write+23) ◂— cmp rax, -0x1000 /* 'H=' */
+ RDX  0x0
+*RDI  0x7fffffffdcf0 ◂— 0xa333231333231 /* '123123\n' */
+*RSI  0x7fffffffbbd0 ◂— 'Hello your name: '
+*R8   0x6
+*R9   0x0
+*R10  0x555555556020 ◂— 0x206f6c6c6548 /* 'Hello ' */
+*R11  0x246
+ R12  0x7fffffffde98 —▸ 0x7fffffffe12c ◂— '/mnt/d/pwn_myself/pwn_from_blabla/training/fmt/chall1/chall1'
+ R13  0x55555555542f ◂— endbr64
+ R14  0x555555557d60 —▸ 0x555555555280 ◂— endbr64
+ R15  0x7ffff7ffd040 (_rtld_global) —▸ 0x7ffff7ffe2e0 —▸ 0x555555554000 ◂— 0x10102464c457f
+*RBP  0x7fffffffdd80 ◂— 0x1
+*RSP  0x7fffffffdcf0 ◂— 0xa333231333231 /* '123123\n' */
+*RIP  0x5555555554db ◂— call 0x555555555140
+────────────────────────────────────────────────────────────[ DISASM / x86-64 / set emulate on ]────────────────────────────────────────────────────────────
+ ► 0x5555555554db    call   printf@plt                &lt;printf@plt&gt;
+        format: 0x7fffffffdcf0 ◂— 0xa333231333231 /* '123123\n' */
+        vararg: 0x7fffffffbbd0 ◂— 'Hello your name: '
+
+   0x5555555554e0    mov    edi, 0xa
+   0x5555555554e5    call   putchar@plt                &lt;putchar@plt&gt;
+
+   0x5555555554ea    mov    eax, 0
+   0x5555555554ef    mov    rdx, qword ptr [rbp - 8]
+   0x5555555554f3    sub    rdx, qword ptr fs:[0x28]
+   0x5555555554fc    je     0x555555555503                &lt;0x555555555503&gt;
+
+   0x5555555554fe    call   __stack_chk_fail@plt                &lt;__stack_chk_fail@plt&gt;
+
+   0x555555555503    leave
+   0x555555555504    ret
+
+   0x555555555505    add    byte ptr [rax], al
+─────────────────────────────────────────────────────────────────────────[ STACK ]──────────────────────────────────────────────────────────────────────────
+1a8:0d40│  0x7fffffffeb68 ◂— 0x632e2f346e6a682f ('/hjn4/.c')
+1a9:0d48│  0x7fffffffeb70 ◂— 0x6e69622f6f677261 ('argo/bin')
+1aa:0d50│  0x7fffffffeb78 ◂— 0x6f6c2f7273752f3a (':/usr/lo')
+1ab:0d58│  0x7fffffffeb80 ◂— 0x6e6962732f6c6163 ('cal/sbin')
+1ac:0d60│  0x7fffffffeb88 ◂— 0x6f6c2f7273752f3a (':/usr/lo')
+1ad:0d68│  0x7fffffffeb90 ◂— 0x3a6e69622f6c6163 ('cal/bin:')
+1ae:0d70│  0x7fffffffeb98 ◂— 0x6962732f7273752f ('/usr/sbi')
+1af:0d78│  0x7fffffffeba0 ◂— 0x622f7273752f3a6e ('n:/usr/b')
+───────────────────────────────────────────────────────────────────────[ BACKTRACE ]────────────────────────────────────────────────────────────────────────
+ ► 0   0x5555555554db
+   1   0x7ffff7db0d90 __libc_start_call_main+128
+   2   0x7ffff7db0e40 __libc_start_main+128
+   3   0x555555555205
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+pwndbg&gt; stack 100
+00:0000│ rdi rsp 0x7fffffffdcf0 ◂— 0xa333231333231 /* '123123\n' */
+01:0008│         0x7fffffffdcf8 ◂— 0x0
+... ↓            15 skipped
+11:0088│         0x7fffffffdd78 ◂— 0x24007a7085aa7000
+12:0090│ rbp     0x7fffffffdd80 ◂— 0x1
+13:0098│         0x7fffffffdd88 —▸ 0x7ffff7db0d90 (__libc_start_call_main+128) ◂— mov edi, eax
+14:00a0│         0x7fffffffdd90 ◂— 0x0
+15:00a8│         0x7fffffffdd98 —▸ 0x55555555542f ◂— endbr64
+16:00b0│         0x7fffffffdda0 ◂— 0x100000000
+17:00b8│         0x7fffffffdda8 —▸ 0x7fffffffde98 —▸ 0x7fffffffe12c ◂— '/mnt/d/pwn_myself/pwn_from_blabla/training/fmt/chall1/chall1'
+18:00c0│         0x7fffffffddb0 ◂— 0x0
+19:00c8│         0x7fffffffddb8 ◂— 0xf94761a3191a9112
+1a:00d0│         0x7fffffffddc0 —▸ 0x7fffffffde98 —▸ 0x7fffffffe12c ◂— '/mnt/d/pwn_myself/pwn_from_blabla/training/fmt/chall1/chall1'
+1b:00d8│         0x7fffffffddc8 —▸ 0x55555555542f ◂— endbr64
+1c:00e0│         0x7fffffffddd0 —▸ 0x555555557d60 —▸ 0x555555555280 ◂— endbr64
+1d:00e8│         0x7fffffffddd8 —▸ 0x7ffff7ffd040 (_rtld_global) —▸ 0x7ffff7ffe2e0 —▸ 0x555555554000 ◂— 0x10102464c457f
+1e:00f0│         0x7fffffffdde0 ◂— 0x6b89e5ca2389112
+1f:00f8│         0x7fffffffdde8 ◂— 0x6b88e1503909112
+20:0100│         0x7fffffffddf0 ◂— 0x0
+... ↓            2 skipped
+23:0118│         0x7fffffffde08 —▸ 0x55555555a410 ◂— '````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````'
+24:0120│         0x7fffffffde10 ◂— 0x0
+25:0128│         0x7fffffffde18 ◂— 0x24007a7085aa7000
+26:0130│         0x7fffffffde20 ◂— 0x0
+27:0138│         0x7fffffffde28 —▸ 0x7ffff7db0e40 (__libc_start_main+128) ◂— mov r15, qword ptr [rip + 0x1ef159]
+28:0140│         0x7fffffffde30 —▸ 0x7fffffffdea8 —▸ 0x7fffffffe169 ◂— 'SHELL=/bin/bash'
+29:0148│         0x7fffffffde38 —▸ 0x555555557d60 —▸ 0x555555555280 ◂— endbr64
+2a:0150│         0x7fffffffde40 —▸ 0x7ffff7ffe2e0 —▸ 0x555555554000 ◂— 0x10102464c457f
+2b:0158│         0x7fffffffde48 ◂— 0x0
+2c:0160│         0x7fffffffde50 ◂— 0x0
+2d:0168│         0x7fffffffde58 —▸ 0x5555555551e0 ◂— endbr64
+2e:0170│         0x7fffffffde60 —▸ 0x7fffffffde90 ◂— 0x1
+2f:0178│         0x7fffffffde68 ◂— 0x0
+30:0180│         0x7fffffffde70 ◂— 0x0
+31:0188│         0x7fffffffde78 —▸ 0x555555555205 ◂— hlt
+32:0190│         0x7fffffffde80 —▸ 0x7fffffffde88 ◂— 0x1c
+33:0198│         0x7fffffffde88 ◂— 0x1c
+34:01a0│         0x7fffffffde90 ◂— 0x1
+
+</code></pre>
+<p>Do là vừa không thể ovw gì với chỉ 1 lần nhập với Pie, và cũng không biết leak gì nên chall này mình khong làm được ==&quot;</p>
 
                     </main>
 
