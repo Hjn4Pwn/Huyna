@@ -1654,6 +1654,216 @@ pwndbg&gt; stack 100
 
 </code></pre>
 <p>Do là vừa không thể ovw gì với chỉ 1 lần nhập với Pie, và cũng không biết leak gì nên chall này mình khong làm được ==&quot;</p>
+<h1 id="chall2"><a class="header" href="#chall2">chall2</a></h1>
+<p><em><strong>chall này mình chưa giải ra</strong></em></p>
+<pre><code class="language-file">▶ checksec chall2
+[*] '/mnt/d/pwn_myself/pwn_from_blabla/training/fmt/chall2/chall2'
+    Arch:     amd64-64-little
+    RELRO:    Full RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      PIE enabled
+    FORTIFY:  Enabled
+
+</code></pre>
+<h2 id="source-4"><a class="header" href="#source-4">source</a></h2>
+<pre><code class="language-c">// positive sp value has been detected, the output may be wrong!
+void __fastcall main(const char *a1, char **a2, char **a3)
+{
+  unsigned __int64 v3; // [rsp+10h] [rbp-10h]
+
+  while ( 1 )
+  {
+    ((void (__fastcall *)(const char *, char **, char **))sub_1396)(a1, a2, a3);
+    v3 = (int)sub_13BA();
+    if ( v3 &lt;= 5 )
+      break;
+    a1 = &quot;???&quot;;
+    puts(&quot;???&quot;);
+  }
+  __asm { jmp     rax }
+}
+
+
+void sub_12E8()
+{
+  int v0; // [rsp-Ch] [rbp-14h]
+
+  v0 = open(&quot;/dev/urandom&quot;, 0);
+  if ( v0 &lt; 0 )
+    exit(-1);
+  unk_40E0 = 'toor';
+  if ( read(v0, &amp;unk_4110, 0x2FuLL) != 47 )
+    exit(-2);
+  setbuf(stdin, 0LL);
+  setbuf(stdout, 0LL);
+  setbuf(stderr, 0LL);
+}
+
+int sub_13BA()
+{
+  __int64 buf[4]; // [rsp+0h] [rbp-20h] BYREF
+
+  buf[3] = __readfsqword(0x28u);
+  buf[0] = 0LL;
+  buf[1] = 0LL;
+  read(0, buf, 0x10uLL);
+  return atoi((const char *)buf);
+}
+
+ssize_t __fastcall sub_14F8(char *a1)
+{
+  char *v2; // [rsp+18h] [rbp-8h]
+
+  __printf_chk(1LL, &quot;Username: &quot;);
+  fgets(a1, 47, stdin);
+  v2 = strchr(a1, 10);
+  if ( v2 )
+    *v2 = 0;
+  __printf_chk(1LL, &quot;Password: &quot;);
+  return read(0, a1 + 48, 0x2FuLL);
+}
+
+
+int sub_1592()
+{
+  unsigned __int64 i; // [rsp+18h] [rbp-8h]
+
+  for ( i = 1LL; i &lt;= 0xF; ++i )
+  {
+    if ( !*(&amp;off_4020 + i) )
+    {
+      *(&amp;off_4020 + i) = calloc(1uLL, 0x60uLL);
+      return sub_14F8((char *)*(&amp;off_4020 + i));
+    }
+  }
+  return puts(&quot;Can't create new user!&quot;);
+}
+
+unsigned __int64 __fastcall login(_QWORD *a1, __int64 a2)
+{
+  unsigned __int64 i; // [rsp+18h] [rbp-78h]
+  char s1[104]; // [rsp+20h] [rbp-70h] BYREF
+  unsigned __int64 v5; // [rsp+88h] [rbp-8h]
+
+  v5 = __readfsqword(0x28u);
+  memset(s1, 0, 0x60uLL);
+  sub_14F8(s1);
+  for ( i = 0LL; i &lt;= 0xF; ++i )
+  {
+    if ( *(&amp;off_4020 + i)
+      &amp;&amp; !strcmp(s1, (const char *)*(&amp;off_4020 + i))
+      &amp;&amp; !memcmp(&amp;s1[48], (char *)*(&amp;off_4020 + i) + 48, 0x2FuLL) )
+    {
+      *a1 = *(&amp;off_4020 + i);
+      return v5 - __readfsqword(0x28u);
+    }
+  }
+  puts(&quot;Invaild username or password!&quot;);
+  return v5 - __readfsqword(0x28u);
+}
+
+
+unsigned __int64 __fastcall sub_175E(_QWORD *a1)
+{
+  unsigned __int64 v2; // [rsp+78h] [rbp-8h]
+
+  v2 = __readfsqword(0x28u);
+  if ( *a1 )
+  {
+    puts(&quot;\n[-----------------------]&quot;);
+    __printf_chk(1LL, *a1);
+    __printf_chk(1LL, *a1 + 48LL);
+    puts(&quot;\n[-----------------------]&quot;);
+  }
+  else
+  {
+    puts(&quot;You must login first!&quot;);
+  }
+  return v2 - __readfsqword(0x28u);
+}
+
+int __fastcall sub_1804(void **a1)
+{
+  if ( *a1 != &amp;unk_40E0 )
+    return puts(&quot;Access denied!&quot;);
+  puts(&quot;Access granted!&quot;);
+  return system(&quot;sh&quot;);
+}
+</code></pre>
+<p>Như mình thấy thì có 1 hàm để lấy shell, bằng cách bypass *<em>if ( <em>a1 != &amp;unk_40E0 )</em></em></p>
+<p>Đọc source code trên IDA thì mình k thấy được sự liền mạch như là hàm nào call hàm nào, và call khi vào. Đến lúc run, debug, và so sánh chức năng thì từ từ mình mới hình dung được mục đích của từng hàm.</p>
+<p>Mình thấy có bug fmt, tuy nhiên là <strong>__printf_chk</strong> và sẽ filter các fmt như <strong>%n , %N$</strong> cơ mà mình có research và thấy là %N$ có thể bypass ví dụ như <strong>%7$p %p %p %p %p %p %p</strong> cần 6 cái %p sau %7$p. Cơ mà mình vẫn không biết cách bypass %n để ovw, theo như thầy <strong>saye</strong> có hint là <em>leak mem</em> nên mình đã thay đổi hướng suy nghĩ.</p>
+<pre><code class="language-asm">   0x555555555804:      endbr64
+   0x555555555808:      push   rbp
+   0x555555555809:      mov    rbp,rsp
+   0x55555555580c:      sub    rsp,0x10
+   0x555555555810:      mov    QWORD PTR [rbp-0x8],rdi
+   0x555555555814:      mov    rax,QWORD PTR [rbp-0x8]
+   0x555555555818:      mov    rax,QWORD PTR [rax]
+   0x55555555581b:      lea    rdx,[rip+0x28be]        # 0x5555555580e0
+   0x555555555822:      cmp    rax,rdx
+   0x555555555825:      je     0x555555555838
+   0x555555555827:      lea    rax,[rip+0x8b6]        # 0x5555555560e4
+   0x55555555582e:      mov    rdi,rax
+   0x555555555831:      call   0x555555555120 &lt;puts@plt&gt;
+   0x555555555836:      jmp    0x555555555856
+   0x555555555838:      lea    rax,[rip+0x8b4]        # 0x5555555560f3
+   0x55555555583f:      mov    rdi,rax
+   0x555555555842:      call   0x555555555120 &lt;puts@plt&gt;
+   0x555555555847:      lea    rax,[rip+0x8b5]        # 0x555555556103
+   0x55555555584e:      mov    rdi,rax
+   0x555555555851:      call   0x555555555150 &lt;system@plt&gt;
+   0x555555555856:      leave
+   0x555555555857:      ret
+
+</code></pre>
+<p>để bypass if check và call được system thì <strong>RAX</strong> phải bằng <strong>RDX</strong>, cơ mà sau khi <strong>stepi</strong> để follow vào flow trước lúc compare rax với rdx thì mình vẫn không biết làm sao để bypass và leak cái gì ==&quot;. Do là lúc này cái mà mình muốn so là địa chỉ lưu chuỗi mình nhập vô trên Heap với cái bất biến lại là địa chỉ lưu chuỗi &quot;root&quot; được khởi tạo trước đó. </p>
+<p>Do mình mới chơi nên còn thiếu kiến thức nên vẫn chưa biết làm sao. rất sorry các thầy ==&quot;, mình báo thầy saye 2,3h sáng ==&quot; mà vẫn khum giải ra bài.</p>
+<pre><code class="language-shell">───────────────────────────────────────────────────[ REGISTERS / show-flags off / show-compact-regs off ]───────────────────────────────────────────────────
+ RAX  0x5555555592a0 ◂— 'username'
+ RBX  0x0
+ RCX  0x7fffffffdd41 ◂— 0xa /* '\n' */
+*RDX  0x5555555580e0 ◂— 0x746f6f72 /* 'root' */
+ RDI  0x7fffffffdd78 —▸ 0x5555555592a0 ◂— 'username'
+ RSI  0x4
+ R8   0x1999999999999999
+ R9   0x0
+ R10  0x7ffff7f45ac0 (_nl_C_LC_CTYPE_toupper+512) ◂— 0x100000000
+ R11  0x7ffff7f463c0 (_nl_C_LC_CTYPE_class+256) ◂— 0x2000200020002
+ R12  0x7fffffffdea8 —▸ 0x7fffffffe131 ◂— '/mnt/d/pwn_myself/pwn_from_blabla/training/fmt/chall2/chall2'
+ R13  0x55555555541d ◂— endbr64
+ R14  0x555555557d58 —▸ 0x5555555552a0 ◂— endbr64
+ R15  0x7ffff7ffd040 (_rtld_global) —▸ 0x7ffff7ffe2e0 —▸ 0x555555554000 ◂— 0x10102464c457f
+ RBP  0x7fffffffdd60 —▸ 0x7fffffffdd90 ◂— 0x1
+ RSP  0x7fffffffdd50 ◂— 0x0
+*RIP  0x555555555822 ◂— cmp rax, rdx
+────────────────────────────────────────────────────────────[ DISASM / x86-64 / set emulate on ]────────────────────────────────────────────────────────────
+   0x555555555810    mov    qword ptr [rbp - 8], rdi
+   0x555555555814    mov    rax, qword ptr [rbp - 8]
+   0x555555555818    mov    rax, qword ptr [rax]
+   0x55555555581b    lea    rdx, [rip + 0x28be]
+ ► 0x555555555822    cmp    rax, rdx
+   0x555555555825    je     0x555555555838                &lt;0x555555555838&gt;
+
+   0x555555555827    lea    rax, [rip + 0x8b6]
+   0x55555555582e    mov    rdi, rax
+   0x555555555831    call   puts@plt                &lt;puts@plt&gt;
+
+   0x555555555836    jmp    0x555555555856                &lt;0x555555555856&gt;
+
+   0x555555555838    lea    rax, [rip + 0x8b4]
+─────────────────────────────────────────────────────────────────────────[ STACK ]──────────────────────────────────────────────────────────────────────────
+00:0000│ rsp 0x7fffffffdd50 ◂— 0x0
+01:0008│     0x7fffffffdd58 —▸ 0x7fffffffdd78 —▸ 0x5555555592a0 ◂— 'username'
+02:0010│ rbp 0x7fffffffdd60 —▸ 0x7fffffffdd90 ◂— 0x1
+03:0018│     0x7fffffffdd68 —▸ 0x5555555554c4 ◂— jmp 0x5555555554ec
+04:0020│     0x7fffffffdd70 ◂— 0x0
+05:0028│ rdi 0x7fffffffdd78 —▸ 0x5555555592a0 ◂— 'username'
+06:0030│     0x7fffffffdd80 ◂— 0x4
+07:0038│     0x7fffffffdd88 ◂— 0xe1126ebd5b22aa00
+
+</code></pre>
 
                     </main>
 
