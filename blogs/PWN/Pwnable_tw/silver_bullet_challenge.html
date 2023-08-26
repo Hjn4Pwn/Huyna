@@ -365,18 +365,11 @@ int __cdecl beat(int bullet, int werewolf)
 </tbody></table>
 </div>
 <blockquote>
-<p>Note</p>
-<blockquote>
 <p>Bình thường ở kiến trúc 32bit, trước khi call hàm nó sẽ :</p>
-</blockquote>
 <blockquote>
 <p>Push tham số lên stack</p>
-</blockquote>
-<blockquote>
 <p>Tới call function thì sẽ push return address vào</p>
-</blockquote>
-<blockquote>
-<p>xong mới nhảy tới call</p>
+<p>xong mới nhảy tới call funct</p>
 </blockquote>
 </blockquote>
 <p>Thì ta chỉ cần thiết kế stack như vậy là được tức là:</p>
@@ -389,7 +382,6 @@ int __cdecl beat(int bullet, int werewolf)
 </div>
 <p>Sau khi mà leak được libc bằng cách gọi Puts với arg là puts got thì sẽ call lại main reload stack fram sau đấy sẽ tiếp tục như trước thay vì call puts thì call system thoi.</p>
 <h2 id="exploit"><a class="header" href="#exploit">exploit</a></h2>
-<h3 id="version-cùi-mía"><a class="header" href="#version-cùi-mía">version cùi mía</a></h3>
 <pre><code class="language-python">from pwn import *
 
 
