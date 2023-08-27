@@ -201,6 +201,46 @@
 <p>jmp <strong>target</strong></p>
 <h2 id="conditional_control"><a class="header" href="#conditional_control">conditional_control</a></h2>
 <p><em>chuyến điều khiển có điều kiện</em></p>
+<p>2 steps:</p>
+<ul>
+<li>test the codition( <strong>test</strong>, <strong>cmp</strong> ) <em>test là and nhưng không thay đổi source</em></li>
+<li>jump</li>
+</ul>
+<p>Group of conditional jumps:</p>
+<ul>
+<li>jumps based on the value of a single flag</li>
+<li>jumps based on the value of CX | ECX | RCX</li>
+<li>jumps based on comparisions of signed operands</li>
+<li>jumps based on comparisions of unsigned operands</li>
+</ul>
+<p><strong>cmp op1, op2</strong></p>
+<p>mấy cái j___ thì tự research chứ tui lười ghi ra quá ==&quot;</p>
+<ul>
+<li><strong>jz, je</strong> : jump if zero, equal <em><strong>!=</strong></em> **jnz, jne **</li>
+<li><strong>ja</strong> : jump if above <em><strong>!=</strong></em> <strong>jnbe</strong> : jump not above or equal</li>
+</ul>
+<p>... blabla tự suy ra nhea bro</p>
+<h3 id="loop-instructions"><a class="header" href="#loop-instructions">Loop instructions</a></h3>
+<ul>
+<li><strong>Loop target</strong> : <em>Loop</em></li>
+</ul>
+<p><em>Action :</em></p>
+<p>CX = CX - 1; 
+IF CX != 0 jump to target</p>
+<ul>
+<li><strong>Loope target</strong> : <em>Loop while equal</em></li>
+<li><strong>Loopz target</strong> : <em>Loop while zero</em></li>
+</ul>
+<p><em>Action :</em></p>
+<p>CX = CX - 1; 
+IF CX != 0 AND ZF == 1 jump to target</p>
+<ul>
+<li><strong>Loopne target</strong> : <em>Loop while not equal</em></li>
+<li><strong>Loopnz target</strong> : <em>Loop while not zero</em></li>
+</ul>
+<p><em>Action :</em></p>
+<p>CX = CX - 1; 
+IF CX != 0 AND ZF == 0 jump to target</p>
 
                     </main>
 
