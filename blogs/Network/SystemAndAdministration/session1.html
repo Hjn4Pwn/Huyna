@@ -1,0 +1,339 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>session 1 - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../../favicon.svg">
+        <link rel="shortcut icon" href="../../../favicon.png">
+        <link rel="stylesheet" href="../../../css/variables.css">
+        <link rel="stylesheet" href="../../../css/general.css">
+        <link rel="stylesheet" href="../../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../../highlight.css">
+        <link rel="stylesheet" href="../../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item expanded "><a href="../../../blogs/Network/SystemAndAdministration/session1.html" class="active">session 1</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc </a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking </a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings </a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame </a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_Pico</li><li class="chapter-item "><a href="../../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li><li class="chapter-item affix "><li class="part-title">RE_from_blabla</li><li class="chapter-item "><a href="../../../blogs/RE_from_blabla/problems.html">training</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../../blogs/Docker/tips.html">Some tips for ctf</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="session-1"><a class="header" href="#session-1">session 1</a></h1>
+<ul>
+<li><a href="#ip">IP</a></li>
+<li><a href="#router">Router</a></li>
+<li><a href="#routing_protocol">Routing protocol</a></li>
+</ul>
+<h2 id="ip"><a class="header" href="#ip">ip</a></h2>
+<h3 id="phân-lớp-ip"><a class="header" href="#phân-lớp-ip">Phân lớp IP</a></h3>
+<p>0xxxxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx : class A</p>
+<p>dãy địa chỉ lớp A: 1.0.0.1 -&gt; 126.255.255.254</p>
+<p>10xxxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx : class B</p>
+<p>dãy địa chỉ lớp A: 128.0.0.1 -&gt; 191.255.255.254</p>
+<p>110xxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx : class C</p>
+<p>dãy địa chỉ lớp A: 192.0.0.1 -&gt; 223.255.255.254</p>
+<h3 id="phân-loại-ip"><a class="header" href="#phân-loại-ip">Phân loại IP</a></h3>
+<ul>
+<li>Private IP: <strong>LAN</strong>
+<ul>
+<li>10.0.0.0 -&gt; 10.255.255.254</li>
+<li>172.16.0.0 -&gt; 172.31.255.254</li>
+<li>192.168.0.0 -&gt; 192.168.255.254</li>
+</ul>
+</li>
+<li>Public IP : <strong>WAN</strong></li>
+</ul>
+<h3 id="Địa-chỉ-host"><a class="header" href="#Địa-chỉ-host">Địa chỉ Host</a></h3>
+<ul>
+<li>Là ip address đặt cho các interface</li>
+<li>Hai host chung 1 net, ip sẽ có phần net giống nhau và phần host khác nhau</li>
+</ul>
+<h3 id="Địa-chỉ-network"><a class="header" href="#Địa-chỉ-network">Địa chỉ Network</a></h3>
+<ul>
+<li>Là ip triển khai cho các mạng, không dùng đặt cho card mạng, và không thể đặt cho các interface</li>
+<li>ip này có phần host là các bits không</li>
+</ul>
+<h3 id="Địa-chỉ-broadcast"><a class="header" href="#Địa-chỉ-broadcast">Địa chỉ Broadcast</a></h3>
+<ul>
+<li>Là địa chỉ được dùng đại diện cho tất cả các Host trong cùng 1 mạng</li>
+<li>Phần host chỉ chứa bit 1</li>
+<li>Không thể đặt cho các interface</li>
+</ul>
+<p>EX: 10.255.255.255 ; 172.16.255.255 ; 192.168.1.255</p>
+<h3 id="subnetmask"><a class="header" href="#subnetmask">Subnetmask</a></h3>
+<ul>
+<li>Là thứ giúp máy tính xác định được địa chỉ mạng, bật hết các bits net lên 1, các bits host là 0</li>
+</ul>
+<p>EX: 255.0.0.0 là subnetmask của lớp A</p>
+<h3 id="subnet"><a class="header" href="#subnet">Subnet</a></h3>
+<ul>
+<li>Khi ta chia các mạng thành các mạng nhỏ hơn, thì các mạng nhỏ hơn này được gọi là subnet</li>
+<li>Hình thức chia là : Net mượn bits của Host làm Subnet</li>
+</ul>
+<p>EX: 192.168.5.0/25</p>
+<h3 id="vlsm"><a class="header" href="#vlsm">VLSM</a></h3>
+<p><em>Variable Length Subnet Masking</em></p>
+<p>Đơn giản là thay vì chia ip các net có số host bằng nhau, thì dựa trên nhu cầu thực tế để chia sau cho phụ hợp nhu cầu cần sử dụng </p>
+<h2 id="router"><a class="header" href="#router">Router</a></h2>
+<ul>
+<li>Có tính năng chuyên biệt là định tuyến. Định tuyến hiểu đơn giản là làm sao để các máy tính ở các lớp mạng khác nhau có thể thấy được nhau...</li>
+</ul>
+<h3 id="vai-trò-của-router-trong-mạng-wan"><a class="header" href="#vai-trò-của-router-trong-mạng-wan">Vai trò của router trong mạng WAN:</a></h3>
+<ul>
+<li>Chọn lựa đường đi tốt nhất tới mạng đích</li>
+<li>Chuyển tiếp gói tín tới Interface tương ứng với đường đi ngắn nhất</li>
+</ul>
+<ul>
+<li>Router có thể làm được tốt công việc định tuyến (Routing) là do sử dụng Routing Protocol để xây dựng Routing table. Và dựa vào Routing table để định tuyến gói tin</li>
+</ul>
+<h3 id="những-thành-phần-cơ-bản-của-router"><a class="header" href="#những-thành-phần-cơ-bản-của-router">Những thành phần cơ bản của Router</a></h3>
+<ul>
+<li>CPU</li>
+<li>RAM: phục vụ cho việc sử lý tính toán của router</li>
+<li>NVRAM: lưu trữ cấu hình router</li>
+</ul>
+<p>Mở router lên cấu hình, restart lại sẽ mất hết, do đó cấu hình xong cần phải dùng lệnh ghi cấu hình vào NVRAM</p>
+<ul>
+<li>Flash: lưu trữ OS</li>
+<li>Buses, ROM, Interfaces, Power Supply</li>
+</ul>
+<h3 id="cổng-console-aux-lan-wan"><a class="header" href="#cổng-console-aux-lan-wan">Cổng console, AUX, LAN, WAN</a></h3>
+<ul>
+<li>Kết nối với WAN thông qua cổng Serial:
+<ul>
+<li>Leased Line</li>
+<li>Circuit-Switched</li>
+<li>Paket-Switched </li>
+</ul>
+</li>
+</ul>
+<h3 id="quy-trình-boot-up-của-router"><a class="header" href="#quy-trình-boot-up-của-router">Quy trình Boot-up của Router</a></h3>
+<ol>
+<li>Perform POST</li>
+<li>Execute Bootstap Loader</li>
+</ol>
+<p>-&gt; Khởi động các tập lệnh</p>
+<ol start="3">
+<li>
+<p>Locate the IOS (IOS đã có trong Flash)</p>
+</li>
+<li>
+<p>Load the IOS (IOS cần load từ TFTP server)</p>
+</li>
+<li>
+<p>Locate the Configuration file</p>
+</li>
+<li>
+<p>Execute the Configuration file</p>
+</li>
+<li>
+<p>Enter setup mode</p>
+</li>
+</ol>
+<h3 id="cấu-hình-cơ-bản-cho-router"><a class="header" href="#cấu-hình-cơ-bản-cho-router">Cấu hình cơ bản cho Router</a></h3>
+<ul>
+<li>Thiết lập Hostname, Password</li>
+<li>Kiểm tra bằng lệnh show command</li>
+<li>Cấu hình Serial Interface</li>
+<li>Cấu hình Ethernet Interface</li>
+<li>Lưu thống tin cấu hình </li>
+<li>Backup</li>
+</ul>
+<h3 id="routing_protocol"><a class="header" href="#routing_protocol">Routing_protocol</a></h3>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../../homepage.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../../blogs/PWN/ROP_Emporium/ret2win_challenge.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../../homepage.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../../blogs/PWN/ROP_Emporium/ret2win_challenge.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../../elasticlunr.min.js"></script>
+        <script src="../../../mark.min.js"></script>
+        <script src="../../../searcher.js"></script>
+
+        <script src="../../../clipboard.min.js"></script>
+        <script src="../../../highlight.js"></script>
+        <script src="../../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
