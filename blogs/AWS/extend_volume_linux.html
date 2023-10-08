@@ -165,14 +165,22 @@
                     <main>
                         <h1 id="attach--extend-volume-for-linux"><a class="header" href="#attach--extend-volume-for-linux">Attach &amp; Extend volume for linux</a></h1>
 <ul>
-<li><a href="#Full-script">Full script</a></li>
-<li><a href="#Detail">Detail</a></li>
-<li>For more : 
+<li>
+<p><a href="#Full-script">Full script</a></p>
+</li>
+<li>
+<p><a href="#Detail">Detail</a></p>
+</li>
+<li>
+<p>For more : </p>
 <ul>
 <li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html">attach volume</a></li>
 <li><a href="https://www.tecmint.com/fdisk-commands-to-manage-linux-disk-partitions/">create partition</a></li>
 <li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/recognize-expanded-volume-linux.html">extend volume</a></li>
 </ul>
+</li>
+<li>
+<p><a href="#summary">Summary</a></p>
 </li>
 </ul>
 <h2 id="full-script"><a class="header" href="#full-script">Full-script</a></h2>
@@ -556,6 +564,223 @@ tmpfs            95M     0   95M   0% /run/user/1000
 [ec2-user@ip-172-31-43-5 ~]$
 </code></pre>
 <h2 id="detail"><a class="header" href="#detail">Detail</a></h2>
+<p>Thì sau khi attach volume trên aws thì trên con instance linux vẫn chưa available cái volume đó. Check:</p>
+<pre><code class="language-shell">[ec2-user@ip-172-31-43-5 ~]$ lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  20G  0 disk
+
+[ec2-user@ip-172-31-43-5 ~]$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        4.0M     0  4.0M   0% /dev
+tmpfs           475M     0  475M   0% /dev/shm
+tmpfs           190M  2.9M  188M   2% /run
+/dev/xvda1      8.0G  1.6G  6.4G  20% /
+tmpfs           475M     0  475M   0% /tmp
+/dev/xvda128     10M  1.3M  8.7M  13% /boot/efi
+tmpfs            95M     0   95M   0% /run/user/1000
+
+</code></pre>
+<ul>
+<li>lsblk : liệt kê các disk và partition (phân vùng nếu có) của nó</li>
+<li>df -h : hiện thị dung lượng của các filesystem ...?</li>
+</ul>
+<p>Tiếp đến ta sẽ create partition:</p>
+<pre><code class="language-shell">[ec2-user@ip-172-31-43-5 ~]$ fdisk /dev/xvdf
+
+Welcome to fdisk (util-linux 2.37.4).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+fdisk: cannot open /dev/xvdf: Permission denied
+[ec2-user@ip-172-31-43-5 ~]$ sudo fdisk /dev/xvdf
+
+Welcome to fdisk (util-linux 2.37.4).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+Device does not contain a recognized partition table.
+Created a new DOS disklabel with disk identifier 0xa8d78fb6.
+
+Command (m for help): m
+
+Help:
+
+  DOS (MBR)
+   a   toggle a bootable flag
+   b   edit nested BSD disklabel
+   c   toggle the dos compatibility flag
+
+  Generic
+   d   delete a partition
+   F   list free unpartitioned space
+   l   list known partition types
+   n   add a new partition
+   p   print the partition table
+   t   change a partition type
+   v   verify the partition table
+   i   print information about a partition
+
+  Misc
+   m   print this menu
+   u   change display/entry units
+   x   extra functionality (experts only)
+
+  Script
+   I   load disk layout from sfdisk script file
+   O   dump disk layout to sfdisk script file
+
+  Save &amp; Exit
+   w   write table to disk and exit
+   q   quit without saving changes
+
+  Create a new label
+   g   create a new empty GPT partition table
+   G   create a new empty SGI (IRIX) partition table
+   o   create a new empty DOS partition table
+   s   create a new empty Sun partition table
+
+
+Command (m for help): n
+Partition type
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (1-4, default 1):
+First sector (2048-41943039, default 2048):
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-41943039, default 41943039):
+
+Created a new partition 1 of type 'Linux' and of size 20 GiB.
+
+Command (m for help): w
+The partition table has been altered.
+Calling ioctl() to re-read partition table.
+Syncing disks.
+
+</code></pre>
+<p><strong>check:</strong></p>
+<pre><code class="language-shell">[ec2-user@ip-172-31-43-5 ~]$ lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  20G  0 disk
+└─xvdf1   202:81   0  20G  0 part
+
+</code></pre>
+<p>If you have an empty volume, use the mkfs -t command to create a file system on the volume.</p>
+<pre><code class="language-shell">[ec2-user@ip-172-31-43-5 ~]$ sudo mkfs -t xfs /dev/xvdf1
+meta-data=/dev/xvdf1             isize=512    agcount=4, agsize=1310656 blks         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1    bigtime=1 inobtcount=1
+data     =                       bsize=4096   blocks=5242624, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+
+</code></pre>
+<p>Tạo mount point, sau đó mount partition vào ổ data, nói đơn giản là phân vùng ổ đĩa và mount thành 1 ổ dữ liệu.</p>
+<pre><code class="language-shell">[ec2-user@ip-172-31-43-5 ~]$ sudo mkdir /data
+[ec2-user@ip-172-31-43-5 ~]$ sudo mount /dev/xvdf1 /data
+[ec2-user@ip-172-31-43-5 ~]$ lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  20G  0 disk
+└─xvdf1   202:81   0  20G  0 part /data
+[ec2-user@ip-172-31-43-5 ~]$ cd /data/
+[ec2-user@ip-172-31-43-5 data]$ ls
+[ec2-user@ip-172-31-43-5 data]$ echo &quot;test file&quot; &gt; test.txt
+-bash: test.txt: Permission denied
+[ec2-user@ip-172-31-43-5 data]$ sudo echo &quot;test file&quot; &gt; test.txt
+-bash: test.txt: Permission denied
+[ec2-user@ip-172-31-43-5 data]$ ls
+[ec2-user@ip-172-31-43-5 data]$ vi test.txt
+[ec2-user@ip-172-31-43-5 data]$ sudo su
+[root@ip-172-31-43-5 data]# echo &quot;test file&quot; &gt; test.txt
+[root@ip-172-31-43-5 data]# cat test.txt
+test file
+[root@ip-172-31-43-5 data]# ll
+total 4
+-rw-r--r--. 1 root root 10 Oct  8 15:30 test.txt
+
+</code></pre>
+<p>Cần setup để khi reboot vẫn mount data</p>
+<pre><code class="language-shell">[root@ip-172-31-43-5 data]# blkid
+/dev/xvda128: SEC_TYPE=&quot;msdos&quot; UUID=&quot;0067-C627&quot; BLOCK_SIZE=&quot;512&quot; TYPE=&quot;vfat&quot; PARTLABEL=&quot;EFI System Partition&quot; PARTUUID=&quot;e0f8af89-4fce-4ba0-a0b0-c36635f3ecbd&quot;
+/dev/xvda127: PARTLABEL=&quot;BIOS Boot Partition&quot; PARTUUID=&quot;6f1691ad-d67d-4821-b014-468e2117f82d&quot;
+/dev/xvda1: LABEL=&quot;/&quot; UUID=&quot;db2477a6-ca5d-4f37-a4d1-d16dd2369669&quot; BLOCK_SIZE=&quot;4096&quot; TYPE=&quot;xfs&quot; PARTLABEL=&quot;Linux&quot; PARTUUID=&quot;18499c38-3e83-4110-b92d-4bc7cc4ae8aa&quot;
+/dev/xvdf1: UUID=&quot;7ffb8c67-0316-4d06-be79-30db08432ea7&quot; BLOCK_SIZE=&quot;512&quot; TYPE=&quot;xfs&quot; PARTUUID=&quot;a8d78fb6-01&quot;
+[root@ip-172-31-43-5 data]# vi /etc/fstab
+
+
+</code></pre>
+<p>thêm vào 1 dòng như sau: </p>
+<p><em><strong>UUID=7ffb8c67-0316-4d06-be79-30db08432ea7 /data  xfs  defaults,nofail  0 2</strong></em></p>
+<p>check:</p>
+<pre><code class="language-shell">[ec2-user@ip-172-31-43-5 data]$ cd ~
+[ec2-user@ip-172-31-43-5 ~]$ sudo umount /data
+[ec2-user@ip-172-31-43-5 ~]$ lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  20G  0 disk
+└─xvdf1   202:81   0  20G  0 part
+[ec2-user@ip-172-31-43-5 ~]$ sudo mount -a
+[ec2-user@ip-172-31-43-5 ~]$ lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  20G  0 disk
+└─xvdf1   202:81   0  20G  0 part /data
+[ec2-user@ip-172-31-43-5 ~]$ cd /data/
+[ec2-user@ip-172-31-43-5 data]$ ls
+test.txt
+
+</code></pre>
+<p>Tiếp theo là extend volume, sau khi modify trên aws thì gõ:</p>
+<p><em><strong>sudo growpart /dev/xvdf 1</strong></em>: mở rộng phân vùng lưu trữ
+<em><strong>sudo xfs_growfs -d /data/</strong></em>: mở rộng không gian ổ đĩa lưu trữ </p>
+<p>check:</p>
+<pre><code class="language-shell">[ec2-user@ip-172-31-43-5 data]$ lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  30G  0 disk
+└─xvdf1   202:81   0  30G  0 part /data
+
+[ec2-user@ip-172-31-43-5 ~]$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        4.0M     0  4.0M   0% /dev
+tmpfs           475M     0  475M   0% /dev/shm
+tmpfs           190M  2.9M  188M   2% /run
+/dev/xvda1      8.0G  1.6G  6.4G  20% /
+tmpfs           475M     0  475M   0% /tmp
+/dev/xvda128     10M  1.3M  8.7M  13% /boot/efi
+tmpfs            95M     0   95M   0% /run/user/1000
+/dev/xvdf1       30G  247M   30G   1% /data
+
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">summary</a></h2>
+<p>Tóm lại có thể hiểu đơn giản là:</p>
+<ul>
+<li>disk =&gt; phân vùng ổ cứng =&gt; mount vào ổ đĩa cụ thể.</li>
+<li>Nếu extend thì sau khi extend ổ cứng trên aws thì vào extend phân vùng, rồi extend ổ địax của phân vùng đó</li>
+</ul>
 
                     </main>
 
