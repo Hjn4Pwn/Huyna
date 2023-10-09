@@ -1,0 +1,359 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>IAM - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/extend_volume_linux.html">Attach & extend volume for linux</a></li><li class="chapter-item expanded "><a href="../../blogs/AWS/IAM.html" class="active">IAM</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/SystemAndAdministration/session1.html">session 1</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc </a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking </a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings </a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame </a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_Pico</li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li><li class="chapter-item affix "><li class="part-title">RE_from_blabla</li><li class="chapter-item "><a href="../../blogs/RE_from_blabla/problems.html">training</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some tips for ctf</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="iam"><a class="header" href="#iam">IAM</a></h1>
+<pre><code class="language-shell">➜ AWS ⚡                                                           23:15:38
+▶ aws configure
+AWS Access Key ID [None]: AKIAZ5IVHEEYKPQ57ZPA
+AWS Secret Access Key [None]: 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
+Default region name [None]: ap-southeast-1
+Default output format [None]: json
+➜ AWS ⚡                                                           23:16:54
+▶ aws sts get-caller-identity
+{
+    &quot;UserId&quot;: &quot;AIDAZ5IVHEEYCGHRIOY4J&quot;,
+    &quot;Account&quot;: &quot;681333694768&quot;,
+    &quot;Arn&quot;: &quot;arn:aws:iam::681333694768:user/dev-01&quot;
+}
+➜ AWS ⚡                                                           23:17:10
+▶ aws s3 ls
+2023-10-09 22:57:49 test-iam-huyna
+➜ AWS ⚡                                                           23:17:39
+▶ aws s3 ls s3://test-iam-huyna
+
+An error occurred (AccessDenied) when calling the ListObjectsV2 operation: Access Denied
+➜ AWS ⚡                                                          23:18:05
+▶ aws s3 ls s3://test-iam-huyna
+2023-10-09 22:38:35        120 More.txt
+2023-10-09 22:38:35        477 blog git.txt
+2023-10-09 22:49:53        708 docker-i.txt
+➜ AWS ⚡                                                           23:19:15
+▶ aws s3 cp s3://test-iam-huyna/More.txt
+
+usage: aws [options] &lt;command&gt; &lt;subcommand&gt; [&lt;subcommand&gt; ...] [parameters]
+To see help text, you can run:
+
+  aws help
+  aws &lt;command&gt; help
+  aws &lt;command&gt; &lt;subcommand&gt; help
+
+aws: error: the following arguments are required: paths
+
+➜ AWS ⚡                                                          23:19:55
+▶ aws s3 cp s3://test-iam-huyna/More.txt .
+download: s3://test-iam-huyna/More.txt to ./More.txt
+➜ AWS ⚡                                                           23:19:59
+▶ ls
+ 0.Slide-PDF       computing-service-ec2
+ 0.Slide-PDF.zip   computing-service-ec2.zip
+ Key-pair          dev-01
+ More.txt         'identity-and-access-management(iam).zip'
+ aws               seminar-aws-final.pdf
+ awscliv2.zip      win
+➜ AWS ⚡                                                           23:20:01
+▶ rm -rf More.txt
+➜ AWS ⚡                                                           23:20:10
+▶ aws s3 ls
+
+An error occurred (AccessDenied) when calling the ListBuckets operation: Access Denied
+➜ AWS ⚡                                                          23:30:41
+▶ aws sts get-session-token --serial-number arn:aws:iam::681333694768:mfa/dev-01-iphone --token-code 235326
+{
+    &quot;Credentials&quot;: {
+        &quot;AccessKeyId&quot;: &quot;ASIAZ5IVHEEYLV3UVIB5&quot;,
+        &quot;SecretAccessKey&quot;: &quot;bVCyhiJMTKvePAH/ixmszZW9QPhzXSmFbOWPKUcg&quot;,
+        &quot;SessionToken&quot;: &quot;IQoJb3JpZ2luX2VjELn//////////wEaDmFwLXNvdXRoZWFzdC0xIkcwRQIhAKmEZfG1CVY9s50bq3mlBJBVwW8OBspoKJDl8M/rqNoFAiAB3sbdKJg6+XSLDBRDjG1bgTO23EkGOKqoE4I5Zjv/vyr4AQjC//////////8BEAAaDDY4MTMzMzY5NDc2OCIMJEslr/Yt/3Om2L3ZKswB87SctMffi7YossEYigKZDwig8vPVwbVlRJTPkj5fbVWj7XtRQmn2uBy+Gb7EclAxL4V4Xwfgiz0GyLY7vqYeHhiY4qD/oQH7t5bTlWdJevmVNDciQRjmXkaMjnKNAWYvy9wm3xokZMTYK3vA40gOta0bV8RMn25UCkxj+fSyqxBXbGREUj42t4VrpnHVssLXPHpK1yaTj0ItIpAcZ7ns2WZCRKD2PCKsXLV2oxlnj2VekObyQBc3+NQeLvSKB6zFT7c7vpkKILJXm0kGMKrXkKkGOpgBY0hwz2uBV3cqDYQH1VAHorMe1c3/Vw3LmnQE1Yyg6ZEnnGgADhfqJDdZ1Wfa88a6Nsx4gm5HW2LCIajCogM+p0HFpv7IPHWEYCkQ+e+DmjH6N+fZ+f8u/NGFzK94ZSNnCTzHiqMC60gdp8hvmuS3jK5//FaI486nXvLadjBb+fvCF04gOZ1cSXH9TiDD8pB+HkmEGjGe1Js=&quot;,
+        &quot;Expiration&quot;: &quot;2023-10-10T04:34:50+00:00&quot;
+    }
+}
+➜ AWS ⚡                                                           23:34:50
+▶ aws s3 ls --profile dev-01-MFA
+2023-10-09 22:37:37 test-iam-huyna
+➜ AWS ⚡                                                           23:43:52
+▶ ssh -i &quot;udemy-singapore-ssh-key.pem&quot; ec2-user@ec2-13-214-214-251.ap-southeast-1.compute.amazonaws.com
+Warning: Identity file udemy-singapore-ssh-key.pem not accessible: No such file or directory.
+The authenticity of host 'ec2-13-214-214-251.ap-southeast-1.compute.amazonaws.com (13.214.214.251)' can't be established.
+ED25519 key fingerprint is SHA256:gmGmNUBaJ7K9W+YW7pzxj1+28PcXMz0Mz1x54+ZjdtA.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'ec2-13-214-214-251.ap-southeast-1.compute.amazonaws.com' (ED25519) to the list of known hosts.
+ec2-user@ec2-13-214-214-251.ap-southeast-1.compute.amazonaws.com: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+➜ AWS ⚡                                                          23:54:17
+▶ cd Key-pair/
+➜ Key-pair ⚡                                                      23:54:20
+▶ ssh -i &quot;udemy-singapore-ssh-key.pem&quot; ec2-user@ec2-13-214-214-251.ap-southeast-1.compute.amazonaws.com
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Permissions 0555 for 'udemy-singapore-ssh-key.pem' are too open.
+It is required that your private key files are NOT accessible by others.
+This private key will be ignored.
+Load key &quot;udemy-singapore-ssh-key.pem&quot;: bad permissions
+ec2-user@ec2-13-214-214-251.ap-southeast-1.compute.amazonaws.com: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+➜ Key-pair ⚡                                                     23:54:23
+▶ sudo ssh -i &quot;udemy-singapore-ssh-key.pem&quot; ec2-user@ec2-13-214-214-251.ap-southeast-1.compute.amazonaws.com
+[sudo] password for hjn4:
+The authenticity of host 'ec2-13-214-214-251.ap-southeast-1.compute.amazonaws.com (13.214.214.251)' can't be established.
+ED25519 key fingerprint is SHA256:gmGmNUBaJ7K9W+YW7pzxj1+28PcXMz0Mz1x54+ZjdtA.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'ec2-13-214-214-251.ap-southeast-1.compute.amazonaws.com' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '-&gt;
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[ec2-user@ip-172-31-47-187 ~]$ ls
+[ec2-user@ip-172-31-47-187 ~]$ ls
+[ec2-user@ip-172-31-47-187 ~]$ whoami
+ec2-user
+[ec2-user@ip-172-31-47-187 ~]$ ls
+[ec2-user@ip-172-31-47-187 ~]$ aws s3 ls
+2023-10-09 16:19:08 test-iam-huyna
+[ec2-user@ip-172-31-47-187 ~]$ aws assu
+
+[ec2-user@ip-172-31-47-187 ~]$ aws sts assume-role --role-arn arn:aws:iam::681333694768:role/test-power-user-access --role-session-name test-assume
+
+An error occurred (AccessDenied) when calling the AssumeRole operation: User: arn:aws:sts::681333694768:assumed-role/ec2-role-/i-07cc8b30b3c0b2fe8 is not authorized to perform: sts:AssumeRole on resource: arn:aws:iam::681333694768:role/test-power-user-access
+[ec2-user@ip-172-31-47-187 ~]$
+logout
+Connection to ec2-13-214-214-251.ap-southeast-1.compute.amazonaws.com closed.
+➜ Key-pair ⚡                                                     00:30:44
+▶  aws sts assume-role --role-arn arn:aws:iam::681333694768:role/test-power-user-access --role-session-name test-assume
+{
+    &quot;Credentials&quot;: {
+        &quot;AccessKeyId&quot;: &quot;ASIAZ5IVHEEYDFBJZLHN&quot;,
+        &quot;SecretAccessKey&quot;: &quot;L6/V10JdO6dFENqnOCn334a0TUNI7Fdc3mjnga8C&quot;,
+        &quot;SessionToken&quot;: &quot;IQoJb3JpZ2luX2VjELr//////////wEaDmFwLXNvdXRoZWFzdC0xIkcwRQIhAIuDx7gDnguyTLgr5H4d1e6HWBbwj6WunJNQubohjYToAiBRaXyQp6siNNL+aK2ufI+/S3Vdg8uDIW3A2gcUImg7WiqhAgjD//////////8BEAAaDDY4MTMzMzY5NDc2OCIMMcrdFTOnjGlYFsYAKvUB1Y2FSxwJJv8shoBYd7ctuWi5KizLJZReKHf8Rk7Nz9YYnrisvUQtU2fydlQRhIOd/sd7yTmTqwpnuJ8cSOQWSA/EoTcKdEgGStvwmfINReYJtII2QQhw8oz0sGWw5dDU1heT5MClPf/ebyQK2FALgOGgK6ZRBbNUh+CSfYoXjB94RZfduY6lOis+cSvYDdxI1iiyvSKQiGfTl23a+BlOI3g2ScW9yzXnkaKRTqQp+j3uvmsARCAdkOyGSKvfQXjMNOBtgJNa4VnbWp+nMEfCII2z7OMPR3Nzd/iuBiUvjtaZ3SbD/PnAQ7NC8q8czvjFjRXoluAwyvGQqQY6nQHoDRvYKI2meXOYUoWF3i6EBI0rheqQRJFDzeYfPvrNNoG8VShPZUp5q9vrFdl085OCoYABTbYtcu1JZxQ90vBaFLFUlWrmjfFE/Ozs5ZaHLLVFwyycwl0RN+mbq/lJOofeGcO0PlLAMw9aEuRCEUP43GxWQGmcLUmAawSYyIrVV+4JPgnBYyewlMyvPXAoRcEQ7juS3I01Jfsii4bd&quot;,
+        &quot;Expiration&quot;: &quot;2023-10-09T18:30:50+00:00&quot;
+    },
+    &quot;AssumedRoleUser&quot;: {
+        &quot;AssumedRoleId&quot;: &quot;AROAZ5IVHEEYFJIAL3WQM:test-assume&quot;,
+        &quot;Arn&quot;: &quot;arn:aws:sts::681333694768:assumed-role/test-power-user-access/test-assume&quot;
+    }
+}
+➜ Key-pair ⚡                                                      00:30:50
+▶ aws s3 ls --profile test-assume
+2023-10-09 22:37:37 test-iam-huyna
+
+
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/AWS/extend_volume_linux.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/Network/SystemAndAdministration/session1.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/AWS/extend_volume_linux.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/Network/SystemAndAdministration/session1.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
