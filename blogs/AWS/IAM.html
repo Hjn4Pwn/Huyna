@@ -165,7 +165,32 @@
                     <main>
                         <h1 id="iam"><a class="header" href="#iam">IAM</a></h1>
 <ul>
-<li>For more:
+<li>
+<p><a href="#iam">IAM</a></p>
+</li>
+<li>
+<p><a href="#policy">Policy</a></p>
+</li>
+<li>
+<p><a href="#role">Role</a></p>
+</li>
+<li>
+<p><a href="#resource-policy">Resource policy</a></p>
+</li>
+<li>
+<p><a href="#mfa">check MFA policy</a></p>
+</li>
+<li>
+<p><a href="#config-access-key-cli">config access key CLI</a></p>
+</li>
+<li>
+<p><a href="#assume-role">assume role</a></p>
+</li>
+<li>
+<p><a href="#switch-role">switch role</a></p>
+</li>
+<li>
+<p>For more:</p>
 <ul>
 <li><a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">install cli aws</a></li>
 <li><a href="https://repost.aws/knowledge-center/authenticate-mfa-cli">CLI authenticate token MFA</a></li>
@@ -173,58 +198,43 @@
 </ul>
 </li>
 </ul>
-<pre><code class="language-shell">➜ AWS ⚡                                                           23:15:38
-▶ aws configure
-AWS Access Key ID [None]: AKIAZ5IVHEEYKPQ57ZPA
-AWS Secret Access Key [None]: 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
-Default region name [None]: ap-southeast-1
-Default output format [None]: json
-➜ AWS ⚡                                                           23:16:54
-▶ aws sts get-caller-identity
-{
-    &quot;UserId&quot;: &quot;AIDAZ5IVHEEYCGHRIOY4J&quot;,
-    &quot;Account&quot;: &quot;681333694768&quot;,
-    &quot;Arn&quot;: &quot;arn:aws:iam::681333694768:user/dev-01&quot;
-}
-➜ AWS ⚡                                                           23:17:10
-▶ aws s3 ls
-2023-10-09 22:57:49 test-iam-huyna
-➜ AWS ⚡                                                           23:17:39
-▶ aws s3 ls s3://test-iam-huyna
-
-An error occurred (AccessDenied) when calling the ListObjectsV2 operation: Access Denied
-➜ AWS ⚡                                                          23:18:05
-▶ aws s3 ls s3://test-iam-huyna
-2023-10-09 22:38:35        120 More.txt
-2023-10-09 22:38:35        477 blog git.txt
-2023-10-09 22:49:53        708 docker-i.txt
-➜ AWS ⚡                                                           23:19:15
-▶ aws s3 cp s3://test-iam-huyna/More.txt
-
-usage: aws [options] &lt;command&gt; &lt;subcommand&gt; [&lt;subcommand&gt; ...] [parameters]
-To see help text, you can run:
-
-  aws help
-  aws &lt;command&gt; help
-  aws &lt;command&gt; &lt;subcommand&gt; help
-
-aws: error: the following arguments are required: paths
-
-➜ AWS ⚡                                                          23:19:55
-▶ aws s3 cp s3://test-iam-huyna/More.txt .
-download: s3://test-iam-huyna/More.txt to ./More.txt
-➜ AWS ⚡                                                           23:19:59
-▶ ls
- 0.Slide-PDF       computing-service-ec2
- 0.Slide-PDF.zip   computing-service-ec2.zip
- Key-pair          dev-01
- More.txt         'identity-and-access-management(iam).zip'
- aws               seminar-aws-final.pdf
- awscliv2.zip      win
-➜ AWS ⚡                                                           23:20:01
-▶ rm -rf More.txt
-➜ AWS ⚡                                                           23:20:10
-▶ aws s3 ls
+<h2 id="iam-1"><a class="header" href="#iam-1">iam</a></h2>
+<p><em>Identity and Access Management</em></p>
+<p>Nhiệm vụ là định danh phân quyền, quản lý việc ai, cái gì có thể access như thế nào tới các resource trên AWS</p>
+<h2 id="policy"><a class="header" href="#policy">policy</a></h2>
+<p>Có thể định nghĩa ai/ cái gì có thể làm gì hoặc không làm gì</p>
+<ul>
+<li>Effect: Allow or Deny (Deny được ưu tiên hơn nếu có conflict)</li>
+<li>Action: tập hợp các hành động</li>
+<li>Resource: tập hợp các resource cho phép tương tác</li>
+<li>[Condition]: Điều kiện kèm theo (time, mfa,...)</li>
+</ul>
+<p>Policy có thể gắn vào Role/Group/User</p>
+<p>Có 2 loại:</p>
+<ul>
+<li>Inline Policy: Được đính trực tiếp trên Role/group/user và không thể tái sử dụng, kiểu dính chặt như đóng cmn đinh vào í</li>
+<li>Managed Policy: Này như cái option đi kèm thoi, có thể tái sử dụng và gắn thoải mái trên role/group/user</li>
+</ul>
+<h2 id="role"><a class="header" href="#role">role</a></h2>
+<p>Là quyền được dùng để:</p>
+<ul>
+<li>Gán cho các resource để nó tương tác với nhau, ví dụ gán cho ec2 cho phép nó tương tác với s3, vì nếu không có các role này thì các resource sẽ không tự connect và làm việc với nhau</li>
+<li>assume role, switch role: <strong>for later</strong></li>
+</ul>
+<h2 id="resource-policy"><a class="header" href="#resource-policy">resource-policy</a></h2>
+<p>Tương tự như IAM policy tuy nhiên nó sẽ được gán dô cái resource cụ thể.
+Quyền của resource cao hơn, và quyền của user sẽ được tổng hợp cả IAM lẫn resource policy</p>
+<h2 id="mfa"><a class="header" href="#mfa">mfa</a></h2>
+<p>setup policy cho việc là user phải bật policy mới được phép tướng tác với các resource </p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_aws_my-sec-creds-self-manage-mfa-only.html">manage MFA user</a></li>
+</ul>
+<p>gán policy này vào group muốn filter</p>
+<p>xài cosole thì setup được cái mfa rồi, còn dùng cli thì howto?</p>
+<ul>
+<li><a href="https://repost.aws/knowledge-center/authenticate-mfa-cli">CLI authenticate token MFA</a></li>
+</ul>
+<pre><code class="language-shell">▶ aws s3 ls
 
 An error occurred (AccessDenied) when calling the ListBuckets operation: Access Denied
 ➜ AWS ⚡                                                          23:30:41
@@ -240,6 +250,58 @@ An error occurred (AccessDenied) when calling the ListBuckets operation: Access 
 ➜ AWS ⚡                                                           23:34:50
 ▶ aws s3 ls --profile dev-01-MFA
 2023-10-09 22:37:37 test-iam-huyna
+
+</code></pre>
+<p>Nhớ config lại cái credentials file trong thư mục .aws ở home folder của user hiện tại trên máy</p>
+<p>phải có khúc này <em><strong>--profile dev-01-MFA</strong></em></p>
+<h2 id="config-access-key-cli"><a class="header" href="#config-access-key-cli">config-access-key-cli</a></h2>
+<p>security credentials -&gt; roll down -&gt; access key -&gt; ... -&gt; download csv</p>
+<p>script: </p>
+<pre><code class="language-shell">➜ AWS ⚡                                                           23:15:38
+▶ aws configure
+AWS Access Key ID [None]: xxxxxxxxxxxxxxxxxxxx
+AWS Secret Access Key [None]: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Default region name [None]: ap-southeast-1
+Default output format [None]: json
+➜ AWS ⚡                                                           23:16:54
+▶ aws sts get-caller-identity
+{
+    &quot;UserId&quot;: &quot;xxxxxxxxxxxxxxxxxxxx&quot;,
+    &quot;Account&quot;: &quot;xxxxxxxxxxxxxxxxxxxx&quot;,
+    &quot;Arn&quot;: &quot;arn:aws:iam::xxxxxxxxxxxxxxxxxxxx:user/dev-01&quot;
+}
+➜ AWS ⚡                                                           23:17:10
+▶ aws s3 ls
+2023-10-09 22:57:49 test-iam-huyna
+
+</code></pre>
+<h2 id="assume-role"><a class="header" href="#assume-role">assume-role</a></h2>
+<p>Cho phép assume role tức là có quyền tạm thời để tương tác với 1 cái resource có thể là trên account root khác.</p>
+<p>Ví dụ account root A của ta có con user là dev-01, thg dev-01 này muốn tương tác với cái resource nào đấy hay có tác vụ cần thiết nào đấy trên account root B nhưng ta lại không muốn dùng accout root B tạo thêm profile user các kiểu, thì ta có thể dùng assume role để cấp cho 1 cái quyền tạm thời, ta có thể quản lý thời gián </p>
+<p>Cơ mà để làm đc thì ta cần 1 cái trust policy</p>
+<h3 id="trust-policy"><a class="header" href="#trust-policy">trust policy</a></h3>
+<p>Như tên của nó thì là nó sẽ cho biết nó trust đối tượng nào, tức là cho phép thằng nào assume/switch tới nó (role)</p>
+<h2 id="switch-role"><a class="header" href="#switch-role">switch-role</a></h2>
+<pre><code class="language-shell">➜ AWS ⚡                                                          23:18:05
+▶ aws s3 ls s3://test-iam-huyna
+2023-10-09 22:38:35        120 More.txt
+2023-10-09 22:38:35        477 blog git.txt
+2023-10-09 22:49:53        708 docker-i.txt
+➜ AWS ⚡                                                          23:19:55
+▶ aws s3 cp s3://test-iam-huyna/More.txt .
+download: s3://test-iam-huyna/More.txt to ./More.txt
+➜ AWS ⚡                                                           23:19:59
+▶ ls
+ 0.Slide-PDF       computing-service-ec2
+ 0.Slide-PDF.zip   computing-service-ec2.zip
+ Key-pair          dev-01
+ More.txt         'identity-and-access-management(iam).zip'
+ aws               seminar-aws-final.pdf
+ awscliv2.zip      win
+➜ AWS ⚡                                                           23:20:01
+▶ rm -rf More.txt
+➜ AWS ⚡                                                           23:20:10
+
 ➜ AWS ⚡                                                           23:43:52
 ▶ ssh -i &quot;udemy-singapore-ssh-key.pem&quot; ec2-user@ec2-13-214-214-251.ap-southeast-1.compute.amazonaws.com
 Warning: Identity file udemy-singapore-ssh-key.pem not accessible: No such file or directory.
