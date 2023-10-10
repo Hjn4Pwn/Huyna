@@ -190,6 +190,9 @@
 <p><a href="#switch-role">switch role</a></p>
 </li>
 <li>
+<p><a href="#best-practice-iam">Best practice IAM</a></p>
+</li>
+<li>
 <p>For more:</p>
 <ul>
 <li><a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">install cli aws</a></li>
@@ -304,6 +307,14 @@ Default output format [None]: json
 <p>Như tên của nó thì là nó sẽ cho biết nó trust đối tượng nào, tức là cho phép thằng nào assume/switch tới nó (role)</p>
 <h2 id="switch-role"><a class="header" href="#switch-role">switch-role</a></h2>
 <p>sẽ rời bỏ account ban đầu và qua chỉ tương tác với các resource của account thứ 2. <em><strong>review on udemy</strong></em></p>
+<h2 id="best-practice-iam"><a class="header" href="#best-practice-iam">best-practice-iam</a></h2>
+<ul>
+<li>sử dụng group để gán quyền cho các user, không gán riêng lẻ</li>
+<li>cấp quyền vừa đủ cho user, không cấp thừa hay thiếu</li>
+<li>chú yếu các deny rule tránh conflict</li>
+<li>Luôn setup mfa cho user (không bật mfa =&gt; miễn tương tác với resource)</li>
+<li>Không share access/secret key giữa các member/team của 1 dự án</li>
+</ul>
 
                     </main>
 
