@@ -170,6 +170,7 @@
 <li><a href="#Kh%C3%A1i-ni%E1%BB%87m">Khái niệm</a></li>
 <li><a href="#%C4%90%E1%BA%B7c-tr%C6%B0ng">Đặc trưng</a></li>
 <li><a href="#T%C3%ADnh-n%C4%83ng">Tính năng</a></li>
+<li><a href="#K%E1%BA%BFt-h%E1%BB%A3p">Kết hợp</a></li>
 </ul>
 </li>
 </ul>
@@ -201,6 +202,15 @@
 <li>Manual Monitoring Tool: Log lại từng record thực hiện trên bucket</li>
 <li>Analytic and insight: phân tích storage để optimize</li>
 <li>Strong consistency: Provide strong read-after-write consistency for PUT and DELETE object (<em>sau khi put hay delete thì request tiếp theo sẽ không truy xuất được nội dung cũ trước khi put hay delete</em>)</li>
+</ul>
+<h2 id="kết-hợp"><a class="header" href="#kết-hợp">Kết-hợp</a></h2>
+<ul>
+<li>Dùng làm nơi lưu trữ file cho các ứng dụng chạy trên EC2, Container, Lambda. Các file có thể đa dạng về loại &amp; kích thước (Image, Video, Document,...)</li>
+<li>Dùng làm nơi chứa archive log cho hầu hết các dịch vụ khác của AWS (VPC, ALB, APIGateway,...)</li>
+<li>Dùng làm data source cho các bài toán big data &amp; data warehouse</li>
+<li>Nơi lưu trữ dữ liệu gửi lên từ các thiết bị IoT</li>
+<li>Vùng lưu trữ tạm thời cho bài toàn ETL (Extract - Transform - Load) khi kết hợp với lambda</li>
+<li>Host 1 website tĩnh (html, css, js) khi kết hợp với CloudFont</li>
 </ul>
 
                     </main>
