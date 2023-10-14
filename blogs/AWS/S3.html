@@ -222,6 +222,19 @@
 <li>Chi phí theo đó sẽ tăng lên so với khi không bật versioning</li>
 <li>Sau khi bật versioning, nếu tắt versioning thì những object trước khi tắt vẫn sẽ có nhiều version, những object sinh ra sau khi tắt sẽ không có version</li>
 </ul>
+<h2 id="presign-url"><a class="header" href="#presign-url">Presign URL</a></h2>
+<ul>
+<li>Khi muốn cấp access tạm thời cho người dùng public tới một object trên S3, AWS cung cấp cơ chế Presign URL</li>
+<li>User có thể dùng Presign URL để download/upload object trên S3 trong thời gian quy định (được set lúc phát hành URl)</li>
+<li>Usecase:
+<ul>
+<li>Muốn cấp access public cho 1 object không muốn thay đổi ACL hoặc tạo thêm bucket policy</li>
+<li>Cần authen người dùng hoặc yêu cầu họ làm gì đó trước khi được download file (vd xen quảng cáo)</li>
+<li>Ngăn chặn resource để public vô thời hạn khiến cho tài nguyên bị khai thác bởi bên khác</li>
+</ul>
+</li>
+</ul>
+<p><img src="presign-url.png" alt="presign url operating model" /></p>
 
                     </main>
 
