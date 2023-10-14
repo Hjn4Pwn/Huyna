@@ -175,6 +175,7 @@
 <li><a href="#storage-classes">Storage Class</a></li>
 <li><a href="#life-cycle">Life Cycle</a></li>
 <li><a href="#static-website-hosting">Static website hosting</a></li>
+<li><a href="#event-trigger">Event trigger</a></li>
 </ul>
 <h2 id="concept"><a class="header" href="#concept">Concept</a></h2>
 <ul>
@@ -298,6 +299,20 @@
 }
 
 </code></pre>
+<h2 id="event-trigger"><a class="header" href="#event-trigger">Event trigger</a></h2>
+<ul>
+<li>S3 cung cấp cơ chế trigger 1 event sang dịch vụ khác khi có thay đổi đối với object (upload, delete)</li>
+<li>Target của trigger có thể là Lambda Function, SNS, SQS.</li>
+<li>Sample usecase:
+<ul>
+<li>Resize image khi có người upload image lên s3 bucket, lưu vào các thư mục size khác nhau</li>
+<li>Giải nén 1 file zip khi có người upload.</li>
+<li>Extract csv file, xử lý data rồi lưu vào database</li>
+<li>Notification tới Operator khi có ai xoá 1 file</li>
+<li>....</li>
+</ul>
+</li>
+</ul>
 
                     </main>
 
