@@ -165,22 +165,20 @@
                     <main>
                         <h1 id="s3---simple-storage-service"><a class="header" href="#s3---simple-storage-service">S3 - <em>Simple Storage Service</em></a></h1>
 <ul>
-<li>S3
-<ul>
 <li><a href="#concept">Concept</a></li>
 <li><a href="#characteristic">Characteristic</a></li>
 <li><a href="#feature">Feature</a></li>
 <li><a href="#combination">Combination</a></li>
+<li><a href="#bucket-policy---access-control-list">Bucket policy - Access Control List</a></li>
+<li><a href="#versioning">Versioning</a></li>
 </ul>
-</li>
-</ul>
-<h3 id="concept"><a class="header" href="#concept">Concept</a></h3>
+<h2 id="concept"><a class="header" href="#concept">Concept</a></h2>
 <ul>
 <li>Là dịch vụ lưu trữ dạng Object cung cấp khả năng mở rộng, availability, performance</li>
 <li>Có thể sử dụng S3 để lưu trữ và bảo vệ nhiều loại data cho các usecase như: data lake, website, mobile, backup &amp; restore, archive, enterprise application, IoT device, Big Data &amp; Analytic</li>
 <li>Cung cấp nhiều managed feature giúp tối ưu, tổ chức và cấu hình access tới data đáp ứng nhu cầu về business, organization &amp; complicance</li>
 </ul>
-<h3 id="characteristic"><a class="header" href="#characteristic">Characteristic</a></h3>
+<h2 id="characteristic"><a class="header" href="#characteristic">Characteristic</a></h2>
 <ul>
 <li>Là một managed service. User không cần quan tâm tới hạ tầng ở bên dưới.</li>
 <li>Cho phép lưu file dưới dạng object với size từ 0-5TB. Dạng Object khác với dạng Block là ta không thể chỉnh sửa dữ liệu được, nếu muốn phải download về máy, chỉnh sửa và up lên lại.</li>
@@ -190,7 +188,7 @@
 <li>Cung cấp khả năng phân quyền và giới hạn truy cập một cách chi tiết.</li>
 <li>Dễ sử dụng, có thể kết hợp với nhiều service khác cho bài toán automation và data processing.</li>
 </ul>
-<h3 id="feature"><a class="header" href="#feature">Feature</a></h3>
+<h2 id="feature"><a class="header" href="#feature">Feature</a></h2>
 <p>S3 cung cấp các tính năng cơ bản sau:</p>
 <ul>
 <li>Storage classes: cung cấp nhiều hình thức luu trữ phù hợp cho nhiều loại data khác nhau về nhu cầu access, yêu cầu về durability, thời gian lưu trữ khác nhau giúp KH tùy chọn được class lưu trữ phù hợp từ đó tối ưu chi phí.</li>
@@ -210,6 +208,19 @@
 <li>Nơi lưu trữ dữ liệu gửi lên từ các thiết bị IoT</li>
 <li>Vùng lưu trữ tạm thời cho bài toàn ETL (Extract - Transform - Load) khi kết hợp với lambda</li>
 <li>Host 1 website tĩnh (html, css, js) khi kết hợp với CloudFont</li>
+</ul>
+<h2 id="bucket-policy---access-control-list"><a class="header" href="#bucket-policy---access-control-list">Bucket policy - Access Control List</a></h2>
+<ul>
+<li>Access Control List: Quy định quyền access của một AWS Account hoặc nhóm user (group) đến bucket hoặc resource bên trong</li>
+<li>Thường dùng trong trường hợp muốn cấp access cho một resource cụ thể bên trong bucket mà không muốn thay đổi bucket policy</li>
+<li><strong>Tuy nhiên gần đây AWS khuyến nghị người đùng khôn nên xài ACL trừ khi có yêu cầu đặc biệt nào đó, thay vào đó hãy sử dụng bucket policy, iam policy &amp; pre-sign URL là đủ để cover hầu hết các usecase</strong></li>
+</ul>
+<h2 id="versioning"><a class="header" href="#versioning">Versioning</a></h2>
+<ul>
+<li>Sử dụng khi có nhu cầu lưu trữ nhiều version của cùng 1 object</li>
+<li>tránh đưuojc việc mất mát khi thao tác xóa nhầm hoặc ghi đè (có thể lấy lại version trước đó)</li>
+<li>Chi phí theo đó sẽ tăng lên so với khi không bật versioning</li>
+<li>Sau khi bật versioning, nếu tắt versioning thì những object trước khi tắt vẫn sẽ có nhiều version, những object sinh ra sau khi tắt sẽ không có version</li>
 </ul>
 
                     </main>
