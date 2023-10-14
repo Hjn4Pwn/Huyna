@@ -176,6 +176,7 @@
 <li><a href="#life-cycle">Life Cycle</a></li>
 <li><a href="#static-website-hosting">Static website hosting</a></li>
 <li><a href="#event-trigger">Event trigger</a></li>
+<li><a href="#best-practice">Best practice</a></li>
 </ul>
 <h2 id="concept"><a class="header" href="#concept">Concept</a></h2>
 <ul>
@@ -312,6 +313,18 @@
 <li>....</li>
 </ul>
 </li>
+</ul>
+<h2 id="best-practice"><a class="header" href="#best-practice">Best practice</a></h2>
+<ul>
+<li>Chọn region của S3 cùng region với application (EC2, ECS) để tối ưu
+performance.</li>
+<li>Sử dụng bucket policy cho những data quan trọng. Cấp quyền vừa đủ cho
+user/role, hạn chế cấp S3FullAccess.</li>
+<li>Bật versioning để bảo vệ data tránh bị mất, xoá nhầm.</li>
+<li>Mã hoá data nhạy cảm (client side or server side).</li>
+<li>Enforce TLS để yêu cầu sd HTTPS khi truyền nhận file (chống hack).</li>
+<li>Sử dụng VPC endpoint để tăng tốc truy cập từ application (sẽ học ở bài VPC).</li>
+<li>Khi host static web, nên kết hợp với CloudFront để tối ưu chi phí và tăng trải nghiệm người dùng.</li>
 </ul>
 
                     </main>
