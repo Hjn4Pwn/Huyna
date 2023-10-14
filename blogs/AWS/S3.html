@@ -172,6 +172,9 @@
 <li><a href="#bucket-policy---access-control-list">Bucket policy - Access Control List</a></li>
 <li><a href="#versioning">Versioning</a></li>
 <li><a href="#presign-url">Presign URL</a></li>
+<li><a href="#storage-classes">Storage Class</a></li>
+<li><a href="#life-cycle">Life Cycle</a></li>
+<li><a href="#static-website-hosting">Static website hosting</a></li>
 </ul>
 <h2 id="concept"><a class="header" href="#concept">Concept</a></h2>
 <ul>
@@ -268,6 +271,33 @@
 </li>
 </ul>
 <p><a href="https://aws.amazon.com/s3/storage-classes/"><em><strong>For more in slide PDF on my local OR here</strong></em></a></p>
+<h2 id="life-cycle"><a class="header" href="#life-cycle">Life Cycle</a></h2>
+<ul>
+<li>Tính năng cho phép tự động move object xuống các class lưu trữ thấp hơn hoặc xóa luôn sau một khoảng thời gian nhắm tiết kiệm chi phí</li>
+<li>Khác với Intelligent Tiering, người dùng sẽ tự quyết định life cycle cho objects (hoặc 1 thư mục), vd sau 90 ngày thì cho xuống Glacier, sau 270 ngày thì xóa hoàn toàn.</li>
+<li>Phù hợp cho các bài toán lưu trữ Log đã biết trước thời gian thường xuyên access và thời gian có thể xóa</li>
+</ul>
+<h2 id="static-website-hosting"><a class="header" href="#static-website-hosting">Static website hosting</a></h2>
+<ul>
+<li>Upload folder static web vào bucket, ở gốc lun. Tức là bucket rồi vào là gặp các file trong folder static web</li>
+<li>Vào <strong>Properties</strong> enable cái <em><strong>Static website hosting</strong></em></li>
+<li>Sang <strong>permission</strong> tắt cái <em>Block all public access</em></li>
+<li>Edit <strong>Bucket policy</strong> :</li>
+</ul>
+<pre><code class="language-python">{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;Statement1&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Principal&quot;: &quot;*&quot;,
+            &quot;Action&quot;: &quot;s3:GetObject&quot;,
+            &quot;Resource&quot;: &quot;arn:aws:s3:::learn-s3-hjn4/*&quot;
+        }
+    ]
+}
+
+</code></pre>
 
                     </main>
 
