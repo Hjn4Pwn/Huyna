@@ -169,6 +169,8 @@
 <li><a href="#type-of-load-balancer">Type of Balancing</a></li>
 <li><a href="#auto-scaling">Auto scaling</a></li>
 <li><a href="#elb-elastic-load-balancing">Elastic Load Balancing</a></li>
+<li><a href="#auto-scaling-group">Auto Scaling Group</a></li>
+<li><a href="#more">More</a></li>
 </ul>
 <h2 id="load-balance"><a class="header" href="#load-balance">Load Balance</a></h2>
 <p>Nếu hệ thống có nhiều hơn 1 thành phần, cần có cơ chế để phân phối requesrs từ client đến các thành phần ở backemd = &gt; sự ra đời của Load Balancer</p>
@@ -249,6 +251,95 @@
 <p><img src="./image/scale-in-out.png" alt="scale in/out" /></p>
 </li>
 </ul>
+<h2 id="auto-scaling-group"><a class="header" href="#auto-scaling-group">Auto Scaling Group</a></h2>
+<ul>
+<li>Có nhiệm vụ điều chỉnh số lượng của instance cho phù hợp với workload</li>
+<li>Mục đích:
+<ul>
+<li>Tiết kiệm chi phí</li>
+<li>Tự động hóa việc mở rộng và phục hồi sự cố</li>
+</ul>
+</li>
+</ul>
+<p><img src="./image/auto-scaling-group.png" alt="Auto Scaling Group" /></p>
+<ul>
+<li><strong>Launch Template:</strong> Đơn giản là 1 cái chỉ dẫn để Auto Scaling biết được nó phải launch instance như thế nào, cần cài software gì</li>
+<li><strong>Cloud watch</strong> : để monitor các instance trong cluster để biết được nên scale out hay scale in thông qua các alarm, alarm này sẽ đến từ chính bản thân cluster hoặc service khác</li>
+<li><strong>Load Balance</strong> : Làm nhiệm vụ distribute, phân phối các request của client</li>
+</ul>
+<h2 id="launch-configuration-and-launch-template"><a class="header" href="#launch-configuration-and-launch-template">Launch Configuration and Launch Template</a></h2>
+<ul>
+<li>đích: Chỉ dẫn cho Auto Scaling Group biết được cần phải launch instance như thế nào.</li>
+<li>Các thông tin có thể định nghĩa trong launch template:
+<ul>
+<li>AMI</li>
+<li>Instance Type</li>
+<li>Keypair (trong trường hợp bạn cần login vào instance sau khi tạo)</li>
+<li>Subnet (Thường không chọn mà để Auto Scaling Group quyết định)</li>
+<li>Security Group(s)</li>
+<li>Volume(s)</li>
+<li>Tag(s)</li>
+<li>Userdata (script tự động chạy khi instance start)</li>
+<li>................</li>
+</ul>
+</li>
+</ul>
+<p><em><strong>Một số thông tin như Instance Type, Subnet, Security Group có thể được overwrite bởi Auto
+Scaling Group.</strong></em></p>
+<p><em><strong>Launch Template thường được sử dụng hơn bởi nó có thể quản lý được version.</strong></em></p>
+<h2 id="các-phương-pháp-scale-hệ-thống"><a class="header" href="#các-phương-pháp-scale-hệ-thống">Các phương pháp scale hệ thống</a></h2>
+<ul>
+<li>
+<p><strong>No Scale</strong>: Duy trì 1 số lượng cố định instances (nếu instance die thì tạo con mới để bổ sung, ngoài ra không làm gì cả)</p>
+</li>
+<li>
+<p><strong>Manually Scaling</strong>: điều chỉnh 3 thông số: min/max/desire để quyết định số lượng instance trong ASG.</p>
+</li>
+<li>
+<p><strong>Dynamic Scaling</strong>: Scale tự động dựa trên việc monitor các thông số.</p>
+<ul>
+<li>
+<p><strong>Target tracking scaling</strong>: Monitor thông số ngay trên chính cluster, vd CPU, Memory, Network in-out.</p>
+</li>
+<li>
+<p><strong>Step scaling</strong>: điều chỉnh số lượng instance (tăng/giảm) dựa trên 1 tập hợp các alarm (có thể đến từ các resource khác không phải bản thân cluster).</p>
+</li>
+<li>
+<p><strong>Simple scaling</strong>: Tương tự Step scaling tuy nhiên có apply “cool down period”, tức là sau khi scale xong sẽ đợi một lúc rồi scale tiếp tránh việc scale liên tục</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Schedule Scaling</strong>: Đặt lịch để tự động tăng giảm số instance theo thời gian, phù hợp với các hệ thống có workload tăng vào 1 thời điểm cố định trong ngày. Như các hệ thống : <em><strong>chấm công, đặt cơm trưa,...</strong></em></p>
+</li>
+<li>
+<p><strong>Predict Scaling</strong>: AWS đưa ra dự đoán dựa vào việc học từ thông số hằng ngày, hằng tuần để điều chỉnh số lượng instance một cách tự động. Độ chính xác phụ thuộc vào thời gian application đã vận hành và tính ổn định của traffic đi vào hệ thống</p>
+</li>
+</ul>
+<p><img src="./image/monitor-from-not-cluster.png" alt="Example cho việc monitor service bên ngoài cluster và thực hiện scale" /></p>
+<h2 id="more"><a class="header" href="#more">More</a></h2>
+<h3 id="hiểu-rõ-về-3-thông-số-min-max-desire-capacity"><a class="header" href="#hiểu-rõ-về-3-thông-số-min-max-desire-capacity">Hiểu rõ về 3 thông số Min, Max, Desire capacity</a></h3>
+<p>Về bản chất ASG nhìn vào thông số <strong>Desire capacity</strong> để
+biết được cần thêm hay bớt instance trong cluster.</p>
+<p><em><strong>Ex:</strong></em></p>
+<ul>
+<li>Cluster đang có 2 instances, set desire = 4 =&gt; ASG sẽ
+add thêm 2 instance.</li>
+<li>Cluster đang có 4 instances, set desire = 3 =&gt; ASG sẽ
+terminate bớt 1 instance</li>
+</ul>
+<p><strong>Min</strong>: Sau khi số lượng instance bằng với min, ASG sẽ
+không terminate bớt instance vì bất cứ lý do gì.</p>
+<p><strong>Max</strong>: Sau khi số lượng instance bằng với max, ASG sẽ
+không add thêm instance vì bất cứ lý do gì.</p>
+<h3 id="elastic-load-balancer-stickiness-session"><a class="header" href="#elastic-load-balancer-stickiness-session">Elastic Load Balancer stickiness session</a></h3>
+<ul>
+<li>Cho phép điều hướng một client cụ thể tới target cố định trong
+một khoảng thời gian.</li>
+<li>Phù hợp cho các website sử dụng công nghệ cũ quản lý session
+của user trên RAM</li>
+</ul>
+<p><em>Chỉnh trong Edit Listen trong Load balancer, và trong target group tương ứng</em></p>
 
                     </main>
 
