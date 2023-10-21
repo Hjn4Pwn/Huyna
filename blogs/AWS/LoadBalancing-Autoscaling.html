@@ -164,8 +164,29 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="load-balancing-and-autoscaling"><a class="header" href="#load-balancing-and-autoscaling">Load balancing and autoscaling</a></h1>
+<ul>
+<li><a href="#load-balance">Load Balancing</a></li>
+<li><a href="#type-of-load-balancer">Type of Balancing</a></li>
+<li><a href="#auto-scaling">Auto scaling</a></li>
+<li><a href="#elb-elastic-load-balancing">Elastic Load Balancing</a></li>
+</ul>
 <h2 id="load-balance"><a class="header" href="#load-balance">Load Balance</a></h2>
+<p>Nếu hệ thống có nhiều hơn 1 thành phần, cần có cơ chế để phân phối requesrs từ client đến các thành phần ở backemd = &gt; sự ra đời của Load Balancer</p>
+<p><em>Ta có mỗi Availability Zone (AZ) tương ứng với 1 data center cách nhau vài chục tới vài trăm km. Bằng việc phân bổ các instance nằm trên nhiều hơn 1 AZ, hệ thống có thể chịu được các sự cố cấp độ data center của AWS mà vẫn hoạt động bình thường</em></p>
 <p><img src="./image/loadbalancing.png" alt="Các thành phần của load balance" /></p>
+<h2 id="elb-elastic-load-balancing"><a class="header" href="#elb-elastic-load-balancing">ELB (Elastic Load Balancing)</a></h2>
+<p>Elastic Load Balancing là:</p>
+<ul>
+<li>Một dịch vụ của AWS có nhiệm vụ điều hướng request từ client đến các target backend, đảm bảo request được cân bằng giữa các target.</li>
+<li>ELB là 1 dịch vụ managed hoàn toàn bởi AWS, dễ dàng setup, có đầy đủ các đặc tính cần thiết như:
+<ul>
+<li>High Availability</li>
+<li>Scalability: về lý thuyết là không giới hạn</li>
+<li>High Security: nếu kết hợp với các dịch vụ khác như WAF, Security Group.</li>
+</ul>
+</li>
+<li>ELB có thể dễ dàng kết hợp với đa dạng backend sử dụng EC2, Container, Lambda.</li>
+</ul>
 <h2 id="type-of-load-balancer"><a class="header" href="#type-of-load-balancer">Type of Load Balancer</a></h2>
 <p><img src="./image/OSI.png" alt="Mô hình OSI" /></p>
 <p>Các loại Elastic Load Balancer được phân chia phụ thuộc vào việc nó hoạt động trên layer nào của mô hình OSI 7 layers</p>
@@ -211,6 +232,23 @@
 </ul>
 <p><img src="./image/Gateway-loadbalancer.png" alt="Gateway LoadBalancer" /></p>
 <p>Tổng kết nhỏ là: Mỗi listener sẽ ứng với 1 port, 1 ALB sẽ có nhiều listener, mà mỗi listener có thể có nhiều target, ta có thể xét tỉ lệ cho mỗi target.</p>
+<h2 id="auto-scaling"><a class="header" href="#auto-scaling">Auto scaling</a></h2>
+<ul>
+<li>
+<p>Là việc điều chỉnh cấu hình của các tài nguyên để đáp ứng với nhu cầu workload (số request từ người dung, số lượng công việc phải xử lý,…)</p>
+</li>
+<li>
+<p>Có 2 hình thức scale:</p>
+<ul>
+<li>Scale Up/Down: Tăng/Giảm cấu hình của resources (vd tăng CPU/Ram cho Server, database, tăng dung lượng ổ cứng,…)</li>
+</ul>
+<p><img src="./image/scale-up-down.png" alt="scale up/down" /></p>
+<ul>
+<li>Scale Out/In: Tăng/giảm số lượng thành phần trong 1 cụm chức năng. (Vd add thêm server vào cụm application, add thêm node vào k8s cluster,…)</li>
+</ul>
+<p><img src="./image/scale-in-out.png" alt="scale in/out" /></p>
+</li>
+</ul>
 
                     </main>
 
