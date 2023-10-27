@@ -164,7 +164,54 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="bandit-challenge"><a class="header" href="#bandit-challenge">Bandit challenge</a></h1>
-<p>Bandit 34 level, cái nào basic quá mình sẽ skip.</p>
+<p>Ở đây mình sẽ không tập trung vào việc giải các challs này. Mình sẽ note vài thứ cần lưu ý ở các chall thoi. Cuối cùng sẽ bê các thứ này nhưng ở version sâu hơn qua page khác note lại tiếp.</p>
+<h2 id="level-1"><a class="header" href="#level-1">Level 1</a></h2>
+<p>Việc đọc file nên dùng đường dẫn tương đối hoặc tuyệt đối sẽ tốt hơn để tránh các case đặt biệt</p>
+<h2 id="level-5--6"><a class="header" href="#level-5--6">Level 5 + 6</a></h2>
+<p><img src="./image/bandit/lv5.png" alt="Alt text" /></p>
+<ul>
+<li>
+<p>Lệnh <strong>find</strong> với các option như trên sẽ tiến hành tìm các files trong thư mục tương ứng và các thư mục con của nó, file có kích thước là <strong>1033 bytes</strong>, <strong>không có quyền thực thi</strong>. Ứng với mỗi file đó sẽ trích xuất kiểu dữ liệu của nó. Và <strong>grep</strong> để lọc thứ ta cần</p>
+</li>
+<li>
+<p>Lại là 1 ví dụ khác với lệnh <strong>find</strong></p>
+</li>
+</ul>
+<p><img src="./image/bandit/lv6.png" alt="Alt text" /></p>
+<h2 id="level-9"><a class="header" href="#level-9">Level 9</a></h2>
+<p><strong>strings</strong> có thể trích xuất các chuỗi human readable có trong file</p>
+<h2 id="level-10--11"><a class="header" href="#level-10--11">Level 10 + 11</a></h2>
+<p><img src="./image/bandit/lv10.png" alt="Alt text" />
+<img src="./image/bandit/lv11.png" alt="Alt text" /></p>
+<h2 id="level-12"><a class="header" href="#level-12">Level 12</a></h2>
+<p>Giải nén file thì có nhiều loại lắm, sẽ note lại bên page khác kĩ hơn</p>
+<p><strong>ssh -i filekeyssh  username@host -p PORT</strong></p>
+<h2 id="level-13--18"><a class="header" href="#level-13--18">Level 13 + 18</a></h2>
+<p><img src="./image/bandit/lv13.png" alt="Alt text" /></p>
+<p>Lệnh này để vừa dùng ssh vừa thực hiện copy file ở vị trí cụ thể về local</p>
+<p><img src="./image/bandit/lv18.png" alt="Alt text" /></p>
+<h2 id="level-17"><a class="header" href="#level-17">Level 17</a></h2>
+<p><img src="./image/bandit/lv17.png" alt="Alt text" /></p>
+<h2 id="level-21"><a class="header" href="#level-21">Level 21</a></h2>
+<p>Tìm hiểu file <strong>/etc/cron.d/...</strong></p>
+<h2 id="level-25"><a class="header" href="#level-25">Level 25</a></h2>
+<p>Từ chế độ xem file của <strong>more</strong> ta có thể ấn <strong>v</strong> để mở sang  <strong>vim</strong> từ <strong>vim</strong> ta có thể dùng các lệnh tương tác trực tiếp với <strong>shell</strong>, <em><strong>cần tìm hiểu thêm</strong></em></p>
+<h2 id="level-27--28--29"><a class="header" href="#level-27--28--29">Level 27 + 28 + 29</a></h2>
+<p>Cần học thêm git</p>
+<ul>
+<li><strong>git log</strong></li>
+<li><strong>git show</strong> <id-commit></li>
+<li><strong>git checkout</strong> <branch-name></li>
+<li><strong>git tag</strong></li>
+<li><strong>git show</strong> <tag-name></li>
+<li><strong>git add</strong> <file-name></li>
+<li><strong>git commit -m</strong> <text></li>
+<li><strong>git push origin</strong></li>
+</ul>
+<h2 id="level-32"><a class="header" href="#level-32">Level 32</a></h2>
+<ul>
+<li><strong>$0</strong> : đại diện cho tên shell đã dùng</li>
+</ul>
 
                     </main>
 
