@@ -169,6 +169,7 @@
 <li><a href="#build-docker-image">Build docker image</a></li>
 <li><a href="#run-container">run container</a></li>
 <li><a href="#update-the-application">update the application</a></li>
+<li><a href="#share-docker-application">share image</a></li>
 </ul>
 <p><img src="./image/image_vs_container.png" alt="Docker image vs docker container" /></p>
 <h2 id="image"><a class="header" href="#image">Image</a></h2>
@@ -196,7 +197,7 @@ EXPOSE 3000
 
 </code></pre>
 <ul>
-<li>Sau đó sẽ tiến hành build với lệnh: <strong>docker build -t getting-started .</strong></li>
+<li>Sau đó sẽ tiến hành build với lệnh: <strong>docker build -t getting-started .</strong> hoặc chúng ta có thể gán thêm version cho image bằng cách <strong>docker build -t getting-started:v1 .</strong></li>
 <li>Sau khi build image xong ta cos thể dùng lệnh <strong>docker image ls</strong> để list các image hiện có</li>
 </ul>
 <pre><code class="language-python">➜ getting-started-app ⚡( main)                                                                                                        20.8.0  2 weeks ago 
@@ -338,6 +339,49 @@ docker/getting-started                   latest    3e4394f6b72f   10 months ago 
 <p>docker run -dp 127.0.0.1:3000:3000 --name test-clone hjn4/learn-get-started-from-docker-doc:latest</p>
 </blockquote>
 <p>Note: <em>thường thì ta nên đặt version cụ thể như ngày tháng thay vì để mặc định là latest</em></p>
+<h2 id="persist-the-db"><a class="header" href="#persist-the-db">Persist the DB</a></h2>
+<p>Cái persist volume này sẽ ưu tiên sử dụng hơn bởi vì nó là do docker quản lý, có tính bảo mật hơn là mình tự quản lí</p>
+<ul>
+<li>
+<p><strong>docker volume create todo-db</strong>
+Tức là mình tạo ra 1 cái volume để mà lưu trữ data, sao cho các container sau này tạo lên nó sẽ link đến cái volume này nhầm đảm bảo dữ liệu trong lúc tương tác vẫn được lưu trữ.</p>
+</li>
+<li>
+<p><strong>docker run -dp 127.0.0.1:3000:3000 --mount type=volume,src=todo-db,target=/etc/todos getting-started</strong></p>
+</li>
+</ul>
+<p>Các cái như <strong>version</strong> hay <strong>--name</strong> đồ thì mình tự tinh chỉnh</p>
+<pre><code class="language-shell">➜ getting-started-app ⚡( main)                                                                                                               20.8.0  2 weeks ago 
+▶ docker volume inspect todo-db
+[
+    {
+        &quot;CreatedAt&quot;: &quot;2023-10-27T13:50:42Z&quot;,
+        &quot;Driver&quot;: &quot;local&quot;,
+        &quot;Labels&quot;: null,
+        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/todo-db/_data&quot;,
+        &quot;Name&quot;: &quot;todo-db&quot;,
+        &quot;Options&quot;: null,
+        &quot;Scope&quot;: &quot;local&quot;
+    }
+]
+
+</code></pre>
+<h2 id="bind-mount"><a class="header" href="#bind-mount">Bind Mount</a></h2>
+<p>Toẹt vời trên môi trường dev</p>
+<blockquote>
+<p>docker run -it --mount type=bind,src=&quot;$(pwd)&quot;,target=/src ubuntu bash</p>
+</blockquote>
+<p>Note: <em>The --mount option tells Docker to create a bind mount, where <strong>src</strong> is the current working directory on your host machine (getting-started-app), and target is where that directory should appear inside the container (/src).</em></p>
+<p>Điều này giúp mình có thể tương tác tức thì giữa môi trường trong container và host.</p>
+<pre><code class="language-shell">docker run -dp 127.0.0.1:3000:3000 \
+    -w /app --mount type=bind,src=&quot;$(pwd)&quot;,target=/app \
+    node:18-alpine \
+    sh -c &quot;yarn install &amp;&amp; yarn run dev&quot;
+
+
+ docker logs -f &lt;container-id&gt;
+</code></pre>
+<p><a href="https://docs.docker.com/get-started/06_bind_mounts/">For more</a></p>
 
                     </main>
 
