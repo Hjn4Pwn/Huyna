@@ -382,6 +382,99 @@ Tức là mình tạo ra 1 cái volume để mà lưu trữ data, sao cho các c
  docker logs -f &lt;container-id&gt;
 </code></pre>
 <p><a href="https://docs.docker.com/get-started/06_bind_mounts/">For more</a></p>
+<h2 id="multi-container-apps"><a class="header" href="#multi-container-apps">Multi container apps</a></h2>
+<p>Target là mỗi ứng dụng sẽ chạy 1 container riêng lẽ, dễ dàng cho quản lý và update.</p>
+<p><a href="https://docs.docker.com/get-started/07_multi_container/">For more</a></p>
+<ul>
+<li>Tạo 1 network để các container có thể tương tác với nhau</li>
+</ul>
+<pre><code class="language-shell">docker network create todo-app
+</code></pre>
+<ul>
+<li>Tạo 1 container MYSQL và attach nó vào network vừa tạo</li>
+</ul>
+<pre><code class="language-shell">docker run -d \
+    --network todo-app --network-alias mysql \
+    -v todo-mysql-data:/var/lib/mysql \
+    -e MYSQL_ROOT_PASSWORD=secret \
+    -e MYSQL_DATABASE=todos \
+    mysql:8.0
+
+</code></pre>
+<ul>
+<li>Confirm</li>
+</ul>
+<pre><code class="language-shell">docker exec -it &lt;mysql-container-id&gt; mysql -u root -p
+
+mysql&gt; SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| todos              |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql&gt; exit
+
+</code></pre>
+<h3 id="xác-định-địa-chỉ-ip-các-container"><a class="header" href="#xác-định-địa-chỉ-ip-các-container">Xác định địa chỉ IP các container</a></h3>
+<pre><code class="language-shell">docker run -it --network todo-app nicolaka/netshoot
+
+dig mysql
+
+; &lt;&gt; DiG 9.18.8 &lt;&gt; mysql
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 32162
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;mysql.    IN A
+
+;; ANSWER SECTION:
+mysql.   600 IN A 172.23.0.2
+
+;; Query time: 0 msec
+;; SERVER: 127.0.0.11#53(127.0.0.11)
+;; WHEN: Tue Oct 01 23:47:24 UTC 2019
+;; MSG SIZE  rcvd: 44
+</code></pre>
+<h3 id="run-app-with-mysql"><a class="header" href="#run-app-with-mysql">run app with mysql</a></h3>
+<pre><code class="language-shell">docker run -dp 127.0.0.1:3000:3000 \
+  -w /app -v &quot;$(pwd):/app&quot; \
+  --network todo-app \
+  -e MYSQL_HOST=mysql \
+  -e MYSQL_USER=root \
+  -e MYSQL_PASSWORD=secret \
+  -e MYSQL_DB=todos \
+  node:18-alpine \
+  sh -c &quot;yarn install &amp;&amp; yarn run dev&quot;
+
+
+</code></pre>
+<p>có thể dùng <strong>docker logs -f &lt;container-id&gt;</strong>  xem log</p>
+<ul>
+<li>check:</li>
+</ul>
+<pre><code class="language-shell">docker exec -it &lt;mysql-container-id&gt; mysql -p todos
+
+
+mysql&gt; select * from todo_items;
++--------------------------------------+--------------------+-----------+
+| id                                   | name               | completed |
++--------------------------------------+--------------------+-----------+
+| c906ff08-60e6-44e6-8f49-ed56a0853e85 | Do amazing things! |         0 |
+| 2912a79e-8486-4bc3-a4c5-460793a575ab | Be awesome!        |         0 |
++--------------------------------------+--------------------+-----------+
+
+
+</code></pre>
+<h2 id="docker-compose"><a class="header" href="#docker-compose">Docker compose</a></h2>
+<p>haizz viết 1 hồi lại thấy <a href="https://docs.docker.com/get-started/08_using_compose/">Docs</a> dễ hiểu hơn hẳn =.= khum cần phải viết thêm</p>
 
                     </main>
 
