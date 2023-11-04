@@ -164,6 +164,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="pwn07---ret2libc-vs-rop"><a class="header" href="#pwn07---ret2libc-vs-rop">pwn07 - ret2libc vs ROP</a></h1>
+<p><a href="https://github.com/Hjn4Pwn/Pwn/tree/main/pwn_from_blabla/pwn07_rop_ret2libc">Binary</a></p>
 <h3 id="file"><a class="header" href="#file">File</a></h3>
 <pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwn_from_blabla/pwn07_rop_ret2libc$ file something
 something: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=4558b5c7ea2d782f422eba9789995f071fb1fd07, for GNU/Linux 3.2.0, not stripped
@@ -248,7 +249,7 @@ Say something : abc
 </code></pre>
 <p>Thì ở đây ta có thể thấy flow chương trình khá là đơn giản, ta có thể lợi dụng BOF với <em>gets</em>. Tuy nhiên ta cần biết phải return, control flow chương trình như nào. Ta hướng đến ret2libc</p>
 <p>Do đó ta cần leak được địa chỉ hàm cụ thể =&gt; libc base. Nên ta sẽ lợi dụng hàm <em>prinf</em> để format string nhầm leak ra địa chỉ trên hàm trên binary.</p>
-<p>Oke, giờ thì ta hướng đến việc ghi chuỗi format string <em>&quot;%p %p %p %p&quot;</em> vào đâu và how, oke ta sẽ ghi vào với <em>gets</em> và tại ô nhớ có thể ghi được, check bằng <strong>vmmap</strong>. Sau đấy sẽ dùng <em>printf</em> để format string. </p>
+<p>Oke, giờ thì ta hướng đến việc ghi chuỗi format string <em>&quot;%p %p %p %p&quot;</em> vào đâu và how, oke ta sẽ ghi vào với <em>gets</em> và tại ô nhớ có thể ghi được, check bằng <strong>vmmap</strong>. Sau đấy sẽ dùng <em>printf</em> để format string.</p>
 <p>Ta cần thêm vài gadgets cho việc đó như là <strong>pop rdi ; ret</strong> và <strong>ret</strong></p>
 <pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwn_from_blabla/pwn07_rop_ret2libc$ ROPgadget --binary something | grep &quot;pop rdi
 ; ret&quot;
@@ -303,7 +304,7 @@ LEGEND: STACK | HEAP | CODE | DATA | RWX | RODATA
 </code></pre>
 <p>ta cần ghi vào ô nhớ trống tránh việc ghi đè lên vùng nhớ đã chứa gữ liệu.</p>
 <p>ta có thể check được điều đó với <em><strong>pwndbg&gt; x/100s 0x404000</strong></em>. ở đây mình chọn <strong>0x404070</strong></p>
-<p>Cần tính số byte để overflow đến return address, này đặt breakpoints và tính: </p>
+<p>Cần tính số byte để overflow đến return address, này đặt breakpoints và tính:</p>
 <pre><code class="language-python">&gt;&gt;&gt; str = 0x7fffffffe000
 &gt;&gt;&gt; ret = 0x7fffffffe028
 &gt;&gt;&gt; ret - str
@@ -325,8 +326,8 @@ $ %p %p %p %p
 <pre><code class="language-shell">pwndbg&gt; x/s 0x7fb5af242aa0
 0x7fb5af242aa0 &lt;_IO_2_1_stdin_&gt;:        &quot;\213 \255&quot;, &lt;incomplete sequence \373&gt;
 </code></pre>
-<p>vậy ta nhận thấy là ở format string thứ 3 tức <strong>%3$p</strong> thì có được địa chỉ của hàm <em><strong><em>IO_2_1_stdin</em></strong></em></p>
-<p>Tiếp theo muốn tính được <em>libc base</em> ta cần có offset của hàm <em><strong><em>IO_2_1_stdin</em></strong></em>. How?</p>
+<p>vậy ta nhận thấy là ở format string thứ 3 tức <strong>%3$p</strong> thì có được địa chỉ của hàm <strong><strong>IO_2_1_stdin</strong></strong></p>
+<p>Tiếp theo muốn tính được <em>libc base</em> ta cần có offset của hàm <strong><strong>IO_2_1_stdin</strong></strong>. How?</p>
 <pre><code class="language-shell">hjn4@LAPTOP-TEHHNDTG:/mnt/d/pwn_myself/pwn_from_blabla/pwn07_rop_ret2libc$ readelf -sW /usr/lib/x86_64-linux-gnu/libc.so.6 | grep &quot;_IO_2_1_stdin_&quot;
   2298: 0000000000219aa0   224 OBJECT  GLOBAL DEFAULT   34 _IO_2_1_stdin_@@GLIBC_2.2.5
 </code></pre>
