@@ -176,6 +176,8 @@
 <li><a href="#d%E1%BA%A5u-s%E1%BB%95-d%E1%BB%8Dc">Dấu sổ dọc</a></li>
 <li><a href="#d%E1%BA%A5u-ngo%E1%BA%B7c-%C4%91%C6%A1n">Dấu ngoặc đơn</a></li>
 <li><a href="#d%E1%BA%A5u-g%E1%BA%A1ch-ch%C3%A9o-ng%C6%B0%E1%BB%A3c">Dấu gạch chéo ngược</a></li>
+<li><a href="#regex-lookahead">Regex Lookahead</a></li>
+<li><a href="#regex-password-check">Regex Password check</a></li>
 </ul>
 <h2 id="dấu-ngoặc-vuông"><a class="header" href="#dấu-ngoặc-vuông">Dấu ngoặc vuông[]</a></h2>
 <ul>
@@ -209,6 +211,7 @@
 <h2 id="dấu-mũ"><a class="header" href="#dấu-mũ">Dấu mũ^</a></h2>
 <ul>
 <li>Thể hiện rằng kí tự đứng sau nó phải đứng đầu 1 chuỗi</li>
+<li>Nếu nó đứng như này <strong>[^ab]</strong> có nghĩa là phủ định tức nó không khớp với các chuỗi chứa a,b</li>
 <li><strong>^ab</strong>:
 <ul>
 <li>Thỏa: ab, abc, abHUYNA,...</li>
@@ -292,7 +295,69 @@
 <li>Đây là dấu biến kí tự đặc biệt thành kí tự thường</li>
 <li>Tuy nhiên nó cũng có thể làm điều ngược lại ở một số trường hợp đặc biệt.</li>
 </ul>
-<p><em><strong>Coming soon</strong></em></p>
+<h2 id="regex-lookahead"><a class="header" href="#regex-lookahead">Regex Lookahead</a></h2>
+<h3 id="intro"><a class="header" href="#intro">Intro</a></h3>
+<ul>
+<li>So khớp có điều kiện, giả dụ như tìm số nhưng số đó phải đứng trước <em>km</em> thì mới khớp, mới nhận cái số đấy.</li>
+<li>Syntax cơ bản: <strong>X(?=Y)</strong> : <em>Tức là chỉ khớp với các X mà có Y theo sau nó</em></li>
+<li>Ví dụ:
+<ul>
+<li>String: <strong>1 Python is about 4 feet long</strong></li>
+<li>Pattern: <strong>\d+(?=\s*feet)</strong></li>
+<li>Trong đó:
+<ul>
+<li><strong>\d+</strong> : đại diện cho kí tự 0-9 phải xuất hiện ít nhất 1 lần</li>
+<li><strong>\s*feet</strong> : đại diện cho việc có 1 hoặc vô số hoặc không có khoảng trắng trước feet</li>
+<li>Tóm lại: pattern này đại diện cho việc tìm cái số mà sao cho có thể có 1 hoặc nhiều chữ số mà phía sau nó có hoặc không có khoảng trắng rồi đến feet</li>
+</ul>
+</li>
+<li>Thỏa: <strong>123      feet</strong>, <strong>1feet</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<pre><code class="language-python">import re
+
+def check(password):
+    regex_1 = r&quot;\d+(?=\s*a)&quot;
+    matches = re.finditer(regex_1, password)
+
+    if re.search(regex_1, password):
+        for match in matches:
+            print(match.group())
+        return True
+    else:
+        return False
+
+password = &quot;7    abbbbbb&quot;
+if check(password):
+    print(&quot;Valid&quot;)
+
+else:
+    print(&quot;Invalid&quot;)
+
+➜ Python_learn ⚡( master)                                     2 days ago 
+▶ python3 level3/bai_1.py 
+7
+Valid
+</code></pre>
+<h3 id="regex-multiple-lookaheads"><a class="header" href="#regex-multiple-lookaheads">Regex multiple lookaheads</a></h3>
+<ul>
+<li>Tương tự như thằng ở trên thoi, cơ mà nó sẽ có nhiều điều kiện để match hơn</li>
+<li>Syntax: <strong>X(?=Y)(?=Z)</strong></li>
+</ul>
+<h3 id="regex-negative-lookaheads"><a class="header" href="#regex-negative-lookaheads">Regex negative lookaheads</a></h3>
+<ul>
+<li>Đơn giản là thay vì <strong>(?=)</strong> thì chuyển thành <strong>(?!)</strong> cho việc phủ định đi thoi :3</li>
+</ul>
+<h2 id="regex-password-check"><a class="header" href="#regex-password-check">Regex Password check</a></h2>
+<ul>
+<li>Ít nhất 1 kí tự thường, 1 kí tự hoa, 1 kí tự nằm trong @#$, có độ dài tối thiểu là 6 tối đa là 12:</li>
+</ul>
+<blockquote>
+<p><strong>r&quot;^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.*[$#@]).{6,12}$&quot;</strong></p>
+</blockquote>
+<p><a href="https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a"><strong>For more</strong></a></p>
 
                     </main>
 
