@@ -1,0 +1,530 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>EC2 - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/job.html">Requirements for job</a></li><li class="chapter-item expanded "><a href="../../blogs/AWS/EC2.html" class="active">EC2</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAM.html">IAM</a></li><li class="chapter-item "><a href="../../blogs/AWS/S3.html">S3</a></li><li class="chapter-item "><a href="../../blogs/AWS/LoadBalancing-Autoscaling.html">Load balancing and autoscaling</a></li><li class="chapter-item affix "><li class="part-title">Linux + Git</li><li class="chapter-item "><a href="../../blogs/Linux/bandit.html">Bandit challenge</a></li><li class="chapter-item "><a href="../../blogs/Linux/command_session_1.html">Command session 1</a></li><li class="chapter-item "><a href="../../blogs/Linux/git_command.html">Git command</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some docker tips for CTF</a></li><li class="chapter-item "><a href="../../blogs/Docker/get_started.html">Basic Docker</a></li><li class="chapter-item "><a href="../../blogs/Docker/dockerfile_write.html">Dockerfile</a></li><li class="chapter-item "><a href="../../blogs/Docker/docker_network.html">Docker Network</a></li><li class="chapter-item affix "><li class="part-title">Jenkins</li><li class="chapter-item "><a href="../../blogs/Jenkins/install_by_docker.html">Install Jenkins By Docker</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/link_git_jenkins.html">Link git with jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/pipline_github_jenkins.html">Pipeline jenkinsfile with github</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_jenkins.html">Link gitlab with Jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_dockerhub.html">Gitlab-dockerhub-pipeline</a></li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item "><a href="../../blogs/Python/RE.html">Regular Expression</a></li><li class="chapter-item "><a href="../../blogs/Python/Automation_1.html">Automation with Python 1</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/basic_network_1.html">Basic Network 1</a></li><li class="chapter-item affix "><li class="part-title">PWN</li><li class="chapter-item "><a href="../../blogs/PWN/Emporium_ROP.html">Rop Emporium</a></li><li class="chapter-item "><a href="../../blogs/PWN/pwnableTW.html">Pwnable.tw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pico_CTF.html">Pwn_PicoCTF</a></li><li class="chapter-item "><a href="../../blogs/PWN/PWN_from_blabla.html">Pwn from blabla</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/ASM.html">ASM</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_PicoCTF</li><li class="chapter-item "><a href="../../blogs/RE/RE.html">RE</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="ec2"><a class="header" href="#ec2">EC2</a></h1>
+<ul>
+<li><a href="#whats-ec2">what's EC2?</a></li>
+<li><a href="#life-cycle-of-ec2">Life cycle</a></li>
+<li><a href="#secutiy-group">Secutiy group</a></li>
+<li><a href="#httpd-with-ec2">httpd</a></li>
+<li><a href="#create-snapshot-for-volume">snapshot</a></li>
+<li><a href="#create-ami">AMI</a></li>
+<li><a href="#create-window-instance">window instance</a></li>
+<li><a href="#user-data--meta-data">userdata &amp; metadata</a></li>
+<li><a href="#usecase">Usecase</a></li>
+<li><a href="#ec2-pricing">pricing</a></li>
+<li><a href="#elastic-block-storage-ebs">EBS</a></li>
+<li><a href="#add-and-extend-esternal-volume-for-windows">extend volume windows</a></li>
+<li><a href="#add-and-extend-esternal-volume-for-linux">extend volume linux</a></li>
+<li><strong>For more reference</strong>:
+<ul>
+<li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html">attach volume</a></li>
+<li><a href="https://www.tecmint.com/fdisk-commands-to-manage-linux-disk-partitions/">create partition</a></li>
+<li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/recognize-expanded-volume-linux.html">extend volume</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="whats-ec2"><a class="header" href="#whats-ec2">what's EC2?</a></h2>
+<p><img src="./image/EC2.png" alt="Mot so khai niem co ban" /></p>
+<h2 id="life-cycle-of-ec2"><a class="header" href="#life-cycle-of-ec2">Life cycle of EC2</a></h2>
+<p><img src="./image/life_cycle_ec2.png" alt="Alt text" /></p>
+<p><img src="./image/ec2_1.png" alt="Alt text" /></p>
+<h2 id="secutiy-group"><a class="header" href="#secutiy-group">Secutiy group</a></h2>
+<p><img src="./image/security_group.png" alt="Alt text" /></p>
+<p>config for ping from everywhere to EC2 instance:</p>
+<p><img src="./image/pingfromeverywhere.png" alt="Alt text" /></p>
+<h2 id="httpd-with-ec2"><a class="header" href="#httpd-with-ec2">httpd with EC2</a></h2>
+<pre><code class="language-shell">sudo yum update -y
+sudo yum install httpd -y
+
+sudo su
+echo &quot;abc&quot; &gt; /var/www/html/index.html
+
+systemctl enable httpd
+service httpd start
+
+</code></pre>
+<p>access to http://<public-ip-of-ec2> to view website</p>
+<h2 id="create-snapshot-for-volume"><a class="header" href="#create-snapshot-for-volume">create snapshot for volume</a></h2>
+<p><img src="./image/snapshot.png" alt="Alt text" /></p>
+<p>khi mà có sự cố, mình cần khôi phục lại trạng thái trc đó đã được snapshot, thì ta cần create volume from snapshot và mount nó vào instance.</p>
+<h2 id="create-ami"><a class="header" href="#create-ami">Create AMI</a></h2>
+<h2 id="create-window-instance"><a class="header" href="#create-window-instance">Create Window instance</a></h2>
+<p>add rule RDP allow 0.0.0.0 để remote to window</p>
+<p>use remote desktop:</p>
+<p><img src="./image/remote_to_win.png" alt="Alt text" /></p>
+<h2 id="user-data--meta-data"><a class="header" href="#user-data--meta-data">user-data &amp; meta-data</a></h2>
+<ul>
+<li>userdate : là data mà mình truyền lên để khi launch instance thì nó sẽ chạy thêm các script đó như là cài đặt các tool, cấu hình gì đó,...</li>
+<li>metadata : là các thông tin của instance sau khi launch như là puplic, private IP, security group,...</li>
+<li>Metadata được lưu tại:  <em><strong><a href="http://169.254.169.254/latest/meta-data">http://169.254.169.254/latest/meta-data</a></strong></em> cố định cho cả linux và window</li>
+</ul>
+<pre><code class="language-bash">export TOKEN=`curl -X PUT &quot;http://169.254.169.254/latest/api/token&quot; -H &quot;X-aws-ec2-metadata-token-ttl-seconds: 21600&quot;`
+
+echo &quot;&lt;br&gt;Private IP: &quot; &gt;&gt; index.html
+curl -H &quot;X-aws-ec2-metadata-token: $TOKEN&quot; -v http://169.254.169.254/latest/meta-data/local-ipv4 &gt;&gt; index.html
+
+echo &quot;&lt;br&gt;Public IP: &quot; &gt;&gt; index.html
+curl -H &quot;X-aws-ec2-metadata-token: $TOKEN&quot; -v http://169.254.169.254/latest/meta-data/public-ipv4 &gt;&gt; index.html 
+
+</code></pre>
+<p><img src="./image/check_1.png" alt="Alt text" /></p>
+<h2 id="usecase"><a class="header" href="#usecase">Usecase</a></h2>
+<p>EC2 là 1 dịch vụ rất mạnh của AWS, xuất hiện trong hầu hết các hệ thống. Ngoài ra EC2 còn là nền tảng cơ bản của các dịch vụ Container như ECS và EKS (k8s).
+Usecase cơ bản:</p>
+<ul>
+<li>Lift and shift: Migrate 1:1 các ứng dụng đang chạy trên On-premise của cty, không có nhu cầu tái cấu trúc.</li>
+<li>Chạy các website cơ bản all in one.</li>
+<li>Compute cluster</li>
+<li>Dùng làm database trong trường hợp không muốn xài dịch vụ database sẵn của AWS.</li>
+<li>Dùng làm node của cluster K8S.</li>
+</ul>
+<h2 id="ec2-pricing"><a class="header" href="#ec2-pricing">EC2 pricing</a></h2>
+<ul>
+<li><strong>On-Demand</strong>: Xài nhiêu trả nhiêu, không cần trả trước. Phù hợp cho đa số mục đích (học tập, môi trường dev,…)</li>
+<li><strong>Reserve Instance or Saving Plan</strong>: Mua trước 1-3 năm hoặc commit số tiền sẽ xài hằng tháng để được discount so với On-Demand (tối đa discount lên tới ~72%). Phù hợp cho môi trường production.</li>
+<li><strong>Spot Instance</strong>: Đấu giá để được sd EC2 instance vào các khung giờ thấp điểm. Phù hợp cho các tác vụ xử lý hàng loạt, cần giá rẻ, xử lý có thể resume lại khi bị dừng đột ngột.</li>
+<li><strong>Dedicated Host</strong>: Thuê riêng phần cứng nếu có yêu cầu đặc biệt về compliance.</li>
+</ul>
+<h2 id="elastic-block-storage-ebs"><a class="header" href="#elastic-block-storage-ebs">Elastic Block Storage (EBS)</a></h2>
+<ul>
+<li>Đặc trưng:
+<ul>
+<li>Là một cơ chế lưu trữ dạng block.</li>
+<li>Đơn vị quản lý là các EBS Volume.</li>
+<li>Chỉ có thể access data khi được gắn vào 1 EC2 instance (dùng làm ổ
+root, C: hoặc ổ data)</li>
+<li>Một số loại EBS đặc biệt cho phép gắn vào nhiều hơn 1 EC2 instance
+(multi attach).</li>
+<li>Có thể tăng size một cách dễ dàng ngay cả khi server đang chạy (<strong>không thể giảm size</strong>).</li>
+</ul>
+</li>
+<li>Tính tiền:
+<ul>
+<li>Dung lượng của volume ($/GB/Month), không xài hết cũng mất tiền
+100% trên dung lượng vì đã cấp phát rồi.</li>
+<li>IOPS: Tốc độ đọc ghi càng cao, càng phát sinh phí.</li>
+<li>Dung lượng của các bản snapshot của ổ cứng ($/GB/Month) tuy nhiên
+giá rẻ hơn lưu trữ.</li>
+</ul>
+</li>
+<li>Các loại EBS:
+<ul>
+<li><strong>General purpose (default)</strong>: <em>gp2</em>, <em>gp3</em>: Phù hợp cho hầu hết các mục đích
+sử dụng.</li>
+<li><strong>IOPS Provisioned</strong>: <em>io1</em>, <em>io2</em>: Phù hợp cho các ứng dụng đòi hỏi tốc độ đọc
+ghi cao.</li>
+<li><strong>Throughput optimized HDD</strong>: Dùng cho các hệ thống về Bigdata, Data
+warehouse, cần throughput cao.</li>
+<li><strong>Cold HDD</strong>: Lưu trữ giá rẻ cho các file ít khi được access (VD File server của
+công ty).</li>
+<li><strong>Magnetic</strong>: Thế hệ trước của HDD, ít được sd</li>
+</ul>
+</li>
+</ul>
+<h2 id="add-and-extend-esternal-volume-for-windows"><a class="header" href="#add-and-extend-esternal-volume-for-windows">Add and Extend Esternal volume for Windows</a></h2>
+<ul>
+<li>Create volume lưu ý phải cùng Availability Zone với instance</li>
+<li>Attach volume vừa tạo vào instance mong muốn</li>
+<li>Vào instance windows &gt; disk management &gt;  create new disk</li>
+</ul>
+<h2 id="add-and-extend-esternal-volume-for-linux"><a class="header" href="#add-and-extend-esternal-volume-for-linux">Add and Extend Esternal volume for Linux</a></h2>
+<p><img src="./image/volume_linux_1.png" alt="Alt text" /></p>
+<p>Sau khi attach thì ta kiểm tra thì thấy nó chỉ mới mount vô thoi chứ chưa sử dụng được:</p>
+<pre><code class="language-bash">[root@ip-172-31-40-13 html]# lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  10G  0 disk
+
+
+[root@ip-172-31-40-13 html]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        4.0M     0  4.0M   0% /dev
+tmpfs           475M     0  475M   0% /dev/shm
+tmpfs           190M  2.9M  188M   2% /run
+/dev/xvda1      8.0G  1.6G  6.5G  20% /
+tmpfs           475M     0  475M   0% /tmp
+/dev/xvda128     10M  1.3M  8.7M  13% /boot/efi
+tmpfs            95M     0   95M   0% /run/user/1000
+</code></pre>
+<p>Nếu muốn volume sau này có thể extend được thì ta sẽ tạo thêm 1 layer là partition:</p>
+<pre><code class="language-bash">[root@ip-172-31-40-13 html]# sudo fdisk /dev/xvdf
+
+Welcome to fdisk (util-linux 2.37.4).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+Device does not contain a recognized partition table.
+Created a new DOS disklabel with disk identifier 0x531b6dd7.
+
+Command (m for help): m
+
+Help:
+
+  DOS (MBR)
+   a   toggle a bootable flag
+   b   edit nested BSD disklabel
+   c   toggle the dos compatibility flag
+
+  Generic
+   d   delete a partition
+   F   list free unpartitioned space
+   l   list known partition types
+   n   add a new partition
+   p   print the partition table
+   t   change a partition type
+   v   verify the partition table
+   i   print information about a partition
+
+  Misc
+   m   print this menu
+   u   change display/entry units
+   x   extra functionality (experts only)
+
+  Script
+   I   load disk layout from sfdisk script file
+   O   dump disk layout to sfdisk script file
+
+  Save &amp; Exit
+   w   write table to disk and exit
+   q   quit without saving changes
+
+  Create a new label
+   g   create a new empty GPT partition table
+   G   create a new empty SGI (IRIX) partition table
+   o   create a new empty DOS partition table
+   s   create a new empty Sun partition table
+
+
+Command (m for help): n
+Partition type
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (1-4, default 1): 1
+First sector (2048-20971519, default 2048):
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-20971519, default 20971519):
+
+Created a new partition 1 of type 'Linux' and of size 10 GiB.
+
+Command (m for help): w
+The partition table has been altered.
+Calling ioctl() to re-read partition table.
+Syncing disks.
+
+</code></pre>
+<h3 id="check-lại"><a class="header" href="#check-lại">check lại</a></h3>
+<pre><code class="language-bash">[root@ip-172-31-40-13 html]# lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  10G  0 disk
+└─xvdf1   202:81   0  10G  0 part
+</code></pre>
+<p>Thì ta thấy cái xvdf ban đầu đã có thêm 1 partition giúp mình sau này có thể extend volume. Phải làm thế sau này mới extend được, nếu làm trực tiếp trên thằng xvdf thì sau này không extend được</p>
+<pre><code class="language-bash">[root@ip-172-31-40-13 html]# sudo mkfs -t xfs /dev/xvdf1
+meta-data=/dev/xvdf1             isize=512    agcount=4, agsize=655296 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1    bigtime=1 inobtcount=1
+data     =                       bsize=4096   blocks=2621184, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+log      =internal log           bsize=4096   blocks=16384, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+[root@ip-172-31-40-13 html]# sudo mkdir /data
+[root@ip-172-31-40-13 html]# sudo mount /dev/xvdf1 /data
+[root@ip-172-31-40-13 html]# lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  10G  0 disk
+└─xvdf1   202:81   0  10G  0 part /data
+</code></pre>
+<pre><code class="language-bash">[root@ip-172-31-40-13 html]# sudo blkid
+/dev/xvda128: SEC_TYPE=&quot;msdos&quot; UUID=&quot;A208-E305&quot; BLOCK_SIZE=&quot;512&quot; TYPE=&quot;vfat&quot; PARTLABEL=&quot;EFI System Partition&quot; PARTUUID=&quot;1bba082f-4fd3-4536-ba50-1468a8741f84&quot;
+/dev/xvda127: PARTLABEL=&quot;BIOS Boot Partition&quot; PARTUUID=&quot;7e86a24a-2fe2-4aff-a1c2-5ff59eeb2729&quot;
+/dev/xvda1: LABEL=&quot;/&quot; UUID=&quot;66eb3733-37f3-4398-9990-e97c15b01e5b&quot; BLOCK_SIZE=&quot;4096&quot; TYPE=&quot;xfs&quot; PARTLABEL=&quot;Linux&quot; PARTUUID=&quot;9c63c137-580c-47df-a666-4e9d4ec5d6b4&quot;
+/dev/xvdf1: UUID=&quot;3cba17cc-169d-4b89-b96d-6696f868bf4a&quot; BLOCK_SIZE=&quot;512&quot; TYPE=&quot;xfs&quot; PARTUUID=&quot;531b6dd7-01&quot;
+[root@ip-172-31-40-13 html]# sudo lsblk -o +UUID
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS UUID
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /           66eb3733-37f3-4398-9990-e97c15b01e5b
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi   A208-E305
+xvdf      202:80   0  10G  0 disk
+└─xvdf1   202:81   0  10G  0 part /data       3cba17cc-169d-4b89-b96d-6696f868bf4a
+[root@ip-172-31-40-13 html]# sudo vim /etc/fstab
+[root@ip-172-31-40-13 html]# lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  10G  0 disk
+└─xvdf1   202:81   0  10G  0 part /data
+[root@ip-172-31-40-13 html]# sudo umount /data
+[root@ip-172-31-40-13 html]# lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  10G  0 disk
+└─xvdf1   202:81   0  10G  0 part
+[root@ip-172-31-40-13 html]# sudo mount -a
+[root@ip-172-31-40-13 html]# lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  10G  0 disk
+└─xvdf1   202:81   0  10G  0 part /data
+</code></pre>
+<h3 id="extend-volume"><a class="header" href="#extend-volume">extend volume</a></h3>
+<pre><code class="language-bash">[root@ip-172-31-40-13 html]# lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  30G  0 disk
+└─xvdf1   202:81   0  10G  0 part /data
+
+</code></pre>
+<pre><code class="language-bash">[root@ip-172-31-40-13 html]# sudo growpart /dev/xvdf 1
+CHANGED: partition=1 start=2048 old: size=20969472 end=20971520 new: size=62912479 end=62914527
+
+[root@ip-172-31-40-13 html]# lsblk
+NAME      MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+xvda      202:0    0   8G  0 disk
+├─xvda1   202:1    0   8G  0 part /
+├─xvda127 259:0    0   1M  0 part
+└─xvda128 259:1    0  10M  0 part /boot/efi
+xvdf      202:80   0  30G  0 disk
+└─xvdf1   202:81   0  30G  0 part /data
+
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/AWS/job.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/AWS/IAM.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/AWS/job.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/AWS/IAM.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
