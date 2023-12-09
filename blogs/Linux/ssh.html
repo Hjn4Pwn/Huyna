@@ -175,7 +175,7 @@ sudo apt-get install openssh-server
 <li>Generate the SSH key:</li>
 </ul>
 <pre><code class="language-bash">ssh-keygen -t rsa
-cat id_rsa.pub &gt; ~/.ssh/authorized_keys
+cat ~/.ssh/id_rsa.pub &gt; ~/.ssh/authorized_keys
 </code></pre>
 <ul>
 <li>Copy the private key to the guest. On their side:</li>
