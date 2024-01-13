@@ -1,0 +1,515 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Bash Loops - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">Documents from everywhere</li><li class="chapter-item "><a href="../../blogs/Documents/troubleshooting.html">Troubleshooting</a></li><li class="chapter-item "><a href="../../blogs/Documents/study.html">Study</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/job.html">Requirements for job</a></li><li class="chapter-item "><a href="../../blogs/AWS/EC2.html">EC2</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAM.html">IAM</a></li><li class="chapter-item "><a href="../../blogs/AWS/S3.html">S3</a></li><li class="chapter-item "><a href="../../blogs/AWS/LoadBalancing-Autoscaling.html">Load balancing and autoscaling</a></li><li class="chapter-item affix "><li class="part-title">Linux + Git</li><li class="chapter-item "><a href="../../blogs/Linux/bandit.html">Bandit challenge</a></li><li class="chapter-item "><a href="../../blogs/Linux/command_session_1.html">Command session 1</a></li><li class="chapter-item "><a href="../../blogs/Linux/git_command.html">Git command</a></li><li class="chapter-item "><a href="../../blogs/Linux/ssh.html">SSH</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some docker tips for CTF</a></li><li class="chapter-item "><a href="../../blogs/Docker/get_started.html">Basic Docker</a></li><li class="chapter-item "><a href="../../blogs/Docker/dockerfile_write.html">Dockerfile</a></li><li class="chapter-item "><a href="../../blogs/Docker/docker_network.html">Docker Network</a></li><li class="chapter-item affix "><li class="part-title">Jenkins</li><li class="chapter-item "><a href="../../blogs/Jenkins/install_by_docker.html">Install Jenkins By Docker</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/link_git_jenkins.html">Link git with jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/pipline_github_jenkins.html">Pipeline jenkinsfile with github</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_jenkins.html">Link gitlab with Jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_dockerhub.html">Gitlab-dockerhub-pipeline</a></li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item "><a href="../../blogs/Python/RE.html">Regular Expression</a></li><li class="chapter-item "><a href="../../blogs/Python/Automation_1.html">Automation with Python 1</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item "><a href="../../blogs/Bash_script/Variables_Environment.html">Shell Variables and Environment</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Conditionals_Execution.html">Conditionals Execution</a></li><li class="chapter-item expanded "><a href="../../blogs/Bash_script/Bash_Loops.html" class="active">Bash Loops</a></li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/basic_network_1.html">Basic Network 1</a></li><li class="chapter-item affix "><li class="part-title">PWN</li><li class="chapter-item "><a href="../../blogs/PWN/Emporium_ROP.html">Rop Emporium</a></li><li class="chapter-item "><a href="../../blogs/PWN/pwnableTW.html">Pwnable.tw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pico_CTF.html">Pwn_PicoCTF</a></li><li class="chapter-item "><a href="../../blogs/PWN/PWN_from_blabla.html">Pwn from blabla</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/ASM.html">ASM</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_PicoCTF</li><li class="chapter-item "><a href="../../blogs/RE/RE.html">RE</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="bash-loops"><a class="header" href="#bash-loops">Bash Loops</a></h1>
+<h2 id="for-loop"><a class="header" href="#for-loop">For loop</a></h2>
+<pre><code class="language-sh">for var in item1 item2 ... itemN
+do
+        command1
+        command2
+        ....
+        ...
+        commandN
+done
+
+
+for var in list-of-values
+do
+        command1
+        command2
+        ....
+        ...
+        commandN
+done
+
+for var in $(Linux-command-name)
+do
+        command1
+        command2
+        ....
+        ...
+        commandN
+done
+</code></pre>
+<p><strong>EX:</strong></p>
+<pre><code class="language-sh">#!/bin/bash
+for i in 1 2 3 4 5
+do
+  echo &quot;Welcome $i times.&quot;
+done
+
+
+
+#!/bin/bash
+# A shell script to verify user password database
+files=&quot;/etc/passwd /etc/group /etc/shadow /etc/gshdow&quot;
+for f in $files
+do
+ [  -f $f ] &amp;&amp; echo &quot;$f file found&quot; || echo &quot;*** Error - $f file missing.&quot;
+done
+
+
+
+#!/bin/bash
+# A simple shell script to display a file on screen passed as command line argument
+[ $# -eq 0 ] &amp;&amp; { echo &quot;Usage: $0 file1 file2 fileN&quot;; exit 1; }
+
+# read all command line arguments via the for loop
+for f in $*
+   do
+   echo
+   echo &quot;&lt; $f &gt;&quot;
+   [ -f $f ] &amp;&amp; cat $f || echo &quot;$f not file.&quot;
+   echo &quot;------------------------------------------------&quot;
+done
+
+
+
+#!/bin/bash
+echo &quot;Printing file names in /tmp directory:&quot;
+for f in $(ls /tmp/*)
+do
+ echo $f
+done
+
+
+
+#!/bin/bash
+n=$1
+# make sure command line arguments are passed to the script
+if [ $# -eq 0 ]
+then
+ echo &quot;A shell script to print multiplication table.&quot;
+ echo &quot;Usage : $0 number&quot;
+ exit 1
+fi
+
+# Use for loop
+for i in {1..10}
+do
+ echo &quot;$n * $i = $(( $i * $n))&quot;
+done
+
+#!/bin/bash
+for ((i = 1; i &lt;= 5; i++))
+do
+  echo -n &quot;$i &quot; 
+done
+</code></pre>
+<h2 id="nested-for-loop-statement"><a class="header" href="#nested-for-loop-statement">Nested for loop statement</a></h2>
+<pre><code class="language-sh">#!/bin/bash
+# A shell script to print each number five times.
+for (( i = 1; i &lt;= 5; i++ ))      ### Outer for loop ###
+do
+
+    for (( j = 1 ; j &lt;= 5; j++ )) ### Inner for loop ###
+    do
+          echo -n &quot;$i &quot;
+    done
+
+  echo &quot;&quot; #### print the new line ###
+done
+
+</code></pre>
+<pre><code class="language-sh">#!/bin/bash
+for (( i = 1; i &lt;= 8; i++ )) ### Outer for loop ###
+do
+   for (( j = 1 ; j &lt;= 8; j++ )) ### Inner for loop ###
+   do
+        total=$(( $i + $j))   # total 
+        tmp=$(( $total % 2))  # modulus
+        # Find out odd and even number and change the color 
+        # alternating colors using odd and even number logic  
+        if [ $tmp -eq 0 ]; 
+        then
+            echo -e -n &quot;\033[47m  &quot;
+        else
+            echo -e -n &quot;\033[40m  &quot;
+        fi
+  done
+ echo &quot;&quot; #### print the new line ###
+done
+
+</code></pre>
+<h2 id="while-loop"><a class="header" href="#while-loop">While loop</a></h2>
+<pre><code class="language-sh">while [ condition ]
+do
+        command1
+        command2
+        ..
+        ....
+        commandN
+done
+
+</code></pre>
+<pre><code class="language-sh">#!/bin/bash
+# set n to 1
+n=1
+
+# continue until $n equals 5
+while [ $n -le 5 ]
+do
+ echo &quot;Welcome $n times.&quot;
+ n=$(( n+1 ))  # increments $n
+done
+
+</code></pre>
+<h3 id="reading-a-text-file"><a class="header" href="#reading-a-text-file">Reading A Text File</a></h3>
+<pre><code class="language-sh">#!/bin/bash
+file=/etc/resolv.conf
+while IFS= read -r line
+do
+ # echo line is stored in $line
+ echo $line
+done &lt; &quot;$file&quot;
+
+
+
+#!/bin/bash
+file=/etc/resolv.conf
+# set field separator to a single white space 
+while IFS=' ' read -r f1 f2
+do
+ echo &quot;field # 1 : $f1 ==&gt; field #2 : $f2&quot;
+done &lt; &quot;$file&quot;
+
+
+#!/bin/bash
+file=/etc/passwd
+# set field delimiter to : 
+# read all 7 fields into 7 vars 
+while IFS=: read -r user enpass uid gid desc home shell
+do
+    # only display if UID &gt;= 500 
+ [ $uid -ge 500 ] &amp;&amp; echo &quot;User $user ($uid) assigned \&quot;$home\&quot; home directory with $shell shell.&quot;
+done &lt; &quot;$file&quot;
+</code></pre>
+<h2 id="infinite-while-loop"><a class="header" href="#infinite-while-loop">Infinite while loop</a></h2>
+<ul>
+<li><strong>true command</strong> - do nothing, successfully (always returns exit code 0)</li>
+<li><strong>false command</strong> - do nothing, unsuccessfully (always returns exit code 1)</li>
+<li><strong>: command</strong> - no effect; the command does nothing (always returns exit code 0)</li>
+</ul>
+<pre><code class="language-sh">#!/bin/bash
+# Recommend syntax for setting an infinite while loop
+while :
+do
+ echo &quot;Do something; hit [CTRL+C] to stop!&quot;
+done
+
+
+
+#!/bin/bash
+while true
+do
+ echo &quot;Do something; hit [CTRL+C] to stop!&quot;
+done
+
+
+#!/bin/bash
+while false
+do
+ echo &quot;Do something; hit [CTRL+C] to stop!&quot;
+done
+</code></pre>
+<pre><code class="language-sh">#!/bin/bash
+# set an infinite loop
+while :
+do
+ clear
+        # display menu
+        echo &quot;Server Name - $(hostname)&quot;
+ echo &quot;-------------------------------&quot;
+ echo &quot;     M A I N - M E N U&quot;
+ echo &quot;-------------------------------&quot;
+ echo &quot;1. Display date and time.&quot;
+ echo &quot;2. Display what users are doing.&quot;
+ echo &quot;3. Display network connections.&quot;
+ echo &quot;4. Exit&quot;
+        # get input from the user 
+ read -p &quot;Enter your choice [ 1 -4 ] &quot; choice
+        # make decision using case..in..esac 
+ case $choice in
+  1)
+   echo &quot;Today is $(date)&quot;
+   read -p &quot;Press [Enter] key to continue...&quot; readEnterKey
+   ;;
+  2) 
+   w 
+   read -p &quot;Press [Enter] key to continue...&quot; readEnterKey
+   ;;
+  3)
+   netstat -nat
+   read -p &quot;Press [Enter] key to continue...&quot; readEnterKey
+   ;;
+  4)
+   echo &quot;Bye!&quot;
+   exit 0
+   ;;
+  *)
+   echo &quot;Error: Invalid option...&quot; 
+   read -p &quot;Press [Enter] key to continue...&quot; readEnterKey
+   ;;
+ esac  
+    
+done
+
+</code></pre>
+<h2 id="until-loop"><a class="header" href="#until-loop">Until loop</a></h2>
+<pre><code class="language-sh">#!/bin/bash
+i=1
+until [ $i -gt 6 ]
+do
+ echo &quot;Welcome $i times.&quot;
+ i=$(( i+1 ))
+done
+</code></pre>
+<h2 id="select-loop"><a class="header" href="#select-loop">Select loop</a></h2>
+<pre><code class="language-sh">#!/bin/bash
+
+# Set PS3 prompt
+PS3=&quot;Enter the space shuttle to get more information: &quot;
+
+# Set shuttle list
+select shuttle in columbia endeavour challenger discovery atlantis enterprise exit
+do
+    echo &quot;$shuttle selected&quot;
+    if [ &quot;$shuttle&quot; == &quot;exit&quot; ]
+    then
+        echo &quot;Exiting...&quot;
+        break
+    fi
+done
+
+
+1) columbia    3) challenger  5) atlantis    7) exit
+2) endeavour   4) discovery   6) enterprise
+Enter the space shuttle to get more information: 5
+atlantis selected
+Enter the space shuttle to get more information: 7
+exit selected
+Exiting...
+</code></pre>
+<h2 id="break--continue"><a class="header" href="#break--continue">break &amp; continue</a></h2>
+<pre><code class="language-sh">break
+
+break N # break N times, ex: exit for and then exit while
+
+continue 
+
+continue N # ~ break N
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/Bash_script/Conditionals_Execution.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/Network/basic_network_1.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/Bash_script/Conditionals_Execution.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/Network/basic_network_1.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
