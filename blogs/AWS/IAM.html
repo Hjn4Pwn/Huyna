@@ -165,35 +165,17 @@
                     <main>
                         <h1 id="iam---identity-and-access-management"><a class="header" href="#iam---identity-and-access-management">IAM - <em>Identity and Access Management</em></a></h1>
 <ul>
-<li>
-<p><a href="#iam">IAM</a></p>
-</li>
-<li>
-<p><a href="#policy">Policy</a></p>
-</li>
-<li>
-<p><a href="#role">Role</a></p>
-</li>
-<li>
-<p><a href="#resource-policy">Resource policy</a></p>
-</li>
-<li>
-<p><a href="#mfa">check MFA policy</a></p>
-</li>
-<li>
-<p><a href="#config-access-key-cli">config access key CLI</a></p>
-</li>
-<li>
-<p><a href="#assume-role">assume role</a></p>
-</li>
-<li>
-<p><a href="#switch-role">switch role</a></p>
-</li>
-<li>
-<p><a href="#best-practice-iam">Best practice IAM</a></p>
-</li>
-<li>
-<p>For more:</p>
+<li><a href="#iam">IAM</a></li>
+<li><a href="#policy">Policy</a></li>
+<li><a href="#role">Role</a></li>
+<li><a href="#resource-policy">Resource policy</a></li>
+<li><a href="#config-access-key-cli">config access key CLI</a></li>
+<li><a href="#mfa">check MFA policy</a></li>
+<li><a href="#role_ec2">Role-Ec2-FullS3Access</a></li>
+<li><a href="#assume-role">assume role</a></li>
+<li><a href="#switch-role">switch role</a></li>
+<li><a href="#best-practice-iam">Best practice IAM</a></li>
+<li><strong>For more reference</strong>:
 <ul>
 <li><a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">install cli aws</a></li>
 <li><a href="https://repost.aws/knowledge-center/authenticate-mfa-cli">CLI authenticate token MFA</a></li>
@@ -227,86 +209,256 @@
 <h2 id="resource-policy"><a class="header" href="#resource-policy">resource-policy</a></h2>
 <p>Tương tự như IAM policy tuy nhiên nó sẽ được gán dô cái resource cụ thể.
 Quyền của resource cao hơn, và quyền của user sẽ được tổng hợp cả IAM lẫn resource policy</p>
+<p>IAM policy và resource policy đều không có tác dụng với account root</p>
+<p>Demo resource policy gắn trên S3, để deny user dev-01 có thể tương tác với 1 bucket cụ thể:</p>
+<pre><code class="language-py">{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;test-resource-policy&quot;,
+            &quot;Effect&quot;: &quot;Deny&quot;,
+            &quot;Principal&quot;: {
+                &quot;AWS&quot;: &quot;arn:aws:iam::681333694768:user/dev-01&quot;
+            },
+            &quot;Action&quot;: &quot;s3:*&quot;,
+            &quot;Resource&quot;: [
+                &quot;arn:aws:s3:::test-hjn4&quot;,
+                &quot;arn:aws:s3:::test-hjn4/*&quot;
+            ]
+        }
+    ]
+}
+
+</code></pre>
+<h2 id="config-access-key-cli"><a class="header" href="#config-access-key-cli">config-access-key-cli</a></h2>
+<p>security credentials -&gt; roll down -&gt; access key -&gt; ... -&gt; download csv</p>
+<pre><code class="language-shell">➜ AWS ⚡                                                                      21:02:05
+▶ aws configure
+AWS Access Key ID [****************YKHC]: AKIAZ5IVHEEYHZUB2YMA
+AWS Secret Access Key [****************4CKM]: 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
+Default region name [ap-southeast-1]:
+Default output format [json]:
+
+➜ AWS ⚡                                                                      21:06:10
+▶ aws sts get-caller-identity
+{
+    &quot;UserId&quot;: &quot;AIDAZ5IVHEEYBNDND253T&quot;,
+    &quot;Account&quot;: &quot;681333694768&quot;,
+    &quot;Arn&quot;: &quot;arn:aws:iam::681333694768:user/dev-01&quot;
+}
+
+➜ AWS ⚡                                                                      21:07:43
+▶ aws s3 ls
+2024-01-21 20:52:58 test-hjn4
+
+➜ AWS ⚡                                                                      21:11:55
+▶ aws s3 ls s3://test-hjn4/
+2024-01-21 20:40:11     383190 zoro_image.jpg
+
+➜ AWS ⚡                                                                      21:12:30
+▶ aws s3 cp s3://test-hjn4/zoro_image.jpg .
+download: s3://test-hjn4/zoro_image.jpg to ./zoro_image.jpg
+</code></pre>
 <h2 id="mfa"><a class="header" href="#mfa">mfa</a></h2>
 <p>setup policy cho việc là user phải bật policy mới được phép tướng tác với các resource</p>
 <ul>
 <li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_aws_my-sec-creds-self-manage-mfa-only.html">manage MFA user</a></li>
 </ul>
-<p>gán policy này vào group muốn filter</p>
-<p>xài cosole thì setup được cái mfa rồi, còn dùng cli thì howto?</p>
+<pre><code class="language-py">{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;AllowViewAccountInfo&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: &quot;iam:ListVirtualMFADevices&quot;,
+            &quot;Resource&quot;: &quot;*&quot;
+        },
+        {
+            &quot;Sid&quot;: &quot;AllowManageOwnVirtualMFADevice&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;iam:CreateVirtualMFADevice&quot;
+            ],
+            &quot;Resource&quot;: &quot;arn:aws:iam::*:mfa/*&quot;
+        },
+        {
+            &quot;Sid&quot;: &quot;AllowManageOwnUserMFA&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;iam:DeactivateMFADevice&quot;,
+                &quot;iam:EnableMFADevice&quot;,
+                &quot;iam:GetUser&quot;,
+                &quot;iam:GetMFADevice&quot;,
+                &quot;iam:ListMFADevices&quot;,
+                &quot;iam:ResyncMFADevice&quot;
+            ],
+            &quot;Resource&quot;: &quot;arn:aws:iam::*:user/${aws:username}&quot;
+        },
+        {
+            &quot;Sid&quot;: &quot;DenyAllExceptListedIfNoMFA&quot;,
+            &quot;Effect&quot;: &quot;Deny&quot;,
+            &quot;NotAction&quot;: [
+                &quot;iam:CreateVirtualMFADevice&quot;,
+                &quot;iam:EnableMFADevice&quot;,
+                &quot;iam:GetUser&quot;,
+                &quot;iam:ListMFADevices&quot;,
+                &quot;iam:ListVirtualMFADevices&quot;,
+                &quot;iam:ResyncMFADevice&quot;,
+                &quot;sts:GetSessionToken&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;,
+            &quot;Condition&quot;: {
+                &quot;BoolIfExists&quot;: {&quot;aws:MultiFactorAuthPresent&quot;: &quot;false&quot;}
+            }
+        }
+    ]
+}
+</code></pre>
+<p>attach policy này vào group muốn filter</p>
+<p>Dùng Console thì ta có thể nhập code thông qua app authentication, cơ mà nếu dùng CLI thì không có chỗ nhập mã code, do đó ta cần config:</p>
 <ul>
-<li><a href="https://repost.aws/knowledge-center/authenticate-mfa-cli">CLI authenticate token MFA</a></li>
+<li>
+<p>phát hành temporary token</p>
+</li>
+<li>
+<p>config credential file</p>
+</li>
+<li>
+<p>chỉ định --profile cụ thể khi run command</p>
+</li>
+<li>
+<p><a href="https://repost.aws/knowledge-center/authenticate-mfa-cli">CLI authenticate token MFA</a></p>
+</li>
 </ul>
-<pre><code class="language-shell">▶ aws s3 ls
+<p><strong>aws sts get-session-token --serial-number arn-of-the-mfa-device --token-code code-from-token</strong></p>
+<p>Trong đó:</p>
+<ul>
+<li><strong>arn-of-the-mfa-device</strong>: là arn của MFA của user đó, chứ không pải arn của user</li>
+<li><strong>code-from-token</strong>: này là code mà user phải nhập lúc đăng nhặp trên console, cơ mà thay vì nhập ở đó ta sẽ gõ vô đây</li>
+</ul>
+<pre><code class="language-shell">➜ AWS ⚡                                                                      21:13:19
+▶ aws s3 ls s3://test-hjn4/
+
+An error occurred (AccessDenied) when calling the ListObjectsV2 operation: Access Denied
+
+➜ AWS ⚡                                                                     21:20:47
+▶ aws sts get-session-token --serial-number arn:aws:iam::681333694768:mfa/dev-01-phone --token-code 698227
+{
+    &quot;Credentials&quot;: {
+        &quot;AccessKeyId&quot;: &quot;ASIAZ5IVHEEYGQ4YQHMH&quot;,
+        &quot;SecretAccessKey&quot;: &quot;X/paoqB2qi88U5y5Im7kWdrTHZaT9LSh+E66U7sF&quot;,
+        &quot;SessionToken&quot;: &quot;IQoJb3JpZ2luX2VjEHcaDmFwLXNvdXRoZWFzdC0xIkYwRAIgHzMokdWrV74wqM/z9g0hbxphIkeWttiIOl9Rs9oklLUCIBd2WYytjYson4IlDGGoPP0looOFIshc5gcIymK4JqUkKu8BCDAQABoMNjgxMzMzNjk0NzY4IgyVbV+T35x+ZQFcBvAqzAE9FPmGOHnhtNuX3rV1i/KZVKUZAyms1utzKNccm6QYAI4bE8Fvl+4wH5KGTLdie6mmhT4EP2jTCFKj3d/TluT/FVe00DNRWZn+V+K4oPDLEDzDhbYpcf3N4xXb3rCWWO8lesst9L2ZKWUxuKPjZ/akPbxxSCKIMwDnE3z91TTgJMu9BuMewf6HBft62WjuELFkyI4laCauyrdrDrGrYHciTYbfTze5Bxmk8LAcw/mFBtPC6POop7LJdq0f5epWNgQVIOyg/bWBzZCNaMcwl9i0rQY6mQHC7INntEJmQny4phC97w8O3l5zjHtoPf7fLICKHu8sUIyqCAEKd6vjXbC9cxtoxTdTBM483DPOyQ1a9dMXxtLwH82FnR9WRdLlblRKjjIrOPvjICTzyw2IsCbmkgDswPEqd3Zp6/pvSDrK7Pp0GEM13g5JnghXPJoo4cw0oCwg63ckwIj5xXvaCTaLHK7g1+cOHxwekpRsWUs=&quot;,
+        &quot;Expiration&quot;: &quot;2024-01-22T02:37:11+00:00&quot;
+    }
+}
+
+</code></pre>
+<p>Lúc này ta sẽ đi config file <strong>credentials</strong> trong thư mục .aws ở home folder của user hiện tại trên máy, như bên dưới, và dùng <strong>--profile test-mfa</strong> để chỉ định profile. token này 8 tiếng sẽ bị expired do đó sau đó sẽ cần cấu hình lại</p>
+<pre><code class="language-py">➜ .aws ⚡                                                                    21:45:17
+▶ cat credentials
+[default]
+aws_access_key_id = AKIAZ5IVHEEYHZUB2YMA
+aws_secret_access_key = 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
+
+
+[test-mfa]
+aws_access_key_id = ASIAZ5IVHEEYGQ4YQHMH
+aws_secret_access_key = X/paoqB2qi88U5y5Im7kWdrTHZaT9LSh+E66U7sF
+aws_session_token = IQoJb3JpZ2luX2VjEHcaDmFwLXNvdXRoZWFzdC0xIkYwRAIgHzMokdWrV74wqM/z9g0hbxphIkeWttiIOl9Rs9oklLUCIBd2WYytjYson4IlDGGoPP0looOFIshc5gcIymK4JqUkKu8BCDAQABoMNjgxMzMzNjk0NzY4IgyVbV+T35x+ZQFcBvAqzAE9FPmGOHnhtNuX3rV1i/KZVKUZAyms1utzKNccm6QYAI4bE8Fvl+4wH5KGTLdie6mmhT4EP2jTCFKj3d/TluT/FVe00DNRWZn+V+K4oPDLEDzDhbYpcf3N4xXb3rCWWO8lesst9L2ZKWUxuKPjZ/akPbxxSCKIMwDnE3z91TTgJMu9BuMewf6HBft62WjuELFkyI4laCauyrdrDrGrYHciTYbfTze5Bxmk8LAcw/mFBtPC6POop7LJdq0f5epWNgQVIOyg/bWBzZCNaMcwl9i0rQY6mQHC7INntEJmQny4phC97w8O3l5zjHtoPf7fLICKHu8sUIyqCAEKd6vjXbC9cxtoxTdTBM483DPOyQ1a9dMXxtLwH82FnR9WRdLlblRKjjIrOPvjICTzyw2IsCbmkgDswPEqd3Zp6/pvSDrK7Pp0GEM13g5JnghXPJoo4cw0oCwg63ckwIj5xXvaCTaLHK7g1+cOHxwekpRsWUs=
+
+➜ .aws ⚡                                                                     21:45:20
+▶ aws s3 ls --profile test-mfa
+2023-12-05 21:17:54 test-hjn4
+
+</code></pre>
+<h2 id="role_ec2"><a class="header" href="#role_ec2">role_ec2</a></h2>
+<p>Đầu tiên ta sẽ tiến hành create role fulls3Acess rồi gán vào instance:</p>
+<pre><code class="language-sh">[ec2-user@ip-172-31-36-127 ~]$ aws s3 ls
+Unable to locate credentials. You can configure credentials by running &quot;aws configure&quot;.
+
+[ec2-user@ip-172-31-36-127 ~]$ aws s3 ls
+2024-01-21 14:12:30 test-hjn4
+</code></pre>
+<h2 id="trust-policy"><a class="header" href="#trust-policy">trust policy</a></h2>
+<p>Như tên của nó thì là nó sẽ cho biết nó trust đối tượng nào, tức là cho phép thằng nào assume/switch tới nó (role)</p>
+<p><img src="./image/trust_policy.png" alt="Alt text" /></p>
+<h2 id="assume-role"><a class="header" href="#assume-role">assume-role</a></h2>
+<p>assume role cho phép có quyền tạm thời để tương tác với 1 cái resource có thể là trên cùng hoăc khác account root.</p>
+<p>Ví dụ account root A của ta có user là dev-01, thg dev-01 này muốn tương tác với cái resource nào đấy hay có tác vụ cần thiết nào đấy trên account root B nhưng ta lại không muốn dùng accout root B tạo thêm profile user, thì ta có thể dùng assume role để cấp cho 1 cái quyền tạm thời, để dev-01 có thể làm việc với resource ở account root B, root B có thể quản lý thời gián</p>
+<p>Cơ mà để làm đc thì ta cần 1 cái trust policy</p>
+<p>Demo:</p>
+<ul>
+<li>Đầu tiên ta sẽ xóa user dev-01 khỏi các group =&gt; hiện tại user này không có quyền gì cả</li>
+<li>Tiếp theo ta sẽ tiến hành add inline policy cho phép dev-01 <strong>PassRole</strong></li>
+<li>Tiếp đến sẽ tiến hành tạo 1 role <strong>PowerUser</strong>, thiết lập trust policy cho phép dev-01 có thể assume role sang role <strong>PowerUser</strong> này.</li>
+</ul>
+<p><img src="./image/policy_assume_role.png" alt="Alt text" /></p>
+<p>Vào check thử xem có còn tương tác với S3 được nữa không</p>
+<pre><code class="language-sh">➜ .aws ⚡                                                                     21:55:08
+▶ aws s3 ls --profile test-mfa
 
 An error occurred (AccessDenied) when calling the ListBuckets operation: Access Denied
-➜ AWS ⚡                                                          23:30:41
-▶ aws sts get-session-token --serial-number arn:aws:iam::xxxxxxxxxxxxxxxxxxxx:mfa/dev-01-iphone --token-code 235326
-{
-    &quot;Credentials&quot;: {
-        &quot;AccessKeyId&quot;: &quot;xxxxxxxxxxxxxxxxxxxx&quot;,
-        &quot;SecretAccessKey&quot;: &quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;,
-        &quot;SessionToken&quot;: &quot;xxxxxxxxxxxxxxxxxxxx//////////xxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxx//////////xxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx+e+xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxx//xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx=&quot;,
-        &quot;Expiration&quot;: &quot;2023-10-10T04:34:50+00:00&quot;
-    }
-}
-➜ AWS ⚡                                                           23:34:50
-▶ aws s3 ls --profile dev-01-MFA
-2023-10-09 22:37:37 test-iam-huyna
 
 </code></pre>
-<p>Nhớ config lại cái credentials file trong thư mục .aws ở home folder của user hiện tại trên máy</p>
-<p>phải có khúc này <em><strong>--profile dev-01-MFA</strong></em></p>
-<h2 id="config-access-key-cli"><a class="header" href="#config-access-key-cli">config-access-key-cli</a></h2>
-<p>security credentials -&gt; roll down -&gt; access key -&gt; ... -&gt; download csv</p>
-<p>script:</p>
-<pre><code class="language-shell">➜ AWS ⚡                                                           23:15:38
-▶ aws configure
-AWS Access Key ID [None]: xxxxxxxxxxxxxxxxxxxx
-AWS Secret Access Key [None]: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-Default region name [None]: ap-southeast-1
-Default output format [None]: json
-➜ AWS ⚡                                                           23:16:54
-▶ aws sts get-caller-identity
-{
-    &quot;UserId&quot;: &quot;xxxxxxxxxxxxxxxxxxxx&quot;,
-    &quot;Account&quot;: &quot;xxxxxxxxxxxxxxxxxxxx&quot;,
-    &quot;Arn&quot;: &quot;arn:aws:iam::xxxxxxxxxxxxxxxxxxxx:user/dev-01&quot;
-}
-➜ AWS ⚡                                                           23:17:10
-▶ aws s3 ls
-2023-10-09 22:57:49 test-iam-huyna
-
-</code></pre>
-<h2 id="assume-role"><a class="header" href="#assume-role">assume-role</a></h2>
-<p>Cho phép assume role tức là có quyền tạm thời để tương tác với 1 cái resource có thể là trên account root khác.</p>
-<p>Ví dụ account root A của ta có con user là dev-01, thg dev-01 này muốn tương tác với cái resource nào đấy hay có tác vụ cần thiết nào đấy trên account root B nhưng ta lại không muốn dùng accout root B tạo thêm profile user các kiểu, thì ta có thể dùng assume role để cấp cho 1 cái quyền tạm thời, ta có thể quản lý thời gián</p>
-<p>Cơ mà để làm đc thì ta cần 1 cái trust policy</p>
-<p>Thông thường thì user bthg không có quyền gì cả, nên không tương tác được với s3, tuy nhiên ta sẽ tạo một cái assume role cho phép anh ta làm điều đó, và gán vào user và rồi anh ta đã có thể tương tác với s3</p>
-<pre><code class="language-shell">➜ Key-pair ⚡                                                     00:30:44
-▶  aws sts assume-role --role-arn arn:aws:iam::681333694768:role/test-power-user-access --role-session-name test-assume
+<p>Tiến hành assume role bằng CLI</p>
+<pre><code class="language-sh">➜ .aws ⚡                                                                     22:30:15
+▶ aws sts assume-role --role-arn &quot;arn:aws:iam::681333694768:role/poweruser_trust_policy&quot; --role-session-name AWSCLI-AssumeRole
 {
     &quot;Credentials&quot;: {
-        &quot;AccessKeyId&quot;: &quot;xxxxxxxxxxxxxxxxxxxx&quot;,
-        &quot;SecretAccessKey&quot;: &quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;,
-        &quot;SessionToken&quot;: &quot;xxxxxxxxxxxxxxxxxxxx//////////xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx+/xxxxxxxxxxxxxxxxxxxx//////////xxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx+xxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxx&quot;,
-        &quot;Expiration&quot;: &quot;2023-10-09T18:30:50+00:00&quot;
+        &quot;AccessKeyId&quot;: &quot;ASIAZ5IVHEEYFCCX6LN5&quot;,
+        &quot;SecretAccessKey&quot;: &quot;pyK8QCuyfIaPiOTTGsYXJ48o8c76Qpln/daNEGX8&quot;,
+        &quot;SessionToken&quot;: &quot;IQoJb3JpZ2luX2VjEHgaDmFwLXNvdXRoZWFzdC0xIkgwRgIhAPy+ECiSsy9O8cwcEUqWCgEtx1alvLI/NJsIGD+uaJ0WAiEAlf6CH1tH1/4Xwrl8ZAz1MoK7qkvATXdGOG3AcBfDVs0qngIIMRAAGgw2ODEzMzM2OTQ3NjgiDGI9w9L2MN6G4DnbEyr7AbMqHpE15SjQQHKtPQPqQjSE87NMUTaA1IWG4fXM9cjmAvJYDKiMqp+7mCRrp72Y3Q3IfLXQ0qdf4Pr3XrQqwKL1oSVjBg0L63FbIawq/DTbM9L76/R2PROjEDjWqk97eVoFgI7KqSL/2rejiR0cpqZ4FNDhz6PVd2/CZ++MGP8YV1GwVFN9WZSYwcQMtxU0nCdkZzCwN+k4ukavocG2duSW0ojonvTltUDon8IRwaf86t3XSSsZ1T1DEEAS02QPpViG10XTMGG2ucYIl4fL7BTB9QEUpruWYEIKrolpfUmwY6V8/8ETa466Q2dMJF4BoTkE1E/PDSH+g0liMPLytK0GOpwBy2chkqT0oF5NaqJDNn/+7DESjx/OICr4giYy35LZz4rl9u4wBXJdoC1LRIlbgCEWCLdaLoKWcJJ9JfWVQN0hSCsRRprexCb4wC+h5BEbo5ygc+SNfTSEwBdv6Dq6xsw5LQAG0UYT2Bg1ZRhwNv+xf2jcvn753ppcpTimLEIOOqkLhmh9MjIDvQm0JZ+sUmdyl9eyP/HAGo3Bw2FU&quot;,
+        &quot;Expiration&quot;: &quot;2024-01-21T16:34:10+00:00&quot;
     },
     &quot;AssumedRoleUser&quot;: {
-        &quot;AssumedRoleId&quot;: &quot;xxxxxxxxxxxxxxxxxxxx:test-assume&quot;,
-        &quot;Arn&quot;: &quot;arn:aws:sts::xxxxxxxxxxxxxxxxxxxx:assumed-role/test-power-user-access/test-assume&quot;
+        &quot;AssumedRoleId&quot;: &quot;AROAZ5IVHEEYCLSKJSX6A:AWSCLI-AssumeRole&quot;,
+        &quot;Arn&quot;: &quot;arn:aws:sts::681333694768:assumed-role/poweruser_trust_policy/AWSCLI-AssumeRole&quot;
     }
-}
-➜ Key-pair ⚡                                                      00:30:50
-▶ aws s3 ls --profile test-assume
-2023-10-09 22:37:37 test-iam-huyna
+}               
 
 </code></pre>
-<p><em><strong>túm ccái váy lại role ở đây là 1 cái luật 1 cái rule cho phép ai đó làm gì đó, ở cái role này ta sẽ thiết lập cái trust policy thể hiện kiểu tin tưởng ai đó trong khoảng tgian nào đó, để rồi thg đó là có thể assume cái role này trong 1 khoảng tgian nhất định, kiểu có quyền trong 1 tgian nào đó</strong></em></p>
-<h3 id="trust-policy"><a class="header" href="#trust-policy">trust policy</a></h3>
-<p>Như tên của nó thì là nó sẽ cho biết nó trust đối tượng nào, tức là cho phép thằng nào assume/switch tới nó (role)</p>
+<p>Trong đó:</p>
+<ul>
+<li><strong>arn:aws:iam::681333694768:role/poweruser_trust_policy</strong>: là arn của role cần assume sang đó</li>
+<li><strong>AWSCLI-AssumeRole</strong>: tên mình đặt</li>
+</ul>
+<p>Tiến hành cấu hình file:</p>
+<pre><code class="language-sh">➜ .aws ⚡                                                                     22:34:04
+▶ gedit credentials
+
+
+➜ .aws ⚡                                                                     22:35:47
+▶ cat credentials
+[default]
+aws_access_key_id = AKIAZ5IVHEEYHZUB2YMA
+aws_secret_access_key = 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
+
+
+[test-mfa]
+aws_access_key_id = ASIAZ5IVHEEYGQ4YQHMH
+aws_secret_access_key = X/paoqB2qi88U5y5Im7kWdrTHZaT9LSh+E66U7sF
+aws_session_token = IQoJb3JpZ2luX2VjEHcaDmFwLXNvdXRoZWFzdC0xIkYwRAIgHzMokdWrV74wqM/z9g0hbxphIkeWttiIOl9Rs9oklLUCIBd2WYytjYson4IlDGGoPP0looOFIshc5gcIymK4JqUkKu8BCDAQABoMNjgxMzMzNjk0NzY4IgyVbV+T35x+ZQFcBvAqzAE9FPmGOHnhtNuX3rV1i/KZVKUZAyms1utzKNccm6QYAI4bE8Fvl+4wH5KGTLdie6mmhT4EP2jTCFKj3d/TluT/FVe00DNRWZn+V+K4oPDLEDzDhbYpcf3N4xXb3rCWWO8lesst9L2ZKWUxuKPjZ/akPbxxSCKIMwDnE3z91TTgJMu9BuMewf6HBft62WjuELFkyI4laCauyrdrDrGrYHciTYbfTze5Bxmk8LAcw/mFBtPC6POop7LJdq0f5epWNgQVIOyg/bWBzZCNaMcwl9i0rQY6mQHC7INntEJmQny4phC97w8O3l5zjHtoPf7fLICKHu8sUIyqCAEKd6vjXbC9cxtoxTdTBM483DPOyQ1a9dMXxtLwH82FnR9WRdLlblRKjjIrOPvjICTzyw2IsCbmkgDswPEqd3Zp6/pvSDrK7Pp0GEM13g5JnghXPJoo4cw0oCwg63ckwIj5xXvaCTaLHK7g1+cOHxwekpRsWUs=
+
+[test-assume]
+aws_access_key_id = ASIAZ5IVHEEYFCCX6LN5
+aws_secret_access_key = pyK8QCuyfIaPiOTTGsYXJ48o8c76Qpln/daNEGX8
+aws_session_token = IQoJb3JpZ2luX2VjEHgaDmFwLXNvdXRoZWFzdC0xIkgwRgIhAPy+ECiSsy9O8cwcEUqWCgEtx1alvLI/NJsIGD+uaJ0WAiEAlf6CH1tH1/4Xwrl8ZAz1MoK7qkvATXdGOG3AcBfDVs0qngIIMRAAGgw2ODEzMzM2OTQ3NjgiDGI9w9L2MN6G4DnbEyr7AbMqHpE15SjQQHKtPQPqQjSE87NMUTaA1IWG4fXM9cjmAvJYDKiMqp+7mCRrp72Y3Q3IfLXQ0qdf4Pr3XrQqwKL1oSVjBg0L63FbIawq/DTbM9L76/R2PROjEDjWqk97eVoFgI7KqSL/2rejiR0cpqZ4FNDhz6PVd2/CZ++MGP8YV1GwVFN9WZSYwcQMtxU0nCdkZzCwN+k4ukavocG2duSW0ojonvTltUDon8IRwaf86t3XSSsZ1T1DEEAS02QPpViG10XTMGG2ucYIl4fL7BTB9QEUpruWYEIKrolpfUmwY6V8/8ETa466Q2dMJF4BoTkE1E/PDSH+g0liMPLytK0GOpwBy2chkqT0oF5NaqJDNn/+7DESjx/OICr4giYy35LZz4rl9u4wBXJdoC1LRIlbgCEWCLdaLoKWcJJ9JfWVQN0hSCsRRprexCb4wC+h5BEbo5ygc+SNfTSEwBdv6Dq6xsw5LQAG0UYT2Bg1ZRhwNv+xf2jcvn753ppcpTimLEIOOqkLhmh9MjIDvQm0JZ+sUmdyl9eyP/HAGo3Bw2FU
+
+</code></pre>
+<p>Cuối cùng đã có thể assume role thành công:</p>
+<pre><code class="language-sh">➜ .aws ⚡                                                                    22:35:15
+▶ aws s3 ls --profile test-assume
+2023-12-05 21:17:54 test-hjn4
+
+</code></pre>
+<p><em><strong>Note: Lúc mà create role có lỡ quên config trust policy thì sau đó có thể config lại bằng cách vô tab trust relationships</strong></em></p>
+<p><em><strong>túm cái váy lại role ở đây là 1 cái luật 1 cái rule cho phép ai đó làm gì đó, ở cái role này ta sẽ thiết lập cái trust policy thể hiện kiểu tin tưởng ai đó trong khoảng tgian nào đó được dùng cái role này, để rồi thg đó là có thể assume cái role này trong 1 khoảng tgian nhất định, kiểu có quyền trong 1 tgian nào đó</strong></em></p>
 <h2 id="switch-role"><a class="header" href="#switch-role">switch-role</a></h2>
-<p>sẽ rời bỏ account ban đầu và qua chỉ tương tác với các resource của account thứ 2. <em><strong>review on udemy</strong></em></p>
+<p>sẽ rời bỏ account ban đầu và qua tương tác với các resource của account thứ 2. <em><strong>review on udemy</strong></em></p>
+<ul>
+<li><strong>Add policy cho phép assume role cho user cần switch role</strong></li>
+<li><strong>Bên thằng cho switch sang thì cần add trust policy</strong></li>
+</ul>
 <h2 id="best-practice-iam"><a class="header" href="#best-practice-iam">best-practice-iam</a></h2>
 <ul>
 <li>sử dụng group để gán quyền cho các user, không gán riêng lẻ</li>
