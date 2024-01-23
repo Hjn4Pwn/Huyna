@@ -228,20 +228,35 @@
 <li>Chi phí theo đó sẽ tăng lên so với khi không bật versioning</li>
 <li>Sau khi bật versioning, nếu tắt versioning thì những object trước khi tắt vẫn sẽ có nhiều version, những object sinh ra sau khi tắt sẽ không có version</li>
 </ul>
+<p><img src="./image/versioning.png" alt="Alt text" /></p>
+<p><em>Nếu tắt tính năng versioning đi, thì object cùng tên tiếp theo được ghi vào sẽ ghi đè vào version có id = null. Nếu hiện vẫn chưa có version nào mà id=null =&gt; nó sẽ tạo ra version mới với id là null mà k ghi đè lên các version có id khác mặc dù đã tắt tính năng versioning</em></p>
 <h2 id="presign-url"><a class="header" href="#presign-url">Presign URL</a></h2>
 <ul>
 <li>Khi muốn cấp access tạm thời cho người dùng public tới một object trên S3, AWS cung cấp cơ chế Presign URL</li>
 <li>User có thể dùng Presign URL để download/upload object trên S3 trong thời gian quy định (được set lúc phát hành URl)</li>
 <li>Usecase:
 <ul>
-<li>Muốn cấp access public cho 1 object không muốn thay đổi ACL hoặc tạo thêm bucket policy</li>
-<li>Cần authen người dùng hoặc yêu cầu họ làm gì đó trước khi được download file (vd xen quảng cáo)</li>
+<li>Muốn cấp access public cho 1 object không muốn thay đổi ACL hoặc thay đổi bucket policy</li>
+<li>Cần authen người dùng hoặc yêu cầu họ làm gì đó trước khi được download file (vd xenm quảng cáo)</li>
 <li>Ngăn chặn resource để public vô thời hạn khiến cho tài nguyên bị khai thác bởi bên khác</li>
 </ul>
 </li>
 </ul>
 <p><img src="./image/presign-url.png" alt="presign url operating model" /></p>
 <p><a href="https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3/presign.html"><em><strong>Configure CLI Presign URL</strong></em></a></p>
+<p>Trên CLI cần xác định đã login vào:</p>
+<pre><code class="language-sh">aws sts get-caller-identity
+
+aws configure #nếu chưa configure
+
+</code></pre>
+<p>Tiếp theo tiến hành pháp hành Presigned URL: <strong>aws s3 presign <URI of object> + options...</strong></p>
+<pre><code class="language-sh">➜ Asus ⚡                                                           20:53:31
+▶ aws s3 presign s3://hjn4-bucket/hq720.jpg --expires-in 60
+https://hjn4-bucket.s3.ap-southeast-1.amazonaws.com/hq720.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAZ5IVHEEYHXLJRG5P%2F20240123%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20240123T135719Z&amp;X-Amz-Expires=60&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=c5e26cc6133c8597c2b448983c88080ef4b985b8fc5a3328b50d2eaf4146d209
+
+</code></pre>
+<p><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html">docs</a> ở đây có hướng dẫn cả trên Console và CLI</p>
 <h2 id="storage-classes"><a class="header" href="#storage-classes">Storage Classes</a></h2>
 <p>S3 cung cấp nhiều storage class khác nhau nhằm giúp người dùng linh động trong việc lựa chọn class phù hợp với nhu cầu, tiết kiệm chi phí:</p>
 <ul>
@@ -264,14 +279,16 @@
 <li>S3 Glacier:
 <ul>
 <li>Glacier Instant Retrieval</li>
-<li>Glacier Flexible Retrieval (Normal Glacier)</li>
-<li>S3 Glacier Deep Archive</li>
+<li>Glacier Flexible Retrieval (Normal Glacier) <em>cái này mình cần request đợi mới download được tùy usecase mà dùng</em></li>
+<li>S3 Glacier Deep Archive <em>tối đa 12 tiếng</em></li>
 </ul>
 </li>
 <li>S3 on Outposts</li>
 </ul>
 </li>
 </ul>
+<p><img src="./image/storage_class1.png" alt="Alt text" /></p>
+<p><img src="./image/storage_class2.png" alt="Alt text" /></p>
 <p><a href="https://aws.amazon.com/s3/storage-classes/"><em><strong>For more in slide PDF on my local OR here</strong></em></a></p>
 <h2 id="life-cycle"><a class="header" href="#life-cycle">Life Cycle</a></h2>
 <ul>
@@ -280,6 +297,7 @@
 <li>Phù hợp cho các bài toán lưu trữ Log đã biết trước thời gian thường xuyên access và thời gian có thể xóa</li>
 </ul>
 <h2 id="static-website-hosting"><a class="header" href="#static-website-hosting">Static website hosting</a></h2>
+<p><em>S3 hỗ trợ host 1 website tĩnh (HTML, CSS, JS)</em></p>
 <ul>
 <li>Upload folder static web vào bucket, ở gốc lun. Tức là bucket rồi vào là gặp các file trong folder static web</li>
 <li>Vào <strong>Properties</strong> enable cái <em><strong>Static website hosting</strong></em></li>
@@ -294,12 +312,20 @@
             &quot;Effect&quot;: &quot;Allow&quot;,
             &quot;Principal&quot;: &quot;*&quot;,
             &quot;Action&quot;: &quot;s3:GetObject&quot;,
-            &quot;Resource&quot;: &quot;arn:aws:s3:::learn-s3-hjn4/*&quot;
+            &quot;Resource&quot;: &quot;arn:aws:s3:::hjn4-bucket/*&quot;,
+            &quot;Condition&quot;: {
+                &quot;DateGreaterThan&quot;: {
+                    &quot;aws:CurrentTime&quot;: &quot;2024-01-23T15:02:00Z&quot;
+                },
+                &quot;DateLessThan&quot;: {
+                    &quot;aws:CurrentTime&quot;: &quot;2024-01-23T15:05:00Z&quot;
+                }
+            }
         }
     ]
 }
-
 </code></pre>
+<p><em>cái expired time kia là theo chuẩn UTC, Theo giờ VN tức là UTC+7 =&gt; do đó convert từ giờ Việt Nam sang UTC ta phải trừ đi 7 hours</em></p>
 <h2 id="event-trigger"><a class="header" href="#event-trigger">Event trigger</a></h2>
 <ul>
 <li>S3 cung cấp cơ chế trigger 1 event sang dịch vụ khác khi có thay đổi đối với object (upload, delete)</li>
