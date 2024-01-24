@@ -234,6 +234,27 @@
 </ul>
 <p><img src="./image/Gateway-loadbalancer.png" alt="Gateway LoadBalancer" /></p>
 <p>Tổng kết nhỏ là: Mỗi listener sẽ ứng với 1 port, 1 ALB sẽ có nhiều listener, mà mỗi listener có thể có nhiều target, ta có thể xét tỉ lệ cho mỗi target.</p>
+<h2 id="cross-zone-load-balancer"><a class="header" href="#cross-zone-load-balancer">Cross zone load balancer</a></h2>
+<p>ELB là 1 dịch vụ hoạt động cross zone (AWS suggest chọn tất cả các zone có thể khi khởi tọa ELB)</p>
+<ul>
+<li>Nếu Cross zone LoadBalancer được enable thì:
+<img src="./image/cross_zone_enable.png" alt="Alt text" /></li>
+</ul>
+<p>Lúc này ELB chia điều số lượng request đến các EC2, mỗi con nhận 10% không phân biệt là nó ở AZ nào</p>
+<ul>
+<li>
+<p>Nếu Cross zone LoadBalancer bị disable thì:
+<img src="./image/cross_zone_disable.png" alt="Alt text" />
+Lúc này ELB sẽ chia đều số lượng request cho các AZ mà không quan tâm trong zone đó có bao nhiều EC2. Dẫn đến các EC2 sẽ làm việc không cân bằng</p>
+</li>
+<li>
+<p>Note:</p>
+<ul>
+<li><em>Application LoadBalancer mặc định sẽ enable cross zone và không thể tắt</em></li>
+<li><em>Network LoadBalancer mặc định sẽ disable cross zone và ta cần enable sau khi tạo</em></li>
+</ul>
+</li>
+</ul>
 <h2 id="auto-scaling"><a class="header" href="#auto-scaling">Auto scaling</a></h2>
 <ul>
 <li>
@@ -339,7 +360,7 @@ một khoảng thời gian.</li>
 <li>Phù hợp cho các website sử dụng công nghệ cũ quản lý session
 của user trên RAM</li>
 </ul>
-<p><em>Chỉnh trong Edit Listen trong Load balancer, và trong target group tương ứng</em></p>
+<p><em>Chỉnh trong Edit Listen trong Load balancer listener, và trong target group tương ứng</em></p>
 
                     </main>
 
