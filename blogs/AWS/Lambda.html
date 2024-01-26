@@ -251,6 +251,44 @@ Total: $4.225</li>
 <li>Sử dụng trong bài toán ETL khi kết hợp với Kinesis, IoT
 <img src="./image/lambda6.png" alt="Alt text" /></li>
 </ul>
+<h2 id="s3-trigger-resize-image"><a class="header" href="#s3-trigger-resize-image">S3 trigger resize image</a></h2>
+<p>Tạo Lambda Funciton có chức năng xử lý hình (.jpg, .png) được upload lên S3 thành các size khác nhau, output được lưu vào thư mục tương ứng.</p>
+<p><img src="./image/resize_lambda.png" alt="Alt text" /></p>
+<ul>
+<li>Đầu tiên do phần code python này có sử dụng thư viện Pillow mà lambda không support sẵn nên ta cần import Pillow vào layer</li>
+<li>Sau khi có layer chứa thư viện cần thiết, ta sẽ tạo function, add code, add layer vừa tạo vào</li>
+<li>Nhớ config timeout</li>
+<li>Add role để Lambda có thể tương tác với S3</li>
+<li>Qua S3 tạo bucket, event trỏ từ lambda function</li>
+<li>Xem log ở CloudWatch</li>
+</ul>
+<p><strong>Reference:</strong></p>
+<ul>
+<li><a href="https://medium.com/@bhatia.sandeep/importing-python-libraries-in-aws-lambda-f6e8b2a31a24">Maybe useful</a></li>
+<li><a href="https://github.com/keithrozario/Klayers.git">Lambda-Layer-Python-Packages</a></li>
+<li><a href="#Nothing-here-for-you-bruh">Slide Udemy Course</a></li>
+</ul>
+<h2 id="schedule-ec2-instance-startstop"><a class="header" href="#schedule-ec2-instance-startstop">Schedule EC2 instance Start/Stop</a></h2>
+<p>Tạo Lambda Function có chức năng bật tắt EC2 instance theo lịch. Lambda nhận 2
+tham số là “instance_id” và “action” (START, STOP). Tiến hành setting schedule cho
+lambda sử dụng EventBridge. EventBridge sẽ truyền sang 2 tham số cần thiết =&gt;</p>
+<p><img src="./image/start_stop_EC2_lambda.png" alt="Alt text" /></p>
+<ul>
+<li>Đầu tiên ta sẽ tạo Lambda Funtion, add code vào</li>
+<li>Config timeout</li>
+<li>Add Role =&gt; inline policy EC2 =&gt; Write =&gt; Start/Stop Instance</li>
+<li>Sang EventBridge tiến hành schedule</li>
+</ul>
+<h2 id="trigger-upload-move-file-from-s3-to-dynamodb"><a class="header" href="#trigger-upload-move-file-from-s3-to-dynamodb">Trigger upload, move file from S3 to DynamoDB</a></h2>
+<p>Tạo lambda function trigger event upload csv file từ S3, sau đó lưu vào table trong</p>
+<p><img src="./image/S3_dynamoDB_lambda.png" alt="Alt text" /></p>
+<ul>
+<li>Đầu tiên tạo Lambda Function, với code python xử lý</li>
+<li>Config timeout, setup policy cho phép tương tác với S3, DynamoDB</li>
+<li>Tạo table bên DynamoDB</li>
+<li>Tạo thư mục bên S3</li>
+<li>Upload và view log, result</li>
+</ul>
 
                     </main>
 
