@@ -1,0 +1,399 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>API Gateway &amp; Cognito - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">Documents from everywhere</li><li class="chapter-item "><a href="../../blogs/Documents/troubleshooting.html">Troubleshooting</a></li><li class="chapter-item "><a href="../../blogs/Documents/study.html">Study</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/job.html">Requirements for job</a></li><li class="chapter-item "><a href="../../blogs/AWS/EC2.html">Computing Services - EC2</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAM.html">Identity and Access Management -IAM</a></li><li class="chapter-item "><a href="../../blogs/AWS/S3.html">Simple Storage Service - S3</a></li><li class="chapter-item "><a href="../../blogs/AWS/LoadBalancing-Autoscaling.html">Load balancing and Autoscaling</a></li><li class="chapter-item "><a href="../../blogs/AWS/RDS.html">Relational Database Service - RDS</a></li><li class="chapter-item "><a href="../../blogs/AWS/DynamoDB.html">Database Services - No SQL - DynamoDB</a></li><li class="chapter-item "><a href="../../blogs/AWS/Lambda.html">Serverless Lambda</a></li><li class="chapter-item "><a href="../../blogs/AWS/VPC.html">Networking service - VPC, Peering, Endpoint</a></li><li class="chapter-item expanded "><a href="../../blogs/AWS/Gateway_Cognito.html" class="active">API Gateway & Cognito</a></li><li class="chapter-item affix "><li class="part-title">Linux + Git</li><li class="chapter-item "><a href="../../blogs/Linux/bandit.html">Bandit challenge</a></li><li class="chapter-item "><a href="../../blogs/Linux/command_session_1.html">Command session 1</a></li><li class="chapter-item "><a href="../../blogs/Linux/git_command.html">Git command</a></li><li class="chapter-item "><a href="../../blogs/Linux/ssh.html">SSH</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some docker tips for CTF</a></li><li class="chapter-item "><a href="../../blogs/Docker/get_started.html">Basic Docker</a></li><li class="chapter-item "><a href="../../blogs/Docker/dockerfile_write.html">Dockerfile</a></li><li class="chapter-item "><a href="../../blogs/Docker/docker_network.html">Docker Network</a></li><li class="chapter-item affix "><li class="part-title">Jenkins</li><li class="chapter-item "><a href="../../blogs/Jenkins/install_by_docker.html">Install Jenkins By Docker</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/link_git_jenkins.html">Link git with jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/pipline_github_jenkins.html">Pipeline jenkinsfile with github</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_jenkins.html">Link gitlab with Jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_dockerhub.html">Gitlab-dockerhub-pipeline</a></li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item "><a href="../../blogs/Python/RE.html">Regular Expression</a></li><li class="chapter-item "><a href="../../blogs/Python/Automation_1.html">Automation with Python 1</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item "><a href="../../blogs/Bash_script/Variables_Environment.html">Shell Variables and Environment</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Conditionals_Execution.html">Conditionals Execution</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Bash_Loops.html">Bash Loops & Function</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Shell_Redirection.html">Shell Redirection & Pipes and Filters</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Interactive_Scripts.html">Interactive Scripts</a></li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/basic_network_1.html">Basic Network 1</a></li><li class="chapter-item affix "><li class="part-title">PWN</li><li class="chapter-item "><a href="../../blogs/PWN/Emporium_ROP.html">Rop Emporium</a></li><li class="chapter-item "><a href="../../blogs/PWN/pwnableTW.html">Pwnable.tw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pico_CTF.html">Pwn_PicoCTF</a></li><li class="chapter-item "><a href="../../blogs/PWN/PWN_from_blabla.html">Pwn from blabla</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/ASM.html">ASM</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_PicoCTF</li><li class="chapter-item "><a href="../../blogs/RE/RE.html">RE</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="api-gateway--cognito"><a class="header" href="#api-gateway--cognito">API Gateway &amp; Cognito</a></h1>
+<h2 id="what"><a class="header" href="#what">What?</a></h2>
+<ul>
+<li>Một dịch vụ API Gateway được cung cấp bởi AWS. Nó cung cấp một cách đơn giản để xây dựng, quản lý và bảo mật các RESTful API hoặc WebSocket.</li>
+<li>AWS API Gateway là một dịch vụ quan trọng trong kiến trúc dựa trên các dịch vụ của AWS (AWS-based microservices architecture)</li>
+<li>Thường được sử dụng cùng với các dịch vụ AWS khác như AWS Lambda, EC2, S3, Amazon DynamoDB</li>
+<li>AWS API Gateway cung cấp các tính năng:
+<ul>
+<li>Cho phép thiết kế và phát triển API RESTful hoặc WebSocket thông qua web GUI.</li>
+<li>Điều phối các yêu cầu API đến các hệ thống hoặc dịch vụ khác nhau.</li>
+<li>Authen/Author request tới các API.</li>
+<li>Quản lý và giám sát các yêu cầu API, vd số lượng request, response time...</li>
+<li>AWS API Gateway cũng cung cấp các tính năng bảo mật, bao gồm chứng thực và ủy quyền các yêu cầu API và mã hóa secure communication giữa các hệ thống khác nhau.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Đặc-trưng-của-api-gateway"><a class="header" href="#Đặc-trưng-của-api-gateway">Đặc trưng của API Gateway</a></h2>
+<ul>
+<li>Là một fully managed service của AWS.</li>
+<li>Khả năng scale và High Availablity không giới hạn.</li>
+<li>Zero idle cost</li>
+<li>Easy to setup</li>
+<li>Dễ dàng kết hợp với các dịch vụ khác như CloudWatch, WAF cho mục
+đích monitor &amp; security.</li>
+</ul>
+<h2 id="hệ-sinh-thái-api-gateway"><a class="header" href="#hệ-sinh-thái-api-gateway">Hệ sinh thái API Gateway</a></h2>
+<p>API Gateway là một service chủ yếu có nhiệm vụ nhận request của client sau đó forward tới các service phía sau.
+<img src="./image/hesinhthaiAPIGW.png" alt="Alt text" /></p>
+<h2 id="khi-nào-nên-sử-dụng-api-gateway"><a class="header" href="#khi-nào-nên-sử-dụng-api-gateway">Khi nào nên sử dụng API Gateway?</a></h2>
+<p>API Gateway phù hợp cho những bài toán sau:</p>
+<ul>
+<li>Kiến trúc Micro-service sử dụng lambda làm backend</li>
+<li>Backend API cho hầu hết các usecase (web API, IoT)</li>
+<li>Gateway nhận data trực tiếp từ client sau đó lưu vào DynamoDB (DB First)</li>
+<li>Web Socket cho những hệ thống realtime communication.</li>
+</ul>
+<h2 id="api-gateway-pricing"><a class="header" href="#api-gateway-pricing">API Gateway Pricing</a></h2>
+<p>API Gateway là một dịch vụ có idle cost = 0. Người dùng chỉ trả tiền cho chi phí chạy thực tế, cụ thể:</p>
+<ul>
+<li><strong>Với REST API</strong>
+<ul>
+<li>Số lượng request (Vd Singapore region:$ 4.25/1M requests)</li>
+<li>Data transfer out ($/GB)</li>
+<li>Caching size tính theo GB/hour</li>
+</ul>
+</li>
+<li><strong>Với Web socket</strong>
+<ul>
+<li>Message number (đối với Web socket). Vd $1.15/1M message với block 32KB.</li>
+<li>Connection minutes: $0.288/1M connection minutes</li>
+</ul>
+</li>
+</ul>
+<h2 id="authentication-cho-api-gateway"><a class="header" href="#authentication-cho-api-gateway">Authentication cho API Gateway</a></h2>
+<p>API Gateway cung cấp 2 phương thức authen tích hợp trực tiếp (authorizer) thường được sử dụng đó là:</p>
+<ul>
+<li><strong>Cognito Authorizer</strong>
+Liên kết trực tiếp với một Cognito User Pool sử dụng làm authorizer. Khi access API, client passing trực tiếp token lấy được thông qua login với
+Cognito, API Gateway sẽ check token và allow access nếu token hợp lệ.</li>
+<li><strong>Lambda Authorizer (custom authorizer)</strong>
+Khi sử dụng loại authorizer này, bạn sẽ tự implement logic authen trên Lambda. Có 2 hình thức là authen dựa vào TOKEN (JWT) hoặc request parameter based (VD username/password).</li>
+</ul>
+<h2 id="cognito"><a class="header" href="#cognito">Cognito?</a></h2>
+<ul>
+<li>AWS Cognito là một dịch vụ quản lý danh tính và xác thực người dùng của Amazon Web Services (AWS).</li>
+<li>Dịch vụ này cho phép bạn tạo ra các ứng dụng web và di động an toàn với khả năng xác thực người dùng, phân quyền, và đăng nhập với nhiều tùy chọn như user account, Social login hoặc đăng nhập qua Identity Provider.</li>
+</ul>
+<h2 id="tính-năng-của-cognito"><a class="header" href="#tính-năng-của-cognito">Tính năng của Cognito</a></h2>
+<ul>
+<li>Đăng ký &amp; Xác thực người dùng sử dụng username/passwd/email hoặc tài khoản mạng xã hội.</li>
+<li>Phân quyền người dùng vào các ứng dụng hoặc tài nguyên</li>
+<li>Xác thực email/số điện thoại.</li>
+<li>Tích hợp với các dịch vụ khác (API Gateway, Lambda) để xây dựng ứng dụng.</li>
+<li>Hỗ trợ cho ứng dụng di động (iOS,Android) thông qua SDK</li>
+<li>Cognito sync: sync data giữa các mobile device với nhau</li>
+<li>Advanced Security: giám sát &amp; phân tích truy cập của user để phát hiện và ngăn chặn truy cập bất thường (optional).</li>
+</ul>
+<h2 id="pricing-của-cognito"><a class="header" href="#pricing-của-cognito">Pricing của Cognito</a></h2>
+<ul>
+<li>Số lượng Monthly Active User. VD ở Singapore là $0.0055/MAU (càng lên cao càng rẻ)</li>
+<li>User sign in thông qua SAML hoặc OIDC: $0.015/MAU</li>
+<li>Tính năng Advance Security: $0.05/MAU nếu enable</li>
+<li>SMS trong trường hợp gửi message MFA: Tuỳ theo khu vực.</li>
+</ul>
+<h2 id="hạn-chế-của-cognito"><a class="header" href="#hạn-chế-của-cognito">Hạn chế của Cognito</a></h2>
+<ul>
+<li>Số lượng User trên 1 user pool: 40M (contact AWS nếu muốn tăng)</li>
+<li>Số lượng user pool tối đa: default 1,000, max 10,000</li>
+<li>Custom attribute: 50
+Hạn chế về tần suất Admin API call vd:</li>
+<li>UserCreation: 50 RPS. Tăng thêm 10RPS cho mỗi 1 triệu MAU</li>
+<li>AdminUserRead: 120 RPS. Tăng thêm 40 RPS cho mỗi 1 triệu MAU</li>
+<li>RevokeToken: 120 RPS. Tăng thêm 40 RPS cho mỗi 1 triệu MAU</li>
+<li>UserUpdate: 25 RPS không thể tăng thêm.</li>
+<li>...</li>
+</ul>
+<h3 id="lưu-ý-về-cơ-chế-verify-token-của-cognito"><a class="header" href="#lưu-ý-về-cơ-chế-verify-token-của-cognito">Lưu ý về cơ chế verify token của Cognito</a></h3>
+<ul>
+<li>JWT token do Cognito phát hành thông thường sẽ dùng client side verify (sử dụng Public Key do Cognito cung cấp. *Lưu ý AWS không cung cấp private key của Cognito).</li>
+<li>Việc này đồng nghĩa với việc nếu user logout thì access-token vẫn có hiệu lực cho tới khi expired (vd 30 min).</li>
+<li>Nếu hệ thống có nhu cầu revoke access-token đã phát hành khi user có các hành động như change password, log-out thì không thể thực hiện với Cognito.</li>
+<li>Tất nhiên có thể workaround sử dụng các kỹ thuật Caching/DB.</li>
+</ul>
+<h2 id="api-gateway-with-lambda-test-by-postman"><a class="header" href="#api-gateway-with-lambda-test-by-postman">API Gateway with Lambda, test by Postman</a></h2>
+<ul>
+<li>Đầu tiên tạo 1 Lambda function để xửa lí input và trả về 1 chuỗi jdon</li>
+</ul>
+<pre><code class="language-sh">import json
+
+def lambda_handler(event, context):
+    
+    # for debug
+    print('DEBUG INPUT FROM CLIENT:')
+    print(event)
+
+    firstNum = event['firstNum']
+    secondNum = event['secondNum']
+    operator = event['operator'] # ADD, MULTIPLE, DEVIDE, SUBSTRACT
+    # Process the request
+    result = calculate(firstNum, secondNum, operator)
+    
+    # Create the response body
+    response_body = {
+        'message': 'Request processed successfully',
+        'result': result
+    }
+    
+    # Create the HTTP response
+    response = {
+        'statusCode': 200,
+        'body': json.dumps(response_body),
+        'headers': {
+            'Content-Type': 'application/json'
+        }
+    }
+    
+    return response
+
+def calculate(num1, num2, operator):
+    if operator == 'ADD':
+        return num1 + num2
+    elif operator == 'SUBSTRACT':
+        return num1 - num2
+    elif operator == 'MULTIPLE':
+        return num1 * num2
+    elif operator == 'DEVIDE':
+        return num1 / num2
+    else:
+        return 0
+
+</code></pre>
+<ul>
+<li>Tạo REST API Gateway =&gt; Tạo resource (Path) =&gt; create method Post =&gt; tích hợp Lambda Function</li>
+<li>Deploy =&gt; stage</li>
+<li>Test by Postman:
+<img src="./image/postman_api_lambda.png" alt="Alt text" /></li>
+</ul>
+<h2 id="login-cognito-hosted-ui-get-token"><a class="header" href="#login-cognito-hosted-ui-get-token">Login Cognito Hosted UI Get Token</a></h2>
+<p><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-configuring-app-integration.html">Refer</a></p>
+<p><em>Syntax</em>:
+<em><strong>https://your_domain/login?response_type=token&amp;client_id=your_app_client_id&amp;redirect_uri=your_callback_url</strong></em></p>
+<p><em>Note:</em> Nhớ chọn optipon <strong>Implicit grant</strong> cho <strong>OAuth 2.0 grant types</strong> mới get token được</p>
+<pre><code class="language-sh">https://www.google.com/#
+id_token=
+eyJraWQiOiJGbURoNXVcL0ljbmpGUklWbnVQMXo2S3pxZUJOSURIQUpUQmNGUzJOeXJaVT0iLCJhbGciOiJSUzI1NiJ9.eyJhdF9oYXNoIjoiWWhzcGxwZDRtbjlMaFFuWVp4Rkl6ZyIsInN1YiI6IjY5MGY4ZDc4LTkwODUtNDdhYi1iNmJhLTM4ZTRmODQ0MjYyNiIsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC5hcC1zb3V0aGVhc3QtMS5hbWF6b25hd3MuY29tXC9hcC1zb3V0aGVhc3QtMV9IaTROZXZxaGYiLCJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW4iLCJhdWQiOiJzbDFvbzY0aXA5MnU1ajNpdmg3bHVwMmVjIiwiZXZlbnRfaWQiOiI3NWFmMTRiNS03YTMxLTQxNjItOWFiZS0zYmU4NDc3NmU5Y2IiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTcwNjM3NDg5OSwiZXhwIjoxNzA2Mzc4NDk5LCJpYXQiOjE3MDYzNzQ4OTksImp0aSI6Ijc4NTg1ZDM4LWJjZTgtNDZiZi04ZDQ2LTM0ODI4ZjA0N2M4ZCIsImVtYWlsIjoiMjE1MjA5MTZAZ20udWl0LmVkdS52biJ9.VRJlB9yN52P62tCTU57ViSrPd7mbyPzMc3L-fXF3VeTYg9ZsL94h5OrkcQTEkSpIuwSgzOIgm5p5TbhY8ok86yRbG9lzuRvPqw8vRWg62N9Qc3IQ8UnyhUNk043AKa4L_yZ2g-C747kW97aXq1edYaR7d268eUJcRq1ipcxkQwCqQo4JgwTJ498zAa5ImGJzF4AbvNKZvi7-oHgiKHh-R3x9VqoI-tqyCUeHnYp5K3c7vlLH-7_gz1U66NKLz8GjJKR4NwmZt-Y9QKbUpJEcGB66EetztjtvPPsFgLpJ9bKuL9o6zuRcw1TXIC8dOLC3einhXu7dyQmEKPi58X7u3w
+&amp;access_token=
+eyJraWQiOiJYaWtQVjFWckw4TElBbzdpQ3gyWUNoc25iZm5vXC9QMVd6djJ0NllcL0ZuVmM9IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiI2OTBmOGQ3OC05MDg1LTQ3YWItYjZiYS0zOGU0Zjg0NDI2MjYiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuYXAtc291dGhlYXN0LTEuYW1hem9uYXdzLmNvbVwvYXAtc291dGhlYXN0LTFfSGk0TmV2cWhmIiwidmVyc2lvbiI6MiwiY2xpZW50X2lkIjoic2wxb282NGlwOTJ1NWozaXZoN2x1cDJlYyIsImV2ZW50X2lkIjoiNzVhZjE0YjUtN2EzMS00MTYyLTlhYmUtM2JlODQ3NzZlOWNiIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJwaG9uZSBvcGVuaWQgZW1haWwiLCJhdXRoX3RpbWUiOjE3MDYzNzQ4OTksImV4cCI6MTcwNjM3ODQ5OSwiaWF0IjoxNzA2Mzc0ODk5LCJqdGkiOiJkMjQxNWVmZi02YTM0LTQwMTQtOTkxMi01ZTBkODUzOWNkNjIiLCJ1c2VybmFtZSI6ImFkbWluIn0.VPjWOBwQrf-NmUdVQu_7gDLT8oSiW8tzyCfmY3efuzUQJz3XAn5-qVy951LlENOcoglkzqGHi-9OsmIdDqQ7t5kJSrGUmernsGcJKO1ffAS0QSwsRTk09OUDiBy2I7LJqf02lCsXzrkUoD9vG0A3KbMuSzxm86JWFLfuzwhqG5haSBGtzv0qcz6Yv1mf7gm45wMs32tKvgo5_bQCpeMqai-E2D1sZrO_qBGLdrhXuWzpK4Ile0iMmDwZlwpsBXiiLl9c7fXvfUUsk0zHxFB3wHXzNx4dhPxAPWPGqOWlGE8iWmGFto1XK5lrGDknvOIi_9TwfLJkpBOxwvKlu0Oxew&amp;expires_in=3600&amp;token_type=Bearer
+
+</code></pre>
+<h2 id="api-gateway--cognito-1"><a class="header" href="#api-gateway--cognito-1">API Gateway + Cognito</a></h2>
+<p>Mục đích là Authen trước khi mà tương tác với API Gateway</p>
+<ul>
+<li>Đầu tiên create Authorization
+<img src="./image/GW_create_Author.png" alt="Create Authorization" /></li>
+<li>Sau đó attach cái Authorizer đó vào API
+<img src="./image/GW_attach_Author.png" alt="Attach Authorization" /></li>
+<li>Check
+<img src="./image/check_GW_Attach_author.png" alt="Check" /></li>
+<li>Test với Postman
+Header =&gt; Authen: Bearer <strong>id-token</strong>
+<img src="./image/GW_Cognito_token.png" alt="Postman" /></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/AWS/VPC.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/Linux/bandit.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/AWS/VPC.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/Linux/bandit.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
