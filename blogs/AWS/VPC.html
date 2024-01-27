@@ -1,0 +1,367 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Networking service - VPC, Peering, Endpoint - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">Documents from everywhere</li><li class="chapter-item "><a href="../../blogs/Documents/troubleshooting.html">Troubleshooting</a></li><li class="chapter-item "><a href="../../blogs/Documents/study.html">Study</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/job.html">Requirements for job</a></li><li class="chapter-item "><a href="../../blogs/AWS/EC2.html">Computing Services - EC2</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAM.html">Identity and Access Management -IAM</a></li><li class="chapter-item "><a href="../../blogs/AWS/S3.html">Simple Storage Service - S3</a></li><li class="chapter-item "><a href="../../blogs/AWS/LoadBalancing-Autoscaling.html">Load balancing and Autoscaling</a></li><li class="chapter-item "><a href="../../blogs/AWS/RDS.html">Relational Database Service - RDS</a></li><li class="chapter-item "><a href="../../blogs/AWS/DynamoDB.html">Database Services - No SQL - DynamoDB</a></li><li class="chapter-item "><a href="../../blogs/AWS/Lambda.html">Serverless Lambda</a></li><li class="chapter-item expanded "><a href="../../blogs/AWS/VPC.html" class="active">Networking service - VPC, Peering, Endpoint</a></li><li class="chapter-item affix "><li class="part-title">Linux + Git</li><li class="chapter-item "><a href="../../blogs/Linux/bandit.html">Bandit challenge</a></li><li class="chapter-item "><a href="../../blogs/Linux/command_session_1.html">Command session 1</a></li><li class="chapter-item "><a href="../../blogs/Linux/git_command.html">Git command</a></li><li class="chapter-item "><a href="../../blogs/Linux/ssh.html">SSH</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some docker tips for CTF</a></li><li class="chapter-item "><a href="../../blogs/Docker/get_started.html">Basic Docker</a></li><li class="chapter-item "><a href="../../blogs/Docker/dockerfile_write.html">Dockerfile</a></li><li class="chapter-item "><a href="../../blogs/Docker/docker_network.html">Docker Network</a></li><li class="chapter-item affix "><li class="part-title">Jenkins</li><li class="chapter-item "><a href="../../blogs/Jenkins/install_by_docker.html">Install Jenkins By Docker</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/link_git_jenkins.html">Link git with jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/pipline_github_jenkins.html">Pipeline jenkinsfile with github</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_jenkins.html">Link gitlab with Jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_dockerhub.html">Gitlab-dockerhub-pipeline</a></li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item "><a href="../../blogs/Python/RE.html">Regular Expression</a></li><li class="chapter-item "><a href="../../blogs/Python/Automation_1.html">Automation with Python 1</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item "><a href="../../blogs/Bash_script/Variables_Environment.html">Shell Variables and Environment</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Conditionals_Execution.html">Conditionals Execution</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Bash_Loops.html">Bash Loops & Function</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Shell_Redirection.html">Shell Redirection & Pipes and Filters</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Interactive_Scripts.html">Interactive Scripts</a></li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/basic_network_1.html">Basic Network 1</a></li><li class="chapter-item affix "><li class="part-title">PWN</li><li class="chapter-item "><a href="../../blogs/PWN/Emporium_ROP.html">Rop Emporium</a></li><li class="chapter-item "><a href="../../blogs/PWN/pwnableTW.html">Pwnable.tw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pico_CTF.html">Pwn_PicoCTF</a></li><li class="chapter-item "><a href="../../blogs/PWN/PWN_from_blabla.html">Pwn from blabla</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/ASM.html">ASM</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_PicoCTF</li><li class="chapter-item "><a href="../../blogs/RE/RE.html">RE</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="networking-service---vpc-peering-endpoint"><a class="header" href="#networking-service---vpc-peering-endpoint">Networking service - VPC, Peering, Endpoint</a></h1>
+<h2 id="what"><a class="header" href="#what">What?</a></h2>
+<ul>
+<li>Viêt tắt của Virtual Private Cloud</li>
+<li>Là một service cho phép người dùng tạo một mạng ảo (virtual network) và control toàn bộ network in/out của mạng đó.</li>
+<li>VPC tương đối giống với network ở datacenter truyền thống tuy nhiên các khái niệm đã được AWS đơn giản hoá giúp người dùng dễ tiếp cận.</li>
+</ul>
+<h2 id="các-thành-phần-cơ-bản-của-vpc"><a class="header" href="#các-thành-phần-cơ-bản-của-vpc">Các thành phần cơ bản của VPC</a></h2>
+<ul>
+<li><strong>VPC</strong>: Một mạng ảo được tạo ra ở cấp độ region.</li>
+<li><strong>Subnet</strong>: Một dải IP được định nghĩa nằm trong VPC. Mỗi subnet phải được quyết định Availability Zone tại thời điểm tạo ra.</li>
+<li><strong>IP Address</strong>: IP V4 hoặc V6 được cấp phát. Có 2 loại là Public IP và Private IP.</li>
+<li><strong>Routing</strong>: xác định traffic sẽ được điều hướng đi đâu trong mạng.</li>
+<li><strong>Elastic IP</strong>: IP được cấp phát riêng, có thể access từ internet (public), không bị thu hồi khi instance start -&gt; stop. Nếu không dùng, hoặc được gán cho ec2 đang stop =&gt; tính phí. Vì IP này là giới hạn trên global</li>
+<li><strong>Security Group</strong>: Đóng vai trò như một firewall ở cấp độ instance, định nghĩa traffic được đi vào /đi ra.</li>
+<li><strong>Network Access Controll List (ACL)</strong>: được apply ở cấp độ subnet, tương tự như security group nhưng có rule Deny và các rule được đánh độ ưu tiên. Mặc định khi tạo VPC sẽ có 1 ACL được apply cho toàn bộ subnet trong VPC (mở all traffic không chặn gì cả).</li>
+<li><strong>VPC Flow Log</strong>: capture các thông tin di chuyển của traffic trong network.</li>
+<li><strong>VPN Connection</strong>: kết nối VPC trên AWS với hệ thống dưới On-premise.</li>
+<li><strong>Elastic Network Interface</strong>: đóng vai trò như 1 card mạng ảo.</li>
+<li><strong>Internet Gateway</strong>: Kết nối VPC với Internet, là cổng vào từ internet tới các thành phần trong VPC.</li>
+<li><strong>NAT Gateway</strong>: dịch vụ NAT của AWS cho phép các thành phần bên trong kết nối tới internet nhưng không cho bên ngoài kết nối tới.</li>
+<li><strong>VPC Endpoint</strong>: kênh kết nối private giúp kết nối tới các services khác của AWS mà không thông qua internet.</li>
+<li><strong>Peering connection</strong>: kênh kết nối giữa 2 VPC.</li>
+<li><strong>Transit gateways</strong>: đóng vai trò như 1 hub đứng giữa các VPCs, VPN Connection, Direct Connect.</li>
+</ul>
+<p><img src="./image/VPCbase.png" alt="Alt text" /></p>
+<h2 id="internet-gateway"><a class="header" href="#internet-gateway">Internet Gateway</a></h2>
+<ul>
+<li>Là cửa ngõ để truy cập các thành phần trong VPC.</li>
+<li>Nếu VPC không được gắn Internet Gateway thì không thể kết nối SSH tới instance kể cả instance đó có được gắn public IP. Mặc định default-vpc do AWS tạo sẵn đã có gắn Internet Gateway.
+<img src="./image/VPC_Internet_gateway.png" alt="Alt text" /></li>
+</ul>
+<h2 id="nat-gateway"><a class="header" href="#nat-gateway">NAT Gateway</a></h2>
+<ul>
+<li>Giúp cho các instance trong Private Subnet có thể đi ra internet mà không cần tới public IP.</li>
+<li>Giúp tăng cường bảo mật cho các resource cần private (App, DB).
+<img src="./image/VPC_Nat.png" alt="Alt text" /></li>
+</ul>
+<h2 id="network-access-control-list-acl"><a class="header" href="#network-access-control-list-acl">Network Access Control List (ACL)</a></h2>
+<ul>
+<li>Control network in/out đối với subnet được associate</li>
+<li>Mỗi rule sẽ có các thông số:
+<ul>
+<li>Priority</li>
+<li>Allow/Deny</li>
+<li>Protocol</li>
+<li>Port range</li>
+<li>Source IP / Destination IP</li>
+</ul>
+</li>
+<li>Default ACL sẽ allow all.</li>
+<li>Sử dụng quá nhiều rule của ACL sẽ làm giảm performance.</li>
+<li>Rule của ACL là stateless.
+<img src="./image/VPC_ACL.png" alt="Alt text" /></li>
+</ul>
+<h2 id="security-group"><a class="header" href="#security-group">Security Group</a></h2>
+<ul>
+<li>Thường được dùng để gom nhóm các resource có chung network setting (in/out, protocol, port). Khi thiết kế cần quan tâm tới tính tái sử dụng, dễ quản lý.</li>
+<li>Source của một Security Group có thể là CIDR(Classless Inter-Domain Routing - Ex: 192.168.1.0/24) hoặc id của một Security Group khác.</li>
+<li>Rule của Security Group là stateful và không có deny rule.
+<em>Statefull có nghĩa là nếu Inbound cho phép traffic đi vào thì khi request tới sẽ nhận được response mà không cần explicit allow Outbound. Khác với Network ACL</em>
+<img src="./image/VPC_SG.png" alt="Alt text" /></li>
+</ul>
+<h2 id="route-table"><a class="header" href="#route-table">Route Table</a></h2>
+<ul>
+<li>Định tuyến traffic trong subnet hoặc gateway sẽ được điều hướng đi đâu</li>
+<li>Route Table sẽ quyết định một subnet sẽ là Private hay Public.</li>
+<li>Subnet được gọi là Public khi có route đi tới Internet Gateway và ngược lại.</li>
+<li>Một Subnet chỉ có thể associate 1 route table.</li>
+<li>Default VPC do AWS tạo sẵn sẽ có 1 main route table associate với toàn bộ subnet.</li>
+</ul>
+<h2 id="vpc-endpoint"><a class="header" href="#vpc-endpoint">VPC Endpoint</a></h2>
+<ul>
+<li>Giúp các resource trong VPC có thể kết nối tới các dịch vụ khác của AWS thông qua private connection.</li>
+<li>Công dụng: secure, tăng tốc độ.</li>
+<li>Có 2 loại endpoint là Gateway Endpoint (S3, Dynamodb) và Interface Endpoint (SQS, CloudWatch,...)</li>
+<li>Endpoint có thể được cấu hình Security Group để hạn chế truy cập.
+<img src="./image/VPC_Endpoint.png" alt="Alt text" /></li>
+</ul>
+<h2 id="Định-nghĩa-vpc"><a class="header" href="#Định-nghĩa-vpc">Định nghĩa VPC</a></h2>
+<ul>
+<li>VPC được định nghĩa bằng 1 dải CIDR.</li>
+<li>AWS cho recommend chọn 1 trong 3 dải CIDR sau (theo chuẩn RFC-1918)
+<ul>
+<li>192.168.0.0 – 192.168.255.255. Ex: 192.168.0.0/20</li>
+<li>10.0.0.0 – 10.255.255.255. Ex: 10.0.0.0/16</li>
+<li>172.16.0.0 – 172.31.255.255. Ex: 172.31.0.0/16</li>
+</ul>
+</li>
+<li>Việc định nghĩa CIDR của IP cần tuân thủ một số tiêu chí sau:
+<ul>
+<li>Cover được số lượng IP private cần cấp phát trong tương lai.</li>
+<li>Tránh overlap với các hệ thống sẵn có (kể cả on-premise) nếu không sẽ không thể peering.</li>
+</ul>
+</li>
+</ul>
+<h2 id="phân-chia-subnet"><a class="header" href="#phân-chia-subnet">Phân chia subnet?</a></h2>
+<ul>
+<li>Subnet được coi như một thành phần con của VPC.</li>
+<li>Một VPC có thể chứa nhiều subnet không overlap nhau.</li>
+<li>Khi tạo subnet phải chọn Availability Zone.</li>
+<li>Chọn CIDR cho subnet cần lưu ý:
+<ul>
+<li>Số lượng IP cho các resource cần cấp phát (EC2, Container, Lambda,...)
+<strong>VD</strong>: subnet 10.0.1.0/24 sẽ có 256 IP trừ đi 5 reserve ip của AWS
+-&gt; 251 IP khả dụng.</li>
+<li>Số lượng subnet dự tính sẽ tạo trong tương lai.</li>
+<li>Đặt số sao cho dễ quản lý.</li>
+</ul>
+</li>
+</ul>
+<h2 id="pricing-of-vpc"><a class="header" href="#pricing-of-vpc">Pricing of VPC</a></h2>
+<p><a href="https://www.ipaddressguide.com/cidr">Tool CIDR</a> hoặc tính tay cũng không phải là vấn đề</p>
+<p>Giả sử VPC sử dụng CIDR /16 và Subnet sử dụng CIDR /22 ta sẽ có sơ đồ sau:</p>
+<p><img src="./image/VPC_Pricing.png" alt="Alt text" /></p>
+<ul>
+<li><em>Việc phân chia bao nhiêu loại subnet phụ thuộc vào yêu cầu về độc lập network cho các component</em></li>
+<li><em>Các subnet không sử dụng hết IP của VPC nên trong tương lai vẫn có thể mở rộng tạo thêm subnet nếu cần</em></li>
+</ul>
+<p>VPC là một dịch vụ miễn phí tuy nhiên user phải trả phí cho các resource liên quan:</p>
+<ul>
+<li>NAT Gateway: tính tiền theo giờ, ~$45/month/Gateway.</li>
+<li>VPC Endpoint: Tính tiền theo giờ và lưu lượng traffic.</li>
+<li>VPN Connection: tính tiền theo giờ.</li>
+<li>Elastic IP: Tính tiền theo giờ x số IP.</li>
+<li>Traffic: data đi ra ngoài internet.</li>
+<li>...and more</li>
+</ul>
+<h2 id="thiết-kế-vpc-Đơn-giản"><a class="header" href="#thiết-kế-vpc-Đơn-giản">Thiết kế VPC Đơn giản</a></h2>
+<ul>
+<li><strong>Thiết kế một VPC như sau (sử dụng drawio hoặc Powerpoint)</strong></li>
+<li>VPC CIDR: 10.0.0.0/16</li>
+<li>Có 2 loại subnet Public, Private. Mỗi subnet chứa ít nhất 1000 IPs.</li>
+<li>Mỗi loại subnets nằm ở ít nhất 2 AZ.</li>
+<li>Có 1 Internet Gateway, cấu hình route table tới Internet Gateway.</li>
+<li>Có 1 NAT Gateway, cấu hình route table tới NAT Gateway</li>
+</ul>
+<p><img src="./image/VPC_basic.png" alt="Alt text" /></p>
+<ul>
+<li><strong>Thiết kế security group cho 4 nhóm đối tượng:</strong>
+<ul>
+<li>Application Load Balancer (ALB): expose port HTTPS 443.</li>
+<li>App Server cho phép port 80 từ ALB, 22 từ Bastion server.</li>
+<li>Database Server sử dụng MySQL sd port: 3306. Elastic Search sd port: 9200.</li>
+<li>Bastion Server: SSH port 22 từ IP công ty.</li>
+<li>Thiết kế VPC Endpoint cho S3 service.</li>
+</ul>
+</li>
+</ul>
+<p><img src="./image/VPC_basic2.png" alt="Alt text" /></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/AWS/Lambda.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/Linux/bandit.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/AWS/Lambda.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/Linux/bandit.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
