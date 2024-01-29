@@ -1,0 +1,327 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Content Delivery Service (CDN) - CloudFront - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">Documents from everywhere</li><li class="chapter-item "><a href="../../blogs/Documents/troubleshooting.html">Troubleshooting</a></li><li class="chapter-item "><a href="../../blogs/Documents/study.html">Study</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/job.html">Requirements for job</a></li><li class="chapter-item "><a href="../../blogs/AWS/EC2.html">Computing Services - EC2</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAM.html">Identity and Access Management -IAM</a></li><li class="chapter-item "><a href="../../blogs/AWS/S3.html">Simple Storage Service - S3</a></li><li class="chapter-item "><a href="../../blogs/AWS/LoadBalancing-Autoscaling.html">Load balancing and Autoscaling</a></li><li class="chapter-item "><a href="../../blogs/AWS/RDS.html">Relational Database Service - RDS</a></li><li class="chapter-item "><a href="../../blogs/AWS/DynamoDB.html">Database Services - No SQL - DynamoDB</a></li><li class="chapter-item "><a href="../../blogs/AWS/Lambda.html">Serverless Lambda</a></li><li class="chapter-item "><a href="../../blogs/AWS/VPC.html">Networking service - VPC, Peering, Endpoint</a></li><li class="chapter-item "><a href="../../blogs/AWS/Gateway_Cognito.html">API Gateway & Cognito</a></li><li class="chapter-item expanded "><a href="../../blogs/AWS/CloudFront.html" class="active">Content Delivery Service (CDN) - CloudFront</a></li><li class="chapter-item affix "><li class="part-title">Linux + Git</li><li class="chapter-item "><a href="../../blogs/Linux/bandit.html">Bandit challenge</a></li><li class="chapter-item "><a href="../../blogs/Linux/command_session_1.html">Command session 1</a></li><li class="chapter-item "><a href="../../blogs/Linux/git_command.html">Git command</a></li><li class="chapter-item "><a href="../../blogs/Linux/ssh.html">SSH</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some docker tips for CTF</a></li><li class="chapter-item "><a href="../../blogs/Docker/get_started.html">Basic Docker</a></li><li class="chapter-item "><a href="../../blogs/Docker/dockerfile_write.html">Dockerfile</a></li><li class="chapter-item "><a href="../../blogs/Docker/docker_network.html">Docker Network</a></li><li class="chapter-item affix "><li class="part-title">Jenkins</li><li class="chapter-item "><a href="../../blogs/Jenkins/install_by_docker.html">Install Jenkins By Docker</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/link_git_jenkins.html">Link git with jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/pipline_github_jenkins.html">Pipeline jenkinsfile with github</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_jenkins.html">Link gitlab with Jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_dockerhub.html">Gitlab-dockerhub-pipeline</a></li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item "><a href="../../blogs/Python/RE.html">Regular Expression</a></li><li class="chapter-item "><a href="../../blogs/Python/Automation_1.html">Automation with Python 1</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item "><a href="../../blogs/Bash_script/Variables_Environment.html">Shell Variables and Environment</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Conditionals_Execution.html">Conditionals Execution</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Bash_Loops.html">Bash Loops & Function</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Shell_Redirection.html">Shell Redirection & Pipes and Filters</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Interactive_Scripts.html">Interactive Scripts</a></li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/basic_network_1.html">Basic Network 1</a></li><li class="chapter-item affix "><li class="part-title">PWN</li><li class="chapter-item "><a href="../../blogs/PWN/Emporium_ROP.html">Rop Emporium</a></li><li class="chapter-item "><a href="../../blogs/PWN/pwnableTW.html">Pwnable.tw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pico_CTF.html">Pwn_PicoCTF</a></li><li class="chapter-item "><a href="../../blogs/PWN/PWN_from_blabla.html">Pwn from blabla</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/ASM.html">ASM</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_PicoCTF</li><li class="chapter-item "><a href="../../blogs/RE/RE.html">RE</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="content-delivery-service-cdn---cloudfront"><a class="header" href="#content-delivery-service-cdn---cloudfront">Content Delivery Service (CDN) - CloudFront</a></h1>
+<h2 id="what"><a class="header" href="#what">What?</a></h2>
+<ul>
+<li>Là một CDN service của AWS.</li>
+<li>CDN(Content Delivery Network): là một mạng lưới giúp delivery nội dung tới người dùng cuối một cách nhanh chóng nhờ vào việc điều hướng request của họ tới các máy chủ chứa tài nguyên gần nhất.</li>
+</ul>
+<h2 id="mô-hình-hoạt-động-của-một-mạng-cdn"><a class="header" href="#mô-hình-hoạt-động-của-một-mạng-cdn">Mô hình hoạt động của một mạng CDN</a></h2>
+<ul>
+<li>
+<p><strong>Khi không có CDN</strong>:</p>
+<ul>
+<li>Tài nguyên của server sẽ được deliver tới client một cách trực tiếp.</li>
+<li>Tuỳ vào khoảng cách địa lý mà tốc độ truy cập sẽ nhanh hay chậm.
+<img src="./image/cloudfront_mohinh1.png" alt="Alt text" /></li>
+</ul>
+</li>
+<li>
+<p><strong>Khi có CDN</strong>:</p>
+<ul>
+<li>Tài nguyên của server sẽ được cache trên các máy chủ Edge</li>
+<li>Request của user tới một tài nguyên trên CloudFront sẽ được redirect tới máy chủ Edge gần nhất.
+<img src="./image/cloudfront_mohinh2.png" alt="Alt text" /></li>
+</ul>
+</li>
+</ul>
+<h2 id="các-khái-niệm-cơ-bản-của-cloudfront"><a class="header" href="#các-khái-niệm-cơ-bản-của-cloudfront">Các khái niệm cơ bản của CloudFront</a></h2>
+<ul>
+<li><strong>Distribution</strong>: AWS CloudFront phân phối nội dung từ origin đến các edge location thông qua một distribution. Một distribution định nghĩa cách CloudFront phân phối nội dung, bao gồm địa chỉ của origin, các edge location được sử dụng, các thiết lập security &amp; caching.</li>
+<li><strong>Edge Location</strong>: AWS CloudFront sử dụng một mạng lưới toàn cầu các edge location, là các điểm đặt máy chủ trên khắp thế giới, để phân phối nội dung đến người dùng ở gần nhất vị trí đó.</li>
+<li><strong>Origin</strong>: Đây là nơi lưu trữ nội dung gốc (origin content) của bạn, bao gồm các tập tin, ứng dụng web, API và Database. Origin có thể là một Web server, S3 bucket, hoặc các dịch vụ AWS khác.</li>
+<li><strong>Cache</strong>: AWS CloudFront lưu trữ các tài nguyên tại edge location để giảm thời gian phản hồi và tăng tốc độ tải trang web. Các tài nguyên này bao gồm hình ảnh, tập tin CSS và JavaScript.</li>
+<li><strong>Logging and Reporting</strong>: AWS CloudFront cung cấp các báo cáo về hoạt động của distribution, bao gồm lưu lượng và số lần truy cập.</li>
+<li><strong>Security</strong>: AWS CloudFront hỗ trợ nhiều tính năng bảo mật, bao gồm kết nối HTTPS, chữ ký số (Certificate) và xác thực người dùng.</li>
+<li><strong>Customize at the Edge</strong>: thông qua cơ chế Lambda@Edge, cho phép bạn thực thi các function trên các sự kiện CloudFront. Lợi thế về tốc độ và hiệu suất so với thực thi ở Origin. Một số use-case có thể kể đến như: Authen/Author, xử lý tính toán đơn giản, SEO, Intelligent routing, Anti Bot, Realtime image transformation, A/B Testing, User prioritilization</li>
+</ul>
+<h2 id="how-cloudfront-deliver-content-to-user"><a class="header" href="#how-cloudfront-deliver-content-to-user">How CloudFront deliver content to user?</a></h2>
+<ul>
+<li>User access website, request một tài nguyên vd HTML file, Image, CSS..</li>
+<li>DNS điều hướng request của user tới CloudFront edge location gần nhất (dựa theo độ trễ).</li>
+<li>Gồm 3 bước:
+<ul>
+<li>CloudFront forward request tới Origin server (một HTTP server hoặc s3 bucket).</li>
+<li>Origin server trả kết quả cho edge location.</li>
+<li>Ngay sau khi nhận được firstbyte response, edge location forward object tới end-user đồng thời cache lại nội dung cho request lần sau.
+<img src="./image/cloudfront_how.png" alt="Alt text" />
+<em>Từ lần request thứ 2 trở đi, mặc định edge location sẽ trả về object được yêu cầu mà không gọi tới origin server -&gt; tăng tốc độ truy cập.</em></li>
+</ul>
+</li>
+</ul>
+<h2 id="usecase"><a class="header" href="#usecase">Usecase</a></h2>
+<ul>
+<li>Tăng tốc website (Image, CSS, Document, Video,...)</li>
+<li>On demand video &amp; video streaming.</li>
+<li>Field level encrypt: CloudFront tự động mã hoá data được gửi lên từ người dùng, chỉ có backend application có key có thể giải mã.</li>
+<li>Customize at the edge: Trả về mã lỗi khi server maintain hoặc authorize user trước khi forward request tới backend. Cần sử dụng Lambda@Edge</li>
+</ul>
+<h2 id="usecase-sample"><a class="header" href="#usecase-sample">Usecase sample</a></h2>
+<h3 id="hosting-static-website"><a class="header" href="#hosting-static-website">Hosting static website</a></h3>
+<p><img src="./image/Cf_usecase_1.png" alt="Alt text" /></p>
+<ul>
+<li>Website static (chỉ gồm HTML/css/js...) có thể được
+deploy lên S3 kết hợp với CloudFront.</li>
+<li>Hầu hết các framework hiện nay như Angular, Vue, Nodejs đều hỗ trợ build website thành dạng satic chỉ gồm HTML, css, javascript để deploy lên S3.</li>
+</ul>
+<h3 id="server-media-video-image"><a class="header" href="#server-media-video-image">Server media (video, image)</a></h3>
+<p><img src="./image/Cf_usecase_2.png" alt="Alt text" /></p>
+<p>Media được phân phối tới end user thông qua CloudFront cho trải nghiệm tốt hơn do nội dung được redirect tới
+Edge Location gần với User nhất.</p>
+<h3 id="customize-at-the-edge"><a class="header" href="#customize-at-the-edge">Customize at the edge</a></h3>
+<p><img src="./image/Cf_usecase_3.png" alt="Alt text" /></p>
+<p>Sử dụng Lambda@Edge để phân biệt user sử dụng subsciption information lưu ở DynamoDB (có enable Global
+table).
+Tuỳ theo subscription khác nhau (premium/normal) mà
+sẽ có các ưu tiên về xử lý khác nhau, vd user premium được redirect tới máy chủ mạnh hơn user normal.</p>
+<h2 id="cloudfront-pricing"><a class="header" href="#cloudfront-pricing">CloudFront pricing</a></h2>
+<ul>
+<li>No Up-front fee, người dùng chỉ trả tiền cho những gì sử dụng.</li>
+<li>Lượng data thực tế tranasfer out to internet.</li>
+<li>CloudFront function, Lambda@Edge.</li>
+<li>Invalidation Request (clear cache).</li>
+<li>Real-time log.</li>
+<li>Field level encrypt.</li>
+</ul>
+<h2 id="cloudfront-behavior"><a class="header" href="#cloudfront-behavior">CloudFront behavior</a></h2>
+<ul>
+<li>Một CloudFront distribution có thể có nhiều hơn một Origin server phía sau.</li>
+</ul>
+<p><strong>Ex:</strong> một hệ thống gồm có 1 S3 bucket host static website, 1 backend server gồm ALB + Container muốn sử dụng chung một CloudFront distribution.</p>
+<p>=&gt; Cần có cơ chế phân biệt request nào sẽ điều hướng tới đâu.</p>
+<ul>
+<li>Behavior cho phép định nghĩa request với các pattern khác nhau sẽ được forward tới các origin khác nhau
+<img src="./image/Cf_behavior.png" alt="Alt text" /></li>
+<li>Bằng việc cấu hình các behavior khác nhau, CloudFront giúp điều hướng request của người dùng tới đúng origin mong muốn.</li>
+</ul>
+<p><em>Lưu ý khi setting behavior cần quan tâm tới thứ tự trước sau của các behavior, vì khi match 1 path rồi sẽ không đánh giá path tiếp theo.</em></p>
+<h2 id="cloudfront-cache-policy"><a class="header" href="#cloudfront-cache-policy">CloudFront Cache Policy</a></h2>
+<ul>
+<li>CloudFront cache policy là một cấu hình định nghĩa CloudFront sẽ cache và serves content như thế nào đối với User.</li>
+<li>Cache policy có thể được định nghĩa riêng cho từng distribution hoặc behavior.</li>
+<li><strong>Ex:</strong> <em>thời gian content được cache, compress hay không?, forward cookies &amp; query strings hay không?</em></li>
+<li>Việc apply caching policy khác nhau cho từng distribution hoặc behavior, cho phép tinh chỉnh việc control caching cho từng URL hoặc request pattern. Việc này giúp tối ưu hoá caching behavior cho từng loại content khác nhau, <strong>Ex:</strong> <em>Static assets (image, css, js, video...) hoặc dynamic API response.</em></li>
+</ul>
+<h2 id="cloudfront-origin-request-policy"><a class="header" href="#cloudfront-origin-request-policy">CloudFront Origin request policy</a></h2>
+<ul>
+<li>CloudFront origin request policy định nghĩa cách CloudFront xử lý request tới origin.</li>
+<li>Khi user request content trên CloudFront, request được forward tới các origin như S3, EC2, ALB. Origigin Request Policy cho phép modify request trước khi forward tới origin.</li>
+<li>Có thể add/modify/remove header hoặc query string để optimize caching, tăng performance.</li>
+<li>Có thể cấu hình CloudFront sign hoặc encrypt request để bảo vệ backend khỏi những access unauthorized.</li>
+<li>Origin request policy hữu dụng khi có kiến trúc backend phức tạp ví dụ như có nhiều loại origin server.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/AWS/Gateway_Cognito.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/Linux/bandit.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/AWS/Gateway_Cognito.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/Linux/bandit.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
