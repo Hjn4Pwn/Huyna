@@ -1,0 +1,426 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Messaging service - SNS, SQS, SES - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">Documents from everywhere</li><li class="chapter-item "><a href="../../blogs/Documents/troubleshooting.html">Troubleshooting</a></li><li class="chapter-item "><a href="../../blogs/Documents/study.html">Study</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/job.html">Requirements For Job</a></li><li class="chapter-item "><a href="../../blogs/AWS/EC2.html">Computing Services - EC2</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAM.html">Identity and Access Management -IAM</a></li><li class="chapter-item "><a href="../../blogs/AWS/S3.html">Simple Storage Service - S3</a></li><li class="chapter-item "><a href="../../blogs/AWS/LoadBalancing-Autoscaling.html">Load Balancing and Autoscaling</a></li><li class="chapter-item "><a href="../../blogs/AWS/RDS.html">Relational Database Service - RDS</a></li><li class="chapter-item "><a href="../../blogs/AWS/DynamoDB.html">Database Services - No SQL - DynamoDB</a></li><li class="chapter-item "><a href="../../blogs/AWS/Lambda.html">Serverless Lambda</a></li><li class="chapter-item "><a href="../../blogs/AWS/VPC.html">Networking Service - VPC, Peering, Endpoint</a></li><li class="chapter-item "><a href="../../blogs/AWS/Gateway_Cognito.html">API Gateway & Cognito</a></li><li class="chapter-item "><a href="../../blogs/AWS/CloudFront.html">Content Delivery Service (CDN) - CloudFront</a></li><li class="chapter-item "><a href="../../blogs/AWS/Route_53.html">Domain Name System - Route 53</a></li><li class="chapter-item "><a href="../../blogs/AWS/Monitor_Auditing.html">Monitoring and Auditing - CloudWatch, CloudTrail</a></li><li class="chapter-item expanded "><a href="../../blogs/AWS/Mess.html" class="active">Messaging service - SNS, SQS, SES</a></li><li class="chapter-item affix "><li class="part-title">Linux + Git</li><li class="chapter-item "><a href="../../blogs/Linux/bandit.html">Bandit challenge</a></li><li class="chapter-item "><a href="../../blogs/Linux/command_session_1.html">Command session 1</a></li><li class="chapter-item "><a href="../../blogs/Linux/git_command.html">Git command</a></li><li class="chapter-item "><a href="../../blogs/Linux/ssh.html">SSH</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some docker tips for CTF</a></li><li class="chapter-item "><a href="../../blogs/Docker/get_started.html">Basic Docker</a></li><li class="chapter-item "><a href="../../blogs/Docker/dockerfile_write.html">Dockerfile</a></li><li class="chapter-item "><a href="../../blogs/Docker/docker_network.html">Docker Network</a></li><li class="chapter-item affix "><li class="part-title">Jenkins</li><li class="chapter-item "><a href="../../blogs/Jenkins/install_by_docker.html">Install Jenkins By Docker</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/link_git_jenkins.html">Link git with jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/pipline_github_jenkins.html">Pipeline jenkinsfile with github</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_jenkins.html">Link gitlab with Jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_dockerhub.html">Gitlab-dockerhub-pipeline</a></li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item "><a href="../../blogs/Python/RE.html">Regular Expression</a></li><li class="chapter-item "><a href="../../blogs/Python/Automation_1.html">Automation with Python 1</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item "><a href="../../blogs/Bash_script/Variables_Environment.html">Shell Variables and Environment</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Conditionals_Execution.html">Conditionals Execution</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Bash_Loops.html">Bash Loops & Function</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Shell_Redirection.html">Shell Redirection & Pipes and Filters</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Interactive_Scripts.html">Interactive Scripts</a></li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/basic_network_1.html">Basic Network 1</a></li><li class="chapter-item affix "><li class="part-title">PWN</li><li class="chapter-item "><a href="../../blogs/PWN/Emporium_ROP.html">Rop Emporium</a></li><li class="chapter-item "><a href="../../blogs/PWN/pwnableTW.html">Pwnable.tw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pico_CTF.html">Pwn_PicoCTF</a></li><li class="chapter-item "><a href="../../blogs/PWN/PWN_from_blabla.html">Pwn from blabla</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/ASM.html">ASM</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_PicoCTF</li><li class="chapter-item "><a href="../../blogs/RE/RE.html">RE</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="messaging-service---sns-sqs-ses"><a class="header" href="#messaging-service---sns-sqs-ses">Messaging service - SNS, SQS, SES</a></h1>
+<ul>
+<li><a href="#simple-queue-service---sqs">Simple Queue Service - SQS</a>
+<ul>
+<li><a href="#%C4%91%E1%BA%B7c-tr%C6%B0ng-c%E1%BB%A7a-sqs">Đặc trưng của SQS</a></li>
+<li><a href="#sqs-concepts">SQS Concepts</a></li>
+<li><a href="#sqs-limitation">SQS Limitation</a></li>
+<li><a href="#m%E1%BB%99t-s%E1%BB%91-th%C3%B4ng-s%E1%BB%91-li%C3%AAn-quan-monitor">Một số thông số liên quan monitor</a></li>
+<li><a href="#sqs-usecase">SQS Usecase</a></li>
+<li><a href="#sqs-pricing">SQS Pricing</a></li>
+</ul>
+</li>
+<li><a href="#simple-notification-service---sns">Simple Notification Service - SNS</a>
+<ul>
+<li><a href="#%C4%91%E1%BA%B7c-tr%C6%B0ng-c%E1%BB%A7a-sns">Đặc trưng của SNS</a></li>
+<li><a href="#sns-concepts">SNS Concepts</a></li>
+<li><a href="#sns-limitation">SNS Limitation</a></li>
+<li><a href="#sns-usecase">SNS Usecase</a></li>
+<li><a href="#sns-pricing">SNS Pricing</a></li>
+</ul>
+</li>
+<li><a href="#simple-email-service---ses">Simple Email Service - SES</a>
+<ul>
+<li><a href="#t%C3%ADnh-n%C4%83ng-c%E1%BB%A7a-ses">Tính năng của SES</a></li>
+<li><a href="#ses-concept">SES Concept</a></li>
+<li><a href="#ses-pricing">SES Pricing</a></li>
+<li><a href="#ses-production-mode">SES Production mode</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="simple-queue-service---sqs"><a class="header" href="#simple-queue-service---sqs">Simple Queue Service - SQS</a></h2>
+<ul>
+<li>Simple Queue Service (SQS) là một dịch vụ hàng đợi thông điệp mạnh mẽ và dễ sử dụng từ AWS.</li>
+<li>SQS cho phép bạn truyền tin nhắn giữa các thành phần của hệ thống phân tán một cách đáng tin cậy và có khả năng mở rộng.</li>
+<li>Với SQS, bạn có thể tạo ra các message queue và gửi/nhận message trên queue đó. Hàng đợi được quản lý bởi SQS, đảm bảo tính đáng tin cậy và khả năng mở rộng cao. Việc các ứng dụng khác nhau có gửi nhận message trên queue một cách độc lập giúp tăng tính chịu lỗi và sự phân tán trong hệ thống của bạn (de-coupling).</li>
+<li>SQS cung cấp hai loại queue: standard &amp; FIFO (First-In-First-Out). Standard queue cung cấp khả năng mở rộng cao và đáng tin cậy, trong khi FIFO queue đảm bảo tin nhắn được xử lý theo tuần tự (nhược điểm là bị giới hạn về tần suất gửi nhận).</li>
+<li>SQS cũng cung cấp các tính năng như chế độ retry tự động, message filtering và khả năng xác nhận (acknowledge) tin nhắn. Ngoài ra, SQS tích hợp với các dịch vụ AWS khác, cho phép bạn xây dựng các hệ thống phức tạp và đáng tin cậy.</li>
+</ul>
+<h3 id="Đặc-trưng-của-sqs"><a class="header" href="#Đặc-trưng-của-sqs">Đặc trưng của SQS</a></h3>
+<ul>
+<li>SQS là một managed service do đó bạn không quản lý hạ tầng phía sau.</li>
+<li>SQS được tạo và quản lý dưới các đơn vị message queue.</li>
+<li>Tương tác gửi nhận message với queue thông qua Console, SDK, API</li>
+<li>Khả năng mở rộng của SQS là không giới hạn (về lý thuyết).</li>
+<li>Về cơ bản message nào được gửi vào queue trước sẽ được xử lý trước (khi có hành động get message). Tuy nhiên với Queue type standard, AWS không đảm bảo 100%.</li>
+<li>Với FIFO Queue, SQS đảm bảo deliver đúng thứ tự tuy nhiên tần suất gửi nhận message bị giảm xuống 300/s và 3000/s đối với batch process.</li>
+<li>SQS có thể được cấu hình notify message sang Lambda mỗi khi có mesage mới, sử dụng cho bài toán xử lý tự động hoặc ETL.</li>
+</ul>
+<h3 id="sqs-concepts"><a class="header" href="#sqs-concepts">SQS Concepts</a></h3>
+<ul>
+<li>Về cơ bản SQS là nơi có nhiệm vụ trung chuyển giữa một bên là Message Producer (Sender) và một bên là Message Consumer(Receiver).</li>
+<li>Với Standard Queue, message khi được gửi vào queue sẽ tồn tại ở đó cho tới khi bị xoá hoặc hết thời gian retention. Do vậy Consumer phải chủ động xoá message đã xử lý xong.</li>
+<li>Với FIFO Queue, message sẽ được delivery chính xác 1 lần tới consumer (tự động bị xoá sau khi có event receive message).</li>
+</ul>
+<p><img src="./image/SQS_concept1.png" alt="Alt text" /></p>
+<ul>
+<li>
+<p>SQS có một thông số gọi là Visibility Timeout, là thời gian message tạm bị ẩn đi đối với các consumer trong khi message đó đang được receive bởi một consumer. Quá thời gian này nếu message chưa bị xoá sẽ quay trở lại queue.</p>
+</li>
+<li>
+<p><strong>Ex:</strong> <em>KHÔNG apply visibility timed out (hoặc timed out quá ngắn) trong trường hợp có nhiều consumer. Các consumer có thể get message đang được xử lý bởi một consumer khác (chưa finished).</em></p>
+</li>
+</ul>
+<p><img src="./image/SQS_concept2.png" alt="Alt text" /></p>
+<ul>
+<li>Việc apply Visibility Timeout như thế nào cho phù hợp hoàn toàn phụ thuộc vào nghiệp vụ của bạn. Ex: <em>một tác vụ xử lý decode một video mất 10 mins thì bạn nên để Visibility Timeout &gt;10 mins để tránh tình trạng xung đột xử lý giữa các consumers.</em></li>
+<li><strong>Ex:</strong> <em>CÓ apply visibility timed out trong trường hợp có nhiều consumer. Message đang được xử lý bởi một consumer sẽ tạm thời được ẩn đi đối với các consumer khác.</em></li>
+</ul>
+<p><img src="./image/SQS_concept3.png" alt="Alt text" /></p>
+<ul>
+<li>Message mỗi khi được receive sẽ có một thông số receive count (được cộng lên +1 mỗi khi message đó được receive bởi một consumer), ta có thể dựa vào đó để setting dead letter queue (tự động move message đã bị xử lý quá số lần mà vẫn chưa thành công).</li>
+<li><strong>Ex:</strong> hình dưới ta có 2 queue, apply dead-letter queue với receive count = 5, khi tới ngưỡng giới hạn mà message vẫn chưa được xử lý thành công và xoá khỏi queue, ta sẽ move sang một queue khác (dead-letter queue) để xử lý sau.</li>
+</ul>
+<p><img src="./image/SQS_concept4.png" alt="Alt text" /></p>
+<ul>
+<li>Long polling wait time: thời gian để SQS chờ trước khi return empty cho consumer trong  trường hợp không có message nào trên queue.</li>
+<li><strong>Flow khi wait time = 0s:</strong></li>
+</ul>
+<p><img src="./image/SQS_concept5.png" alt="Alt text" /></p>
+<ul>
+<li><strong>Flow khi wait time = 10s:</strong></li>
+</ul>
+<p><img src="./image/SQS_concept6.png" alt="Alt text" /></p>
+<h3 id="sqs-limitation"><a class="header" href="#sqs-limitation">SQS Limitation</a></h3>
+<ul>
+<li>Giới hạn về số lượng message trên một queue: unlimited</li>
+<li>Queue name: 80 characters</li>
+<li>Queue tag: 50 tags</li>
+<li>Long polling: 20s</li>
+<li>Message Visibility Timeout: min: 0s, max: 12 hours</li>
+<li>Message size max: 256KB</li>
+<li>Message attributes: 10 metadata attributes</li>
+<li>Message content: có thể bao gồm XML, Json, Text</li>
+<li>Message retention: default 4 days, min: 1 mininutes max 14 days.</li>
+</ul>
+<h3 id="một-số-thông-số-liên-quan-monitor"><a class="header" href="#một-số-thông-số-liên-quan-monitor">Một số thông số liên quan monitor</a></h3>
+<ul>
+<li><strong>Approximage age of oldest message</strong></li>
+<li><strong>Approximate number of message not visible</strong>: Số lượng mesage đang được xử lý (in-flight) nên bị tạm ẩn khỏi queue.</li>
+<li><strong>Approximate number of message visible</strong>: Số lượng message chưa được xử lý.</li>
+<li><strong>Number of message sent</strong></li>
+<li><strong>Number of message receivednhận</strong></li>
+<li><strong>Number of message deleted</strong></li>
+</ul>
+<h3 id="sqs-usecase"><a class="header" href="#sqs-usecase">SQS Usecase</a></h3>
+<ul>
+<li>Đồng bộ dữ liệu giữa các hệ thống hoặc ứng dụng.</li>
+<li>Xử lý hàng đợi, giúp de-coupling hệ thống và chống bottle neck tại những component có thể có workload tăng đột ngột. Giúp chuyển từ xử lý đồng bộ sang bất đồng bộ.</li>
+<li>Hệ thống xử lý thời gian thực bằng cách sử dụng FIFO queue.</li>
+<li>Data migration. <strong>Ex:</strong> <em>data từ source cần được chia ra nhiều luồng xử lý bất đồng bộ và có phương pháp retry cũng như phân loại message lỗi</em></li>
+</ul>
+<h3 id="sqs-pricing"><a class="header" href="#sqs-pricing">SQS Pricing</a></h3>
+<ul>
+<li>Số lượng request gửi nhận. <strong>Ex:</strong> <em>$0.4/ 1 triệu request với Standard và $0.5 /1 triệu request với FIFO queue. Tính theo block 64KB</em></li>
+<li>Dữ liệu truyền từ SQS đi ra: $0.12 /GB</li>
+<li><strong>Zero idle cost</strong></li>
+</ul>
+<h2 id="simple-notification-service---sns"><a class="header" href="#simple-notification-service---sns">Simple Notification Service - SNS</a></h2>
+<ul>
+<li>AWS Simple Notification Service (SNS) là một dịch vụ notification, cho phép bạn gửi thông báo đến các đối tượng khác nhau như các ứng dụng, user, hệ thống, hoặc các dịch vụ khác trên AWS.</li>
+<li>SNS cho phép bạn gửi thông báo bằng nhiều phương thức khác nhau như email, SMS, push notifications, hoặc API Call. Bạn có thể tạo và quản lý các topics trong SNS, và sau đó gửi thông báo đến các topics. Các đối tượng đã đăng ký (subscribed) vào topic sẽ nhận được thông báo.</li>
+</ul>
+<h3 id="Đặc-trưng-của-sns"><a class="header" href="#Đặc-trưng-của-sns">Đặc trưng của SNS</a></h3>
+<ul>
+<li>Về cơ bản SNS hoạt động theo mô hình Publisher-Subscriber, message khi được bên publisher gửi lên SNS topic sẽ được đồng loạt gửi tới các subscriber.</li>
+<li>Đa kênh thông báo: SNS hỗ trợ nhiều kênh thông báo như email, SMS, push notifications, và API call.</li>
+<li>Khả năng mở rộng và đáng tin cậy: SNS xử lý việc phân phối thông báo trên cơ sở hạ tầng mở rộng của AWS. Nó tự động xử lý khả năng mở rộng và đảm bảo tính đáng tin cậy của việc gửi thông báo.</li>
+<li>Tích hợp với các dịch vụ AWS khác: SNS tích hợp tốt với các dịch vụ AWS khác như SQS, CloudWatch, AWS Lambda, Amazon EC2, và nhiều dịch vụ khác. Điều này cho phép bạn xây dựng các hệ thống phức tạp và tự động hóa quá trình gửi thông báo.</li>
+<li>SNS có hỗ trợ FIFO tương tự như SQS.</li>
+<li><strong>Mesage attribute</strong>: cho phép lưu trữ thêm những thông tin tuỳ chọn cho message.</li>
+<li><strong>Message Filtering</strong>: cho phép đặt các filter để quyết định xem message sẽ notify tới các subscriber nào.</li>
+<li><strong>Message security</strong>: kết hợp với KMS để mã hoá message, tăng tính bảo mật.</li>
+</ul>
+<h3 id="sns-concepts"><a class="header" href="#sns-concepts">SNS Concepts</a></h3>
+<p>SNS có thể kết hợp được với nhiều dịch vụ khác nhau trên AWS cũng như notify tới nhiều loại target bên ngoài AWS.</p>
+<p><img src="./image/SNS_concept.png" alt="Alt text" /></p>
+<h3 id="sns-limitation"><a class="header" href="#sns-limitation">SNS Limitation</a></h3>
+<ul>
+<li>Số lượng topic/account: 100,000, FIFO: 1000</li>
+<li>Subscription: 12,500,000/topic. FIFO: 100/topic</li>
+<li>Delivery rate for email: 10 message/s (extend able)</li>
+<li>Message size: 256KB</li>
+</ul>
+<h3 id="sns-usecase"><a class="header" href="#sns-usecase">SNS Usecase</a></h3>
+<ul>
+<li>Notify đến email / SMS trong trường hợp dùng làm notification service.</li>
+<li>Kết hợp với các dịch vụ Monitoring, Audit, Security để thông báo tới người phụ trách.</li>
+<li>Notify tới Mobile Application.</li>
+<li>Gửi notification đồng thời tới nhiều target theo thời gian thực.</li>
+<li>Xây dựng hệ thống phân tán.</li>
+<li>Xây dựng hệ thống Chat.</li>
+</ul>
+<h3 id="sns-pricing"><a class="header" href="#sns-pricing">SNS Pricing</a></h3>
+<ul>
+<li>Cost cho việc gửi notification
+<ul>
+<li><strong>Mobile push</strong>: $0.5 per 1M notification</li>
+<li><strong>Email</strong>: $1 per 1M notification</li>
+<li><strong>HTTP</strong>: $0.6 per 1M notification</li>
+</ul>
+</li>
+<li>Data transfer
+<ul>
+<li><strong>Transfer in</strong>: Free</li>
+<li><strong>Transfer out</strong>: $0.12/GB</li>
+</ul>
+</li>
+<li>Chi phí cho SMS: tuỳ thuộc vào quốc gia.</li>
+<li>Message filter: $0.11/ GB payload data được scan.</li>
+</ul>
+<h2 id="simple-email-service---ses"><a class="header" href="#simple-email-service---ses">Simple Email Service - SES</a></h2>
+<p>Simple Email Service (SES) là một dịch vụ email được cung cấp bởi Amazon Web Services (AWS) để gửi và nhận email một cách đáng tin cậy và có hiệu suất cao.</p>
+<h3 id="tính-năng-của-ses"><a class="header" href="#tính-năng-của-ses">Tính năng của SES</a></h3>
+<ul>
+<li>Gửi email: SES cho phép bạn gửi email từ ứng dụng hoặc hạ tầng đám mây của bạn thông qua giao thức SMTP (Simple Mail Transfer Protocol).</li>
+<li>Quản lý danh sách người nhận: SES cho phép bạn quản lý và lưu trữ danh sách người nhận email của bạn.</li>
+<li>Xác thực và bảo mật: SES cung cấp các tính năng xác thực và bảo mật nhằm đảm bảo rằng email của bạn được gửi từ nguồn đáng tin cậy và không bị làm giả mạo. Điều này bao gồm xác thực thông qua DKIM (DomainKeys Identified Mail), SPF (Sender Policy Framework) và DMARC (Domain-based Message Authentication, Reporting, and Conformance).</li>
+<li>Ghi lại hoạt động: SES cung cấp các log chi tiết về hoạt động gửi email, bao gồm thông tin về người gửi, người nhận, thời gian gửi và kết quả gửi. Bạn có thể sử dụng dữ liệu này để theo dõi và phân tích hiệu suất gửi email.</li>
+</ul>
+<h3 id="ses-concept"><a class="header" href="#ses-concept">SES Concept</a></h3>
+<ul>
+<li>SES có thể được tích hợp với các dịch vụ khác trong mạng lưới AWS, như Lambda, S3 và SNS, để tự động hóa quy trình gửi email và xử lý các hành động phản hồi từ người nhận.</li>
+<li>Lưu ý rằng SES chủ yếu là dịch vụ gửi email và có giới hạn về tính năng nhận email. Nếu bạn cần chức năng đầy đủ để nhận và xử lý email, bạn có thể xem xét sử dụng dịch vụ như Amazon Simple Notification Service (SNS) hoặc Amazon WorkMail</li>
+</ul>
+<h3 id="ses-pricing"><a class="header" href="#ses-pricing">SES Pricing</a></h3>
+<ul>
+<li>Số lương email: $0.1/1000 email</li>
+<li>File đính kèm: $0.12/1GB attachment</li>
+<li>Ngoài ra SES còn tính phí thêm cho các option như Dedicated IP, Virtual Deliverability Manager.</li>
+</ul>
+<h3 id="ses-production-mode"><a class="header" href="#ses-production-mode">SES Production mode</a></h3>
+<ul>
+<li>Để có thể gửi email tới bất kỳ đâu, AWS yêu cầu SES cần được enable production mode. <em>Nếu chưa được bật production mode, bạn chỉ có thể gửi mail trong sand-box mode tức là gửi tới một danh sách email đã đăng ký sẵn</em></li>
+<li>Để enable production mode, AWS yêu cầu bạn cung cấp một số thông tin:
+<ul>
+<li>Nguồn của email lấy từ đâu?</li>
+<li>Email được gửi trong các use case nào? (marketing, email hướng dẫn thông thường). Bạn có thể gửi sample email để AWS duyệt.</li>
+<li>Làm sao để user un-subscribe việc nhận email?</li>
+<li>Bạn làm sao để hạn chế gửi bounce email (gửi mail đến địa chỉ vô định)?</li>
+</ul>
+</li>
+<li><em><strong>Sau khi xem xét các yếu tố trên, AWS sẽ cân nhắc có enable production mode cho bạn hay không.</strong></em></li>
+<li>Lưu ý sau khi đã enable production mode cho SES
+<ul>
+<li>Liên tục monitor chỉ số <strong>Bounce Rate, Claim rate</strong> và có alert kịp thời để xử lý.</li>
+<li>Theo dõi limit của SES để có action kịp thời yêu cầu nâng limit khi giới hạn gửi mail trong ngày/tuần/tháng bị chạm ngưỡng.</li>
+</ul>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/AWS/Monitor_Auditing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/Linux/bandit.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/AWS/Monitor_Auditing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/Linux/bandit.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
