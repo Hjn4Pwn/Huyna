@@ -1,0 +1,422 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Images &amp; Containers: The Core Building Blocks - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/job.html">Requirements For Job</a></li><li class="chapter-item "><a href="../../blogs/AWS/EC2.html">Computing Services - EC2</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAM.html">Identity and Access Management -IAM</a></li><li class="chapter-item "><a href="../../blogs/AWS/S3.html">Simple Storage Service - S3</a></li><li class="chapter-item "><a href="../../blogs/AWS/LoadBalancing-Autoscaling.html">Load Balancing and Autoscaling</a></li><li class="chapter-item "><a href="../../blogs/AWS/RDS.html">Relational Database Service - RDS</a></li><li class="chapter-item "><a href="../../blogs/AWS/DynamoDB.html">Database Services - No SQL - DynamoDB</a></li><li class="chapter-item "><a href="../../blogs/AWS/Lambda.html">Serverless Lambda</a></li><li class="chapter-item "><a href="../../blogs/AWS/VPC.html">Networking Service - VPC, Peering, Endpoint</a></li><li class="chapter-item "><a href="../../blogs/AWS/Gateway_Cognito.html">API Gateway & Cognito</a></li><li class="chapter-item "><a href="../../blogs/AWS/CloudFront.html">Content Delivery Service (CDN) - CloudFront</a></li><li class="chapter-item "><a href="../../blogs/AWS/Route_53.html">Domain Name System - Route 53</a></li><li class="chapter-item "><a href="../../blogs/AWS/Monitor_Auditing.html">Monitoring and Auditing - CloudWatch, CloudTrail</a></li><li class="chapter-item "><a href="../../blogs/AWS/Mess.html">Messaging Service - SNS, SQS, SES</a></li><li class="chapter-item "><a href="../../blogs/AWS/Event_Bridge.html">Event Bridge</a></li><li class="chapter-item "><a href="../../blogs/AWS/Elastic_Beanstalk.html">Elastic Beanstalk</a></li><li class="chapter-item "><a href="../../blogs/AWS/Container_Service.html">Container Service - ECS, ECR</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAC_CloudFormation.html">Infra as Code - CloudFormation</a></li><li class="chapter-item "><a href="../../blogs/AWS/Backup_Recovery.html">Backup and Recovery</a></li><li class="chapter-item "><a href="../../blogs/AWS/Sec.html">Security Services</a></li><li class="chapter-item affix "><li class="part-title">Kubernetes</li><li class="chapter-item "><a href="../../blogs/Kubernetes/session1.html">Khái niệm cơ bản</a></li><li class="chapter-item affix "><li class="part-title">Linux + Git</li><li class="chapter-item "><a href="../../blogs/Linux/bandit.html">Bandit challenge</a></li><li class="chapter-item "><a href="../../blogs/Linux/command_session_1.html">Command session 1</a></li><li class="chapter-item "><a href="../../blogs/Linux/git_command.html">Git command</a></li><li class="chapter-item "><a href="../../blogs/Linux/ssh.html">SSH</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some docker tips for CTF</a></li><li class="chapter-item "><a href="../../blogs/Docker/get_started.html">Basic Docker</a></li><li class="chapter-item expanded "><a href="../../blogs/Docker/image_container.html" class="active">Images & Containers: The Core Building Blocks</a></li><li class="chapter-item "><a href="../../blogs/Docker/dockerfile_write.html">Dockerfile</a></li><li class="chapter-item "><a href="../../blogs/Docker/docker_network.html">Docker Network</a></li><li class="chapter-item affix "><li class="part-title">Jenkins</li><li class="chapter-item "><a href="../../blogs/Jenkins/install_by_docker.html">Install Jenkins By Docker</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/link_git_jenkins.html">Link git with jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/pipline_github_jenkins.html">Pipeline jenkinsfile with github</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_jenkins.html">Link gitlab with Jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_dockerhub.html">Gitlab-dockerhub-pipeline</a></li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item "><a href="../../blogs/Python/RE.html">Regular Expression</a></li><li class="chapter-item "><a href="../../blogs/Python/Automation_1.html">Automation with Python 1</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item "><a href="../../blogs/Bash_script/Variables_Environment.html">Shell Variables and Environment</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Conditionals_Execution.html">Conditionals Execution</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Bash_Loops.html">Bash Loops & Function</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Shell_Redirection.html">Shell Redirection & Pipes and Filters</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Interactive_Scripts.html">Interactive Scripts</a></li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/basic_network_1.html">Basic Network 1</a></li><li class="chapter-item affix "><li class="part-title">PWN</li><li class="chapter-item "><a href="../../blogs/PWN/Emporium_ROP.html">Rop Emporium</a></li><li class="chapter-item "><a href="../../blogs/PWN/pwnableTW.html">Pwnable.tw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pico_CTF.html">Pwn_PicoCTF</a></li><li class="chapter-item "><a href="../../blogs/PWN/PWN_from_blabla.html">Pwn from blabla</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/ASM.html">ASM</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_PicoCTF</li><li class="chapter-item "><a href="../../blogs/RE/RE.html">RE</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li><li class="chapter-item affix "><li class="part-title">Documents from everywhere</li><li class="chapter-item "><a href="../../blogs/Documents/troubleshooting.html">Troubleshooting</a></li><li class="chapter-item "><a href="../../blogs/Documents/study.html">Study</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="images--containers-the-core-building-blocks"><a class="header" href="#images--containers-the-core-building-blocks">Images &amp; Containers: The Core Building Blocks</a></h1>
+<h2 id="build--run-basic-image-with-dockerfile"><a class="header" href="#build--run-basic-image-with-dockerfile">Build &amp; Run basic image with Dockerfile</a></h2>
+<pre><code class="language-py">FROM node:14
+WORKDIR /app
+COPY . .
+RUN npm install
+EXPOSE 3000
+CMD [ &quot;node&quot;, &quot;app.mjs&quot; ]
+
+</code></pre>
+<blockquote>
+<p>docker build -t getting-started:v1 .</p>
+</blockquote>
+<blockquote>
+<p>docker run -dp 3000:80 getting-started:v1</p>
+</blockquote>
+<h2 id="images-are-read-only"><a class="header" href="#images-are-read-only">Images are Read-Only</a></h2>
+<p>Nên là mỗi khi update code, application =&gt; create new image =&gt; run =&gt; container with new version of code</p>
+<h2 id="images-layers"><a class="header" href="#images-layers">Images Layers</a></h2>
+<pre><code class="language-py">FROM node:14
+WORKDIR /app
+COPY . .
+RUN npm install
+EXPOSE 3000
+CMD [ &quot;node&quot;, &quot;app.mjs&quot; ]
+
+</code></pre>
+<ul>
+<li>
+<p>Với cái Dockerfile như trên nếu chúng ta build lại image mà không thay đổi code =&gt; nó có cache để không phải chạy lại. Tuy nhiên khi mà ta đã thay đổi code thì nó sẽ chạy lại các instructions kể từ chỗ đã thay đổi đến hết.</p>
+</li>
+<li>
+<p>Do đó để save time, ta sẽ làm như sau với case này:</p>
+</li>
+</ul>
+<pre><code class="language-py">FROM node:14
+WORKDIR /app
+COPY package.json .
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD [ &quot;node&quot;, &quot;app.mjs&quot; ]
+
+</code></pre>
+<h2 id="attach--detach-container"><a class="header" href="#attach--detach-container">Attach &amp; Detach Container</a></h2>
+<h3 id="attach"><a class="header" href="#attach">Attach</a></h3>
+<blockquote>
+<p>docker attach &lt;id-name&gt;</p>
+</blockquote>
+<p>trường hợp cần thêm thông tin từ việc chạy docker =&gt; attach hoặc dùng docker</p>
+<h3 id="detach"><a class="header" href="#detach">Detach</a></h3>
+<blockquote>
+<p>docker run -p 8000:80 -d &lt;id-name&gt;</p>
+</blockquote>
+<p><em>If you started a container in detached mode (i.e. with -d), you can still attach to it afterwards without restarting the Container with the following command:</em> <strong>docker attach CONTAINER</strong></p>
+<h2 id="internative"><a class="header" href="#internative">Internative</a></h2>
+<p>Example:</p>
+<pre><code class="language-py">from random import randint
+
+min_number = int(input('Please enter the min number: '))
+max_number = int(input('Please enter the max number: '))
+
+if (max_number &lt; min_number): 
+  print('Invalid input - shutting down...')
+else:
+  rnd_number = randint(min_number, max_number)
+  print(rnd_number)
+
+</code></pre>
+<p>Dockerfile:</p>
+<pre><code class="language-py">FROM python
+WORKDIR /app
+COPY . .
+CMD [&quot;python&quot;, &quot;rng.py&quot;]
+
+</code></pre>
+<p>Nếu run bình thường ta sẽ không thể tương tác, input vào được do đó ta cần 2 options:</p>
+<pre><code class="language-py"> -i, --interactive                    Keep STDIN open even if not attached
+ -t, --tty                            Allocate a pseudo-TTY
+</code></pre>
+<p>option -i =&gt; cho phép stdin, -t giả lập =&gt; terminal để tương</p>
+<h2 id="remove"><a class="header" href="#remove">Remove</a></h2>
+<ul>
+<li>Chỉ được xóa container mà đã stop</li>
+</ul>
+<blockquote>
+<p>docker rm CONTAINER</p>
+</blockquote>
+<ul>
+<li>Chỉ được xóa image mà không được dùng ở bấn kì container nào</li>
+</ul>
+<blockquote>
+<p>docker rmi</p>
+</blockquote>
+<blockquote>
+<p>docker image prune</p>
+</blockquote>
+<ul>
+<li>
+<p>Sẽ xóa toạn bộ các image không sử dụng</p>
+</li>
+<li>
+<p>Thêm option -rm =&gt; vào docker run thì container sẽ được xóa khi bị stop 1 cách auto</p>
+</li>
+</ul>
+<h2 id="more-information-about-an-image"><a class="header" href="#more-information-about-an-image">More information about an image</a></h2>
+<blockquote>
+<p>docker image inspect IMAGE-</p>
+</blockquote>
+<h2 id="copy-file-into--from"><a class="header" href="#copy-file-into--from">Copy file into &amp; from</a></h2>
+<blockquote>
+<p>docker cp source CONTAINER-NAME:dest</p>
+</blockquote>
+<h2 id="name--tag-of-containers--images"><a class="header" href="#name--tag-of-containers--images">Name &amp; Tag of Containers &amp; Images</a></h2>
+<ul>
+<li>Thêm option <strong>--name</strong> trong câu lệnh docker run:</li>
+</ul>
+<blockquote>
+<p>docker run -p 8000:80 -d --name NAME IMAGE-NAME:TAG</p>
+</blockquote>
+<ul>
+<li>Thêm option -t để gắn tag cho image, chính là version:</li>
+</ul>
+<blockquote>
+<p>docker build -t abc:v2 .
+docker run -p 8000:80 -d --name NAME IMAGE-NAME:TAG</p>
+</blockquote>
+<h2 id="push-image-to"><a class="header" href="#push-image-to">Push image to</a></h2>
+<ul>
+<li>Đầu tiên cần tạo repo ta có repo-name</li>
+<li>Để push được image lên DockerHub ta cần image đó phải có tên là username-of-DockerHub/Repo-name</li>
+</ul>
+<blockquote>
+<p>docker tag image-name username-dockerhub / repo-name-on-docker-hub : version</p>
+</blockquote>
+<pre><code class="language-sh">➜ python-app-starting-setup ⚡                                                   17:17:13
+▶ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED              SIZE
+abc          v1        17b72ac3e71d   About a minute ago   1.02GB
+
+➜ python-app-starting-setup ⚡                                                   17:17:58
+▶ docker tag 17b72ac3e71d hjn4/udemy-docker-learn:v1
+
+➜ python-app-starting-setup ⚡                                                   17:18:03
+▶ docker images
+REPOSITORY                TAG       IMAGE ID       CREATED              SIZE
+hjn4/udemy-docker-learn   v1        17b72ac3e71d   About a minute ago   1.02GB
+abc                       v1        17b72ac3e71d   About a minute ago   1.02GB
+
+➜ python-app-starting-setup ⚡                                                   17:18:05
+▶ docker push hjn4/udemy-docker-learn:v1
+The push refers to repository [docker.io/hjn4/udemy-docker-learn]
+eae17a074db1: Pushed
+2b9b1a0059f9: Pushed
+d08e8c3991bb: Mounted from library/python
+00fdc842d356: Mounted from library/python
+a2ad80a8ed2e: Mounted from library/python
+74ec933aa24e: Mounted from library/python
+d43f876e6f21: Mounted from library/python
+9f843c569746: Mounted from library/python
+bcd354c940e1: Mounted from library/python
+1dae5147cd29: Mounted from library/python
+v1: digest: sha256:167a2de6abd3d4b0b231e33431fb4f40f8f744e6132b228e730c2fe3d53bf46e size: 2420
+
+</code></pre>
+<ul>
+<li>Pull image from DockerHun</li>
+</ul>
+<blockquote>
+<p>docker pull IMAGE:tag</p>
+</blockquote>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p><img src="./image/part2_summary_1.png" alt="alt text" /></p>
+<h2 id="cheat-sheet"><a class="header" href="#cheat-sheet">Cheat sheet</a></h2>
+<ul>
+<li><strong>docker build .</strong> : Build a Dockerfile and create your own Image based on the file
+<ul>
+<li><em><strong>-t NAME:TAG</strong></em> : Assign a NAME and a TAG to an image</li>
+</ul>
+</li>
+<li><strong>docker run IMAGE_NAME</strong> : Create and start a new container based on image IMAGENAME (or use the image id)
+<ul>
+<li><em><strong>--name NAME</strong></em> : Assign a NAME to the container. The name can be used for stopping and removing etc.</li>
+<li><em><strong>-d</strong></em> : Run the container in detached mode - i.e. output printed by the container is not visible, the command prompt / terminal does NOT wait for the container to stop</li>
+<li><em><strong>-it</strong></em> : Run the container in &quot;interactive&quot; mode - the container / application is then prepared to receive input via the command prompt / terminal. You can stop the container with CTRL + C when using the -it flag</li>
+<li><em><strong>--rm</strong></em> : Automatically remove the container when it's stopped</li>
+</ul>
+</li>
+<li><strong>docker ps</strong> : List all running containers
+<ul>
+<li><em><strong>-a</strong></em> : List all containers - including stopped ones</li>
+</ul>
+</li>
+<li><strong>docker images</strong> : List all locally stored images</li>
+<li><strong>docker rm CONTAINER</strong> : Remove a container with name CONTAINER (you can also use the container id)</li>
+<li><strong>docker rmi IMAGE</strong> : Remove an image by name / id</li>
+<li><strong>docker container prune</strong> : Remove all stopped containers</li>
+<li><strong>docker image prune</strong> : Remove all dangling images (untagged images)
+<ul>
+<li><em><strong>-a</strong></em> : Remove all locally stored images</li>
+</ul>
+</li>
+<li><strong>docker push IMAGE</strong> : Push an image to DockerHub (or another registry) - the image name/ tag must include the repository name/ url</li>
+<li><strong>docker pull IMAGE</strong> : Pull (download) an image from DockerHub (or another registry) - this is done automatically if you just docker run IMAGE and the image wasn't pulled before</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/Docker/get_started.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/Docker/dockerfile_write.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/Docker/get_started.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/Docker/dockerfile_write.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
