@@ -246,8 +246,31 @@ Require stack:
 <p>Docker file sửa <strong>CMD [ &quot;node&quot;, &quot;server.js&quot; ]</strong> =&gt; <strong>CMD [ &quot;npm&quot;, &quot;start&quot; ]</strong></p>
 <p>Nodemon được dùng trong Nodejs nhầm monitor file system để reload node server mỗi khi có thay đổi. Tuy nhiên thì vẫn chưa thực hành thành công trên wsl2.</p>
 <p>Đã follow <a href="https://devblogs.microsoft.com/commandline/access-linux-filesystems-in-windows-and-wsl-2/">this page</a> but fail :((((</p>
+<h2 id="dockerignore"><a class="header" href="#dockerignore">.dockerignore</a></h2>
+<p>Tương tự như <em><strong>.gitinorge</strong></em>. Các file ở đây sẽ không được copy vào container</p>
 <h2 id="volume-comparison"><a class="header" href="#volume-comparison">Volume Comparison</a></h2>
 <p><img src="./image/volume_comparison.png" alt="alt text" /></p>
+<h2 id="environment-variable"><a class="header" href="#environment-variable">Environment Variable</a></h2>
+<p>Với những case cần có tính linh động, thay vì hard code ta có thể setup: <strong>app.listen(process.env.PORT);</strong></p>
+<p>và như này nếu muốn ở Dockerfile:</p>
+<pre><code class="language-py">....
+ENV PORT 80
+
+EXPOSE $PORT
+....
+
+</code></pre>
+<p>Tuy nhiên cần pải có option <strong>--env PORT=XXXX</strong> ở câu lệnh docker run có thể gán và ghi đè env ở dockerfile:</p>
+<blockquote>
+<p>docker run -p 3000:8000 -d --env PORT=8000 node-app</p>
+</blockquote>
+<p><em>Note: Vì để tăng tính bảo mật =&gt; các env variable không nên đưa vào Dockerfile mà nên setup lúc dùng docker run</em></p>
+<h2 id="argument-in-dockerfile-and-docker-run-command"><a class="header" href="#argument-in-dockerfile-and-docker-run-command">Argument in Dockerfile and Docker run command</a></h2>
+<pre><code class="language-py">ARG TEST=80
+ENV PORT=TEST
+
+</code></pre>
+<p>Có thể bị ghi đè ở docker run: <strong>--build-arg TEST=</strong></p>
 
                     </main>
 
