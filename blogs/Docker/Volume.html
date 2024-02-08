@@ -164,6 +164,15 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="volume"><a class="header" href="#volume">Volume</a></h1>
+<ul>
+<li><a href="#compare-persist-volume-vs-bind-mount">Compare Persist Volume vs Bind Mount</a></li>
+<li><a href="#docker-volume---persist-volume">Docker Volume - Persist Volume</a></li>
+<li><a href="#bind-mount">Bind Mount</a></li>
+<li><a href="#dockerignore">.dockerignore</a></li>
+<li><a href="#volume-comparison">Volume Comparison</a></li>
+<li><a href="#environment-variable">Environment Variable</a></li>
+<li><a href="#argument-in-dockerfile-and-docker-run-command">Argument in Dockerfile and Docker run command</a></li>
+</ul>
 <h2 id="compare-persist-volume-vs-bind-mount"><a class="header" href="#compare-persist-volume-vs-bind-mount">Compare Persist Volume vs Bind Mount</a></h2>
 <p><img src="./image/volume_compare_Persist_bind.png" alt="alt text" /></p>
 <h2 id="docker-volume---persist-volume"><a class="header" href="#docker-volume---persist-volume">Docker Volume - Persist Volume</a></h2>
@@ -270,7 +279,7 @@ EXPOSE $PORT
 ENV PORT=TEST
 
 </code></pre>
-<p>Có thể bị ghi đè ở docker run: <strong>--build-arg TEST=</strong></p>
+<p>Có thể bị ghi đè ở docker run: <strong>--build-arg TEST=XXXX</strong></p>
 
                     </main>
 

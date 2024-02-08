@@ -164,6 +164,25 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="images--containers-the-core-building-blocks"><a class="header" href="#images--containers-the-core-building-blocks">Images &amp; Containers: The Core Building Blocks</a></h1>
+<ul>
+<li><a href="#build--run-basic-image-with-dockerfile">Build &amp; Run basic image with Dockerfile</a></li>
+<li><a href="#images-are-read-only">Images are Read-Only</a></li>
+<li><a href="#images-layers">Images Layers</a></li>
+<li><a href="#attach--detach-container">Attach &amp; Detach Container</a>
+<ul>
+<li><a href="#attach">Attach</a></li>
+<li><a href="#detach">Detach</a></li>
+</ul>
+</li>
+<li><a href="#internative-mode">Internative mode</a></li>
+<li><a href="#remove">Remove</a></li>
+<li><a href="#more-information-about-an-image">More information about an image</a></li>
+<li><a href="#copy-file-into--from-container">Copy file into &amp; from container</a></li>
+<li><a href="#name--tag-of-containers--images">Name &amp; Tag of Containers &amp; Images</a></li>
+<li><a href="#push-image-to-dockerhub">Push image to DockerHub</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#cheat-sheet">Cheat sheet</a></li>
+</ul>
 <h2 id="build--run-basic-image-with-dockerfile"><a class="header" href="#build--run-basic-image-with-dockerfile">Build &amp; Run basic image with Dockerfile</a></h2>
 <pre><code class="language-py">FROM node:14
 WORKDIR /app
@@ -218,7 +237,7 @@ CMD [ &quot;node&quot;, &quot;app.mjs&quot; ]
 <p>docker run -p 8000:80 -d &lt;id-name&gt;</p>
 </blockquote>
 <p><em>If you started a container in detached mode (i.e. with -d), you can still attach to it afterwards without restarting the Container with the following command:</em> <strong>docker attach CONTAINER</strong></p>
-<h2 id="internative"><a class="header" href="#internative">Internative</a></h2>
+<h2 id="internative-mode"><a class="header" href="#internative-mode">Internative mode</a></h2>
 <p>Example:</p>
 <pre><code class="language-py">from random import randint
 
@@ -272,7 +291,7 @@ CMD [&quot;python&quot;, &quot;rng.py&quot;]
 <blockquote>
 <p>docker image inspect IMAGE-</p>
 </blockquote>
-<h2 id="copy-file-into--from"><a class="header" href="#copy-file-into--from">Copy file into &amp; from</a></h2>
+<h2 id="copy-file-into--from-container"><a class="header" href="#copy-file-into--from-container">Copy file into &amp; from container</a></h2>
 <blockquote>
 <p>docker cp source CONTAINER-NAME:dest</p>
 </blockquote>
@@ -290,7 +309,7 @@ CMD [&quot;python&quot;, &quot;rng.py&quot;]
 <p>docker build -t abc:v2 .
 docker run -p 8000:80 -d --name NAME IMAGE-NAME:TAG</p>
 </blockquote>
-<h2 id="push-image-to"><a class="header" href="#push-image-to">Push image to</a></h2>
+<h2 id="push-image-to-dockerhub"><a class="header" href="#push-image-to-dockerhub">Push image to DockerHub</a></h2>
 <ul>
 <li>Đầu tiên cần tạo repo ta có repo-name</li>
 <li>Để push được image lên DockerHub ta cần image đó phải có tên là username-of-DockerHub/Repo-name</li>
