@@ -164,8 +164,19 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="docker-network"><a class="header" href="#docker-network">Docker Network</a></h1>
-<p><a href="https://github.com/Hjn4Pwn/docker-docs/blob/master/docs/docker-coban/docker-network.md">Quá đủ để viết thêm</a></p>
-<p>Nên là mình sẽ thực hành và học theo bởi nó khá chi tiết</p>
+<p><a href="https://github.com/Hjn4Pwn/docker-docs/blob/master/docs/docker-coban/docker-network.md">For more</a></p>
+<p><img src="./image/network_1.png" alt="alt text" /></p>
+<h2 id="container-to-www"><a class="header" href="#container-to-www">Container to WWW</a></h2>
+<p>Có thể kết nối đến <strong>WWW</strong> từ bên trong các ứng dụng trong container. Mà không cần phải config</p>
+<h2 id="container-to-localhost"><a class="header" href="#container-to-localhost">Container to localhost</a></h2>
+<p>Thay domain <strong>localhost</strong> =&gt; <strong>host.docker.internal</strong></p>
+<h2 id="container-to-container"><a class="header" href="#container-to-container">Container to Container</a></h2>
+<ul>
+<li>Tạo network riêng, để đưa các container vào cùng 1 network, và chúng sẽ nói chuyện với nhau bằng name của container</li>
+<li>docker network create NETWORK-NAME</li>
+<li>Thêm option <strong>--network NETWORK-NAME</strong> vào câu lệnh docker run</li>
+<li>Connect giữa các container trong 1 network có thể dùng name của container, thay vì IP</li>
+</ul>
 
                     </main>
 
