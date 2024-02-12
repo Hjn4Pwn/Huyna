@@ -170,6 +170,9 @@
 <li><a href="#run-container">Run Container</a></li>
 <li><a href="#update-the-application">Update The Application</a></li>
 <li><a href="#share-docker-application">Share Image</a></li>
+<li><a href="#persist-the-db">Persist the DB</a></li>
+<li><a href="#bind-mount">Bind Mount</a></li>
+<li><a href="#base-container">Base Container</a></li>
 </ul>
 <p><img src="./image/image_vs_container.png" alt="Docker image vs docker container" /></p>
 <h2 id="image"><a class="header" href="#image">Image</a></h2>
@@ -474,8 +477,48 @@ mysql&gt; select * from todo_items;
 
 
 </code></pre>
-<h2 id="docker-compose"><a class="header" href="#docker-compose">Docker compose</a></h2>
-<p>haizz viết 1 hồi lại thấy <a href="https://docs.docker.com/get-started/08_using_compose/">Docs</a> dễ hiểu hơn hẳn =.= khum cần phải viết thêm</p>
+<h2 id="base-container"><a class="header" href="#base-container">Base container</a></h2>
+<p>Như là môi trường để chạy các lệnh như python, php, node, ...</p>
+<ul>
+<li>Dockerfile:</li>
+</ul>
+<pre><code class="language-sh">FROM node
+WORKDIR /app
+
+</code></pre>
+<blockquote>
+<p>docker run -it -d -v $(pwd):/app mynode npm init</p>
+</blockquote>
+<p>lệnh trên giúp không cần cài node trên local mà vẫn có thể khởi tạo node project thông qua container với bind mount</p>
+<p>Có thể thêm <strong>ENTRYPOINT [&quot;npm&quot;]</strong> để không các lệnh ta dùng đều bắt đầu với npm mà k ghi lại:</p>
+<blockquote>
+<p>docker run -it -d -v $(pwd):/app mynode init</p>
+</blockquote>
+<ul>
+<li>Docker-compose:</li>
+</ul>
+<pre><code class="language-sh">version: &quot;3.8&quot;
+services:
+  npm-name:
+    build: ./
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./:/app
+
+</code></pre>
+<ul>
+<li>Nếu có ENTRYPOINT npm:</li>
+</ul>
+<blockquote>
+<p>docker-compose run --rm npm-name init</p>
+</blockquote>
+<ul>
+<li>Nếu không có ENTRYPOINT</li>
+</ul>
+<blockquote>
+<p>docker-compose run --rm npm-name npm init</p>
+</blockquote>
 
                     </main>
 
