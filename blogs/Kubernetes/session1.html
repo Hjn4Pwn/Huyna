@@ -176,6 +176,7 @@
 </ul>
 </li>
 </ul>
+<p><img src="./image/k8s_architect.png" alt="alt text" /></p>
 <h3 id="control-plane"><a class="header" href="#control-plane">Control Plane</a></h3>
 <ul>
 <li>
@@ -194,7 +195,8 @@
 <p><strong>etcd</strong>: Như là 1 database chứa toàn bộ data của cluster (objects, resources,...) phục vụ cho mục đích truy cập và tra cứu</p>
 </li>
 <li>
-<p><strong>cloud-controller-manager</strong>(<em>optional</em>): Khi mà ta tự tạo riêng 1 cái cluster k8s nhưng lại muốn sử dụng các tài nguyên như (EC2, S3, ...) trên cloud nói chung, AWS nói riêng thì ta cần đến CCM để có thể tương tác với các service của cloud</p>
+<p><strong>cloud-controller-manager</strong>(<em>optional</em>): Khi mà ta tự tạo riêng 1 cái cluster k8s nhưng lại muốn sử dụng các tài nguyên như (EC2, S3, ...) trên cloud nói chung, AWS nói riêng thì ta cần đến CCM để có thể tương tác với các service của cloud
+<img src="./image/k8s_maternode.png" alt="alt text" /></p>
 </li>
 </ul>
 <h3 id="data-plane"><a class="header" href="#data-plane">Data Plane</a></h3>
@@ -362,6 +364,297 @@ people:
 </li>
 <li>Chỉ nên chạy 1 container trong 1 pod</li>
 </ul>
+<h2 id="install"><a class="header" href="#install">Install</a></h2>
+<h3 id="install-kubectl-on-ubuntu"><a class="header" href="#install-kubectl-on-ubuntu">Install kubectl on ubuntu</a></h3>
+<pre><code class="language-py">curl -LO &quot;https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl&quot;
+
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+kubectl version --client
+
+</code></pre>
+<h2 id="install-minikube"><a class="header" href="#install-minikube">Install MiniKube</a></h2>
+<pre><code class="language-sh">sudo apt update -y
+sudo apt upgrade -y
+
+sudo reboot
+sudo apt install -y curl wget apt-transport-https
+
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+minikube version
+
+</code></pre>
+<h2 id="deploy"><a class="header" href="#deploy">Deploy</a></h2>
+<ul>
+<li>Cần start minikube:</li>
+</ul>
+<pre><code class="language-sh">minikube start --driver=docker
+
+minikube status
+</code></pre>
+<ul>
+<li>Khi ta create 1 object, kubectl sẽ tự động gửi câu lệnh này cho virtual host, virtual host nó đi tìm image này nó sẽ tìm trên dockerhub, do đó ta cần push image lên dockerhub</li>
+</ul>
+<blockquote>
+<p>kubectl create deployment first-app --image=kube-test</p>
+</blockquote>
+<p>Kiểm tra cho thấy create object không thành công:</p>
+<pre><code class="language-sh">➜ kub-action-01-starting-setup ⚡                                       20.8.0  07:29:45
+▶ kubectl get deployment
+NAME        READY   UP-TO-DATE   AVAILABLE   AGE
+first-app   0/1     1            0           53s
+
+➜ kub-action-01-starting-setup ⚡                                       20.8.0  07:29:55
+▶ kubectl get pod
+NAME                        READY   STATUS             RESTARTS   AGE
+first-app-f975696fc-fhzqh   0/1     ImagePullBackOff   0          60s
+
+# Do là chưa Ready nên cần push image lên 
+➜ kub-action-01-starting-setup ⚡                                       20.8.0  07:30:02
+▶ kubectl delete deployment first-app
+deployment.apps &quot;first-app&quot; deleted
+
+</code></pre>
+<blockquote>
+<p>minikube dashboard # for monitor</p>
+</blockquote>
+<p><img src="./image/dashboard_minikube.png" alt="alt text" /></p>
+<h3 id="how-kubectl-work"><a class="header" href="#how-kubectl-work">How kubectl work?</a></h3>
+<p><img src="./image/kubectl_work.png" alt="alt text" /></p>
+<h2 id="the-service-object"><a class="header" href="#the-service-object">The &quot;Service&quot; Object</a></h2>
+<p><img src="./image/service_object.png" alt="alt text" /></p>
+<ul>
+<li>
+<p>&quot;Service&quot; Object có thể giúp các pod communicate với nhau thông qua name, giúp các service group pods có thể có 1 đại chỉ IP không đổi dù các pods bên trong có thay đổi</p>
+</li>
+<li>
+<p>Tạo service mới, nhằm tạo cách có thể truy cập đến một deployment cụ thể:</p>
+</li>
+</ul>
+<blockquote>
+<p>kubectl expose deployment kube-app --type=LoadBalancer --port=8080</p>
+</blockquote>
+<ul>
+<li><strong>X</strong>: ClusterIP, LoadBalancer, NodePort, ...</li>
+<li><strong>LoadBalancer</strong> yêu cầu được tạo trước đó</li>
+<li><strong>--port=8080</strong>: Mở cổng 8080 trên dịch vụ. Các yêu cầu được chuyển đến cổng này sẽ được chuyển tiếp đến các Pod thuộc Deployment &quot;first-app&quot; trên cổng mà Deployment đang lắng nghe (trong trường hợp này, cổng 8080).</li>
+<li><strong>ClusterIP</strong>: Dịch vụ mặc định khi không chỉ định --type nào. Nó tạo ra một địa chỉ IP nội bộ trong cụm Kubernetes và chỉ có thể truy cập từ bên trong cụm. Đây là loại dịch vụ nhanh và phổ biến nhất.</li>
+<li><strong>ExternalName</strong>: Liên kết dịch vụ với một tên DNS bên ngoài. Không tạo ra địa chỉ IP nội bộ và không có load balancing. Thường được sử dụng để kết nối với các dịch vụ bên ngoài cụm Kubernetes</li>
+<li><strong>LoadBalancer</strong>: Tạo ra một LoadBalancer và gán một địa chỉ IP công cộng cho dịch vụ. Các yêu cầu được chuyển tiếp từ LoadBalancer đến các Pod thuộc dịch vụ.</li>
+<li><strong>NodePort</strong>:
+<ul>
+<li>Khi bạn tạo một dịch vụ NodePort và kết nối nó với một Deployment, tất cả các Pod thuộc Deployment đó sẽ chia sẻ cùng một cổng NodePort trên mỗi node. Mỗi Pod không có cổng riêng lẻ được mở, và không có cách để yêu cầu từ một Pod cụ thể được chuyển tiếp đến một Pod khác trong cùng một Deployment thông qua cổng NodePort.</li>
+<li>Ví dụ, nếu bạn có một Deployment với nhiều Pod, và tạo một dịch vụ NodePort cho Deployment đó, cổng NodePort sẽ chuyển tiếp yêu cầu đến bất kỳ Pod nào thuộc Deployment đó. Nó không sẽ chuyển tiếp yêu cầu từ một Pod cụ thể đến Pod khác cụ thể trong Deployment.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-sh">➜ kub-action-01-starting-setup ⚡                                       20.8.0  14:33:21
+▶ kubectl expose deployment kube-app --type=LoadBalancer --port=8080
+service/kube-app exposed
+
+➜ kub-action-01-starting-setup ⚡                                       20.8.0  14:33:30
+▶ kubectl get service
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+kube-app     LoadBalancer   10.102.88.140   &lt;pending&gt;     8080:31310/TCP   34s
+kubernetes   ClusterIP      10.96.0.1       &lt;none&gt;        443/TCP          3h4m
+
+</code></pre>
+<ul>
+<li>ClusterIP is default</li>
+<li>Trong minikube thì đây là 1 virtual host do đó thì external-ip sẽ luôn pending như vậy.</li>
+</ul>
+<pre><code class="language-sh">➜ kub-action-01-starting-setup ⚡                                       20.8.0  14:34:05
+▶ minikube service kube-app
+|-----------|----------|-------------|---------------------------|
+| NAMESPACE |   NAME   | TARGET PORT |            URL            |
+|-----------|----------|-------------|---------------------------|
+| default   | kube-app |        8080 | http://192.168.67.2:31310 |
+|-----------|----------|-------------|---------------------------|
+🏃  Starting tunnel for service kube-app.
+|-----------|----------|-------------|------------------------|
+| NAMESPACE |   NAME   | TARGET PORT |          URL           |
+|-----------|----------|-------------|------------------------|
+| default   | kube-app |             | http://127.0.0.1:43719 |
+|-----------|----------|-------------|------------------------|
+🎉  Opening service default/kube-app in default browser...
+
+# or
+➜ Application ⚡                                                                                                    15:34:59
+▶ minikube service kube-app --url
+http://127.0.0.1:43815
+❗  Because you are using a Docker driver on linux, the terminal needs to be open to run it.
+
+</code></pre>
+<ul>
+<li>Có khả năng tự restart nếu pod bị fail, để duy trì tính ổn định của ứng dụng.</li>
+</ul>
+<h2 id="scale"><a class="header" href="#scale">Scale</a></h2>
+<pre><code class="language-sh">➜ ~ ⚡                                                                           19:40:47
+▶ kubectl scale deployment/kube-app --replicas=3
+deployment.apps/kube-app scaled
+
+➜ ~ ⚡                                                                           19:40:53
+▶ kubectl get pods
+NAME                        READY   STATUS              RESTARTS      AGE
+kube-app-57cdbc557f-8t6bc   0/1     ContainerCreating   0             2s
+kube-app-57cdbc557f-g97wk   1/1     Running             3 (52m ago)   8h
+kube-app-57cdbc557f-hnhw6   0/1     ContainerCreating   0             2s
+
+➜ ~ ⚡                                                                           19:40:55
+▶ kubectl get pods
+NAME                        READY   STATUS    RESTARTS      AGE
+kube-app-57cdbc557f-8t6bc   1/1     Running   0             19s
+kube-app-57cdbc557f-g97wk   1/1     Running   3 (53m ago)   8h
+kube-app-57cdbc557f-hnhw6   1/1     Running   0             19s
+
+</code></pre>
+<p><img src="./image/scale_pods.png" alt="alt text" /></p>
+<ul>
+<li>Do là trước đó ta add service type LoadBalancer =&gt; các pods này cũng có load</li>
+</ul>
+<p><img src="./image/loadbalance_scale.png" alt="alt text" /></p>
+<h2 id="update-new-version"><a class="header" href="#update-new-version">Update new version</a></h2>
+<p><em><strong>Note: không thể update image với 1 tên khác hay là 1 cái tech khác</strong></em></p>
+<ul>
+<li>Lệnh này được sử dụng để cập nhật image của container trong một Deployment trong Kubernetes. Trong trường hợp này, kube-app=/hjn4... kube-app ở đây là tên container</li>
+</ul>
+<p><em>Note: Cần lưu ý một vấn đề là tag version phải khác version trước, bởi vì nếu giống nhau nó sẽ k download về</em></p>
+<blockquote>
+<p>kubectl set image deployment/kube-app kube-app=hjn4/kube-app:v2</p>
+</blockquote>
+<pre><code class="language-sh">➜ ~ ⚡                                                                           20:13:20
+▶ kubectl set image deployment/kube-app kube-app=hjn4/kube-app:v2
+deployment.apps/kube-app image updated
+
+</code></pre>
+<ul>
+<li>Lệnh này được sử dụng để theo dõi trạng thái của quá trình triển khai (rollout) sau khi bạn đã thực hiện việc cập nhật image hoặc thay đổi khác trong một Deployment.</li>
+</ul>
+<blockquote>
+<p>kubectl rollout status deployment/kube-app</p>
+</blockquote>
+<pre><code class="language-sh">➜ ~ ⚡                                                                           20:13:56
+▶ kubectl rollout status deployment/kube-app
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 1 old replicas are pending termination...
+deployment &quot;kube-app&quot; successfully rolled out
+
+</code></pre>
+<h2 id="rollback--history"><a class="header" href="#rollback--history">Rollback &amp; history</a></h2>
+<ul>
+<li>Chúng ta giả lập version lỗi, update image với tag không tồn tại:</li>
+</ul>
+<pre><code class="language-sh">➜ ~ ⚡                                                                           20:14:10
+▶ kubectl set image deployment/kube-app kube-app=hjn4/kube-app:3
+deployment.apps/kube-app image updated
+➜ ~ ⚡                                                                           20:37:52
+▶ kubectl rollout status deployment/kube-app
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;kube-app&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+
+</code></pre>
+<p><img src="./image/rollback_failed_version.png" alt="alt text" /></p>
+<ul>
+<li>Hoàn tác việc triển khai version mới nhất:</li>
+</ul>
+<blockquote>
+<p>kubectl rollout undo deployment/kube-app</p>
+</blockquote>
+<ul>
+<li>
+<p>Check các version update và rollback về trạng thái chỉ định trong quá khứ:</p>
+</li>
+<li>
+<p>xem các trạng thái trước đó</p>
+</li>
+</ul>
+<blockquote>
+<p>kubectl rollout history deployment/kube-app</p>
+</blockquote>
+<ul>
+<li>xem chi tiết 1 cụ thể 1 trạng thái</li>
+</ul>
+<blockquote>
+<p>kubectl rollout history deployment/kube-app --revision=1</p>
+</blockquote>
+<pre><code class="language-sh">➜ ~ ⚡                                                                           20:42:27
+▶ kubectl rollout history deployment/kube-app
+deployment.apps/kube-app
+REVISION  CHANGE-CAUSE
+1         &lt;none&gt;
+3         &lt;none&gt;
+4         &lt;none&gt;
+
+➜ ~ ⚡                                                                           20:43:26
+▶ kubectl rollout history deployment/kube-app --revision=1
+deployment.apps/kube-app with revision #1
+Pod Template:
+  Labels:       app=kube-app
+        pod-template-hash=57cdbc557f
+  Containers:
+   kube-app:
+    Image:      hjn4/kube-app
+    Port:       &lt;none&gt;
+    Host Port:  &lt;none&gt;
+    Environment:        &lt;none&gt;
+    Mounts:     &lt;none&gt;
+  Volumes:      &lt;none&gt;
+
+</code></pre>
+<ul>
+<li>Rollback về quá khứ:</li>
+</ul>
+<blockquote>
+<p>kubectl rollout undo deployment/kube-app --to-revision=1</p>
+</blockquote>
+<pre><code class="language-sh">➜ ~ ⚡                                                                           20:44:22
+▶ kubectl rollout undo deployment/kube-app --to-revision=1
+deployment.apps/kube-app rolled back
+
+</code></pre>
+<h3 id="tại-sao-không-thấy-downtime-trong-quá-trình-rollback"><a class="header" href="#tại-sao-không-thấy-downtime-trong-quá-trình-rollback">Tại sao không thấy downtime trong quá trình rollback</a></h3>
+<ul>
+<li><strong>Rolling Update Strategy</strong>: Kubernetes sử dụng chiến lược cập nhật cuộn (Rolling Update) mặc định khi bạn thực hiện các thay đổi trong một Deployment. Điều này có nghĩa là nó sẽ tạo ra các bản sao mới của Pods, loại bỏ từng Pod cũ một cách dần dần để đảm bảo rằng ít nhất một số lượng Pods luôn hoạt động trong suốt quá trình triển khai.</li>
+<li><strong>Pods Cũ Và Mới Hoạt Động Đồng Thời</strong>: Trong quá trình cuộn chảy, có một khoảng thời gian khi cả các Pods cũ và mới đều hoạt động đồng thời. Kubernetes đảm bảo rằng số lượng Pods hoạt động không bao giờ giảm xuống dưới một mức nhất định, nhờ đó giảm thiểu hoặc loại bỏ downtime.</li>
+<li><strong>Health Checks</strong>: Kubernetes sử dụng các kiểm tra sức khỏe (health checks) để đảm bảo rằng mỗi Pod mới được triển khai được xem là &quot;sẵn sàng&quot; trước khi loại bỏ một Pod cũ. Điều này giúp đảm bảo rằng chỉ có các Pods sẵn sàng và lành mạnh được giữ lại.</li>
+<li><strong>Pod Disruption Budgets</strong>: Nếu bạn đã cấu hình Pod Disruption Budget trong Deployment, Kubernetes sẽ giữ lại một số lượng Pods hoạt động tối thiểu trong quá trình triển khai hoặc quay lại phiên bản trước đó.</li>
+</ul>
+<h3 id="delete"><a class="header" href="#delete">Delete</a></h3>
+<pre><code class="language-sh">➜ ~ ⚡                                                                           20:45:57
+▶ kubectl delete service kube-app
+service &quot;kube-app&quot; deleted
+➜ ~ ⚡                                                                           20:52:49
+▶ kubectl delete deployment kube-app
+deployment.apps &quot;kube-app&quot; deleted
+
+➜ ~ ⚡                                                                           20:53:00
+▶ kubectl get deployment
+No resources found in default namespace.
+
+➜ ~ ⚡                                                                           20:53:07
+▶ kubectl get pod
+NAME                        READY   STATUS        RESTARTS   AGE
+kube-app-57cdbc557f-99ftg   1/1     Terminating   0          7m16s
+kube-app-57cdbc557f-k8fx9   1/1     Terminating   0          7m10s
+kube-app-57cdbc557f-z8nl9   1/1     Terminating   0          7m13s
+➜ ~ ⚡                                                                           20:53:13
+▶ kubectl get pod
+No resources found in default namespace.
+</code></pre>
 
                     </main>
 

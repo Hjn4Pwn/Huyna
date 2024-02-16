@@ -164,6 +164,27 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h1>
+<h2 id="docker"><a class="header" href="#docker">Docker</a></h2>
+<pre><code class="language-sh">➜ kub-action-01-starting-setup ⚡                                       20.8.0  11:09:32
+▶ docker login
+Log in with your Docker ID or email address to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com/ to create one.
+You can log in with your password or a Personal Access Token (PAT). Using a limited-scope PAT grants better security and is required for organizations using SSO. Learn more at https://docs.docker.com/go/access-tokens/
+
+Username: hjn4
+Password:
+Error saving credentials: error storing credentials - err: fork/exec /usr/bin/docker-credential-desktop.exe: exec format error, out: ``
+
+</code></pre>
+<blockquote>
+<p>rm ~/.docker/config.json</p>
+</blockquote>
+<p>And then, login again</p>
+<h2 id="wsl2"><a class="header" href="#wsl2">WSL2</a></h2>
+<pre><code class="language-sh">wsl --update
+
+wsl.exe --update
+
+</code></pre>
 
                     </main>
 
