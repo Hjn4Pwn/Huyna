@@ -164,6 +164,17 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="practice-on-kodekloud"><a class="header" href="#practice-on-kodekloud">Practice on KodeKloud</a></h1>
+<ul>
+<li><a href="#some-courses-on-kodekloud">Some Courses on KodeKloud</a></li>
+<li><a href="#pod">Pod</a></li>
+<li><a href="#replicasets">ReplicaSets</a></li>
+<li><a href="">Label &amp; Selector</a></li>
+<li><a href="#namespace">Namespace</a></li>
+<li><a href="#deployment">Deployment</a></li>
+<li><a href="#configmap">Configmap</a></li>
+<li><a href="#secrets">Secrets</a></li>
+<li><a href="#ingress">Ingress</a></li>
+</ul>
 <h2 id="some-courses-on-kodekloud"><a class="header" href="#some-courses-on-kodekloud">Some Courses on KodeKloud</a></h2>
 <ul>
 <li>Practice basic command on KodeKloud:
@@ -449,6 +460,128 @@ data:
           key: APP_COLOR
 
 </code></pre>
+<h2 id="secrets"><a class="header" href="#secrets">Secrets</a></h2>
+<ul>
+<li>How many Secrets exist on the system?</li>
+</ul>
+<blockquote>
+<p>kubectl get secrets</p>
+</blockquote>
+<ul>
+<li>How many secrets are defined in the dashboard-token secret?</li>
+</ul>
+<blockquote>
+<p>kubectl get secrets dashboard-token -o yaml</p>
+</blockquote>
+<ul>
+<li>Create a new secret named <em>db-secret</em> with the data given below.
+<ul>
+<li>Secret Name: <em>db-secret</em></li>
+<li>Secret 1: <em>DB_Host=sql01</em></li>
+<li>Secret 2: <em>DB_User=root</em></li>
+<li>Secret 3: <em>DB_Password=password123</em></li>
+</ul>
+</li>
+</ul>
+<p><strong>Method 1:</strong></p>
+<blockquote>
+<p>kubectl create secret generic db-secret --from-literal=DB_Host=sql01 --from-literal=DB_User=root --from-literal=DB_Password=password123</p>
+</blockquote>
+<p><strong>Method 2:</strong></p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: opaque
+stringData: # k8s auto encode data để lưu trữ trong secret mà không cần encode Base64 trước.
+  DB_Host: sql01
+  DB_User: root
+  DB_Password: password123
+</code></pre>
+<p><strong>Method 3:</strong></p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: opaque
+data: 
+  DB_Host: # encode Base64
+  DB_User: # encode Base64
+  DB_Password: # encode Base64
+
+</code></pre>
+<ul>
+<li>Configure webapp-pod to load environment variables from the newly created secret.</li>
+</ul>
+<pre><code class="language-yaml">spec:
+  containers:
+  - image: kodekloud/simple-webapp-mysql
+    imagePullPolicy: Always
+    name: webapp
+    envFrom: # add
+    - secretRef: # add
+        name: db-secret # add
+
+</code></pre>
+<h2 id="ingress"><a class="header" href="#ingress">Ingress</a></h2>
+<ul>
+<li>
+<p>Let us now deploy an Ingress Controller.</p>
+<ul>
+<li>First, create a namespace called ingress-nginx.</li>
+</ul>
+<blockquote>
+<p>kubectl create namespace ingress-nginx</p>
+</blockquote>
+<ul>
+<li>The NGINX Ingress Controller requires a ConfigMap object. Create a ConfigMap object with name ingress-nginx-controller in the ingress-nginx namespace.</li>
+</ul>
+<blockquote>
+<p>kubectl create configmap ingress-nginx-controller --namespace ingress-nginx</p>
+</blockquote>
+<ul>
+<li>The NGINX Ingress Controller requires two ServiceAccounts. Create both ServiceAccount with name ingress-nginx and ingress-nginx-admission in the ingress-nginx namespace.</li>
+</ul>
+<blockquote>
+<p>kubectl create serviceaccount ingress-nginx --namespace ingress-nginx</p>
+</blockquote>
+<blockquote>
+<p>kubectl create serviceaccount ingress-nginx-admission --namespace ingress-nginx</p>
+</blockquote>
+<ul>
+<li>Create the ingress resource to make the applications available at /wear and /watch on the Ingress service. Also, make use of rewrite-target annotation field: <strong>nginx.ingress.kubernetes.io/rewrite-target: /</strong></li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-wear-watch
+  namespace: app-space
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: &quot;false&quot;
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /wear
+        pathType: Prefix
+        backend:
+          service:
+           name: wear-service
+           port: 
+            number: 8080
+      - path: /watch
+        pathType: Prefix
+        backend:
+          service:
+           name: video-service
+           port:
+            number: 8080
+
+</code></pre>
+<p><em>Ví dụ: Nếu Ingress có nginx.ingress.kubernetes.io/rewrite-target: /app, mọi yêu cầu đến /wear sẽ được rewrite thành /app/wear trước khi được chuyển đến service wear-service.</em></p>
 
                     </main>
 

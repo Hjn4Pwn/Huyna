@@ -170,6 +170,14 @@
 <li><a href="#data-plane">Data Plane</a></li>
 <li><a href="#yaml">YAML</a></li>
 <li><a href="#pod">POD</a></li>
+<li><a href="#replicasets">ReplicaSets</a></li>
+<li><a href="#deployment">Deployment</a></li>
+<li><a href="#service">Service</a></li>
+<li><a href="#label--selector">Label &amp; Selector</a></li>
+<li><a href="#namespace">Namespace</a></li>
+<li><a href="#configmap">ConfigMap</a></li>
+<li><a href="#secret">Secret</a></li>
+<li><a href="#ingress">Ingress</a></li>
 <li><a href="#install-kubectl-on-ubuntu">Install kubectl on ubuntu</a></li>
 </ul>
 <h2 id="cluster-architecture"><a class="header" href="#cluster-architecture">Cluster Architecture</a></h2>
@@ -371,6 +379,60 @@ people:
 <li>ReplicaSet cho phép chạy nhiều bản sao của 1 POD trong Cluster để đảm bảo High Avalibility</li>
 <li>Khi application chạy 2 POD, RS cho phép đảm bảo luôn luôn có 2 POD running trong Cluster</li>
 </ul>
+<h2 id="deployment"><a class="header" href="#deployment">Deployment</a></h2>
+<p><img src="./image/deployment_overview.png" alt="alt text" /></p>
+<ul>
+<li>Khi traffic tăng lên, Kuberentes sẽ không thêm containers vào trong các POD đang chạy mà sẽ thêm các POD khác</li>
+<li>POD được coi là immutable object, tức là khi running không thể edit bất cứ thông tin nào ngoại trừ <strong>image</strong></li>
+<li>Khi traffic tiếp tục tăng lên và 1 node không thể xử lý được thì K8s sẽ tạo POD trên Host khác</li>
+<li><strong>Upgrade/Rollout</strong>: tạo ra một Replicaset mới với các POD với version mới của application</li>
+<li><strong>Rollback</strong>: recover lại các POD của replicaset version trước đó</li>
+<li><em><strong>Deployment Strategy</strong></em>:
+<ul>
+<li><strong>Recreate strategy</strong> sẽ kill tất cả các POD của revision cũ trước khi tạo ra các revision mới, gây ra downtime cho application</li>
+<li><strong>Rolling Update</strong> thực hiện thay thế dần dần các POD của revision cũ và thay thế bằng các POD của revision mới</li>
+</ul>
+</li>
+</ul>
+<h2 id="service"><a class="header" href="#service">Service</a></h2>
+<p><img src="./image/service_concept.png" alt="alt text" /></p>
+<p><em><strong>In Kubernetes, a Service is a method for exposing a network application that is running as one or more Pods in your cluster.</strong></em></p>
+<p><strong>Service types</strong></p>
+<p><img src="./image/service_type.png" alt="alt text" /></p>
+<ul>
+<li><strong>NodePort</strong> cho phép truy cập vào một POD trong Cluster bằng cách mapping với 1 Port nằm trên Node.</li>
+<li><strong>ClusterIP</strong> cho phép gắn một IP ảo (Virtual IP) vào Service và cho phép các service khác trong cluster có thể thương tác với service này qua IP đó</li>
+<li><strong>LoadBalancer</strong> là service cung cấp bởi các Cloud Provider, nó cho phép truy cập vào service thông qua một LoadBalancer</li>
+</ul>
+<h3 id="nodeport"><a class="header" href="#nodeport">NodePort</a></h3>
+<p><img src="./image/service_nodeport.png" alt="alt text" /></p>
+<ul>
+<li>
+<p>Để định một NodePort service cần chỉ định rõ các Port trên Node (NodePort), Port lắng nghe của Service (Port) và Port lắng nghe của POD (targetPort)</p>
+</li>
+<li>
+<p>Khi tạo một Service với kiểu NodePort, một cổng cố định (NodePort) trên mỗi Node trong Cluster sẽ được mở ra để tiếp nhận yêu cầu. Cổng này là một cổng ngoại vi trên máy chủ vật lý hoặc ảo và có thể được truy cập từ bên ngoài Cluster.</p>
+</li>
+<li>
+<p><strong>Virtual IP (ClusterIP)</strong>: Service cung cấp một địa chỉ IP ảo (ClusterIP) để đại diện cho tất cả các Pod thuộc selector của nó. Khi các yêu cầu đến địa chỉ IP của Service (ClusterIP), cổng NodePort trên Node sẽ chuyển hướng yêu cầu đó đến ClusterIP.</p>
+</li>
+<li>
+<p><strong>Forwarding đến các Pod</strong>: Khi một yêu cầu được gửi đến cổng NodePort trên bất kỳ Node nào trong Cluster, nó sẽ được chuyển hướng đến địa chỉ IP của Service (ClusterIP). ClusterIP sau đó sẽ chuyển hướng yêu cầu đến các Pod phù hợp dựa trên selector theo một cơ chế Round Robin.</p>
+</li>
+<li>
+<p><strong>Round Robin Load Balancing</strong>: Cơ chế Round Robin được sử dụng để chuyển hướng yêu cầu đến các Pod trong tập hợp. Mỗi lần yêu cầu mới đến, nó sẽ được chuyển đến Pod tiếp theo trong danh sách.</p>
+</li>
+</ul>
+<h3 id="clusterip"><a class="header" href="#clusterip">ClusterIP</a></h3>
+<p><img src="./image/service_clusterIP.png" alt="alt text" /></p>
+<ul>
+<li>Được sử dụng để tạo ra một địa chỉ IP ảo (Virtual IP) chỉ có thể truy cập từ bên trong Cluster. ClusterIP không cung cấp khả năng truy cập từ bên ngoài Cluster và thường được sử dụng để nhóm các Pod có cùng chức năng</li>
+<li>Khi triển khai một địch vụ thông thường sẽ bao gồm 3 thành phần cơ bản đó là FrontEnd, Backend và DB.</li>
+<li>Trong môi trường của Kubernetes, các thành phần này sẽ được triển khai thành các POD gọi là instance. Các POD này về bản chất được Kubernetes cấp cho 1 địa chỉ IP trong suốt vòng đời của nó, tuy nhiên khi POD bị thay thế bởi POD khác thì IP sẽ bị thay đổi.</li>
+<li>Vì vậy, kêt nối trực tiếp tới IP của POD là điều không thể. Do đó service ClusterIP được sinh ra như một giao diện đồng nhất cho phép nhóm tất cả các POD có cùng chức năng lại, điều đó khiến cho việc POD bị thay đổi IP sẽ không bị ảnh hưởng tới các thành phần tạo kết nối khác.</li>
+</ul>
+<h3 id="loadbalancer"><a class="header" href="#loadbalancer">LoadBalancer</a></h3>
+<p><img src="./image/service_loadbalancer.png" alt="alt text" /></p>
 <h2 id="label--selector"><a class="header" href="#label--selector">Label &amp; Selector</a></h2>
 <p><img src="./image/label_selector.png" alt="alt text" /></p>
 <p><strong>Label</strong>: Gán nhãn cho object
@@ -380,6 +442,117 @@ people:
 <li>Namespace cho phép phân tách, tách biệt resources của một Kubernetes Cluster.</li>
 <li>Sử dụng Namespace khi cần chia K8s resources cho các team khác nhau, các mục đích khác nhau <em>(dev, test, prod,...)</em></li>
 <li>Sử dụng Namespace có thể set các giới hạn về Resources phục vụ việc quản lý tài nguyên</li>
+</ul>
+<h2 id="configmap"><a class="header" href="#configmap">ConfigMap</a></h2>
+<ul>
+<li>
+<p>Các file cấu hình cho ứng dụng có thể được sử dụng trong Kubernetes dưới dạng ConfigMap</p>
+</li>
+<li>
+<p>ConfigMap được lưu dưới dạng Key-Value</p>
+</li>
+<li>
+<p>Ứng dụng có thể đọc các file cấu hình dưới dạng ConfigMap theo các cách sau:</p>
+<ul>
+<li>Sử dụng biến môi trường Environment Variables (printenv)</li>
+<li>Sử dụng Volumes</li>
+</ul>
+</li>
+<li>
+<p>ConfigMap có thể dùng để lưu một file cấu hình đầy đủ <em>(VD. nginx.conf, application.properties)</em></p>
+</li>
+<li>
+<p>Sau đó ConfigMap được mount vào thư mục đặt file cấu hình của ứng dụng trong container sử dụng Volumes.Bằng cách này chúng ta có thể đưa file cấu hình vào trong Container mà không cần thay đổi gì với Container</p>
+</li>
+<li>
+<p>Generate ConfigMap sử dụng declarative yaml file</p>
+</li>
+</ul>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-config-map
+data:
+  APP_COLOR: darkblue
+  APP_OTHER: disregard
+
+</code></pre>
+<ul>
+<li>Expose ConfigMap sử dụng Environment Variables</li>
+</ul>
+<pre><code class="language-yaml"># non configmap
+- env:
+    - name: APP_COLOR
+      value: green
+</code></pre>
+<pre><code class="language-yaml"># use configmap
+- env:
+    - name: APP_COLOR
+      valueFrom:
+        configMapKeyRef: 
+          name: webapp-config-map
+          key: APP_COLOR
+
+</code></pre>
+<h2 id="secret"><a class="header" href="#secret">Secret</a></h2>
+<ul>
+<li>
+<p>Secrets là cách mà Kubernetes cung cấp để chia sẻ các thông nhạy cảm <em>(user/pass, token, key…)</em>, là cách đơn giản nhất để truyền các tham số nhạy cảm</p>
+</li>
+<li>
+<p>Ngoài Secrets còn có thể dùng dịch vụ khác thay thế như <strong>Hashicorp Vault</strong></p>
+</li>
+<li>
+<p>Ứng dụng có thể sử dụng Secret theo các cách sau</p>
+<ul>
+<li>Sử dụng Secret như là các biến môi trường (environment variables)</li>
+<li>Sử dụng Secret như là một file: volumes để mount vào Container</li>
+</ul>
+</li>
+</ul>
+<p>Volume:</p>
+<pre><code class="language-yaml">spec:
+  containers:
+  - name: mynodejs
+    image:  nodejs
+    volumeMounts:
+      - name: credential-volume
+        mountPath: /etc/creds
+  volumes:
+    - name: credential-volume
+      secret:
+        secretName: db-secret
+</code></pre>
+<p><a href="./commands.html">For more</a></p>
+<h2 id="ingress"><a class="header" href="#ingress">Ingress</a></h2>
+<ul>
+<li>Ingress là một phương án để expose service ra bên ngoài thay thế cho NodePort hoặc LoadBalancer type</li>
+<li>Ingress cho phép định tuyến các traffic từ bên ngoài vào các service bên trong K8s theo các rule được định nghĩa:
+<ul>
+<li>Host name</li>
+<li>URL Path</li>
+</ul>
+</li>
+</ul>
+<p><img src="./image/ingress_1.png" alt="alt text" /></p>
+<ul>
+<li>
+<p><strong>Ingress Resource</strong> là Object cho phép định nghĩa cách các request từ bên ngoài vào được định tuyến tới các Service như thế nào trong K8s Cluster</p>
+</li>
+<li>
+<p><strong>Ingress Controller</strong>:</p>
+<ul>
+<li>Ingress Controller đóng vai trò là Proxy và thực hiện tiếp nhận request từ bên ngoài và chuyển hướng tới các dịch vụ Service bên trong Cluster K8s</li>
+<li>Ingress Controller sẽ lắng nghe việc tạo ra các Ingress Resource và apply các rule định nghĩa trong Ingress Resource vào cấu hình Proxy của nó</li>
+</ul>
+</li>
+<li>
+<p><strong>Ingress Rules</strong>:</p>
+<ul>
+<li>Là một phần của Ingress Resources trong Kubernetes. Một Ingress Resources định nghĩa cách yêu cầu HTTP/HTTPS nên được điều hướng đến các dịch vụ trong cluster. Mỗi Ingress Rule chứa một hoặc nhiều quy tắc để xác định cách yêu cầu nên được xử lý.</li>
+<li>Các quy tắc này được đặc tả trong trường spec.rules của Ingress Resources và có thể bao gồm các thông tin như địa chỉ đích, path, port, và backend service.</li>
+</ul>
+</li>
 </ul>
 <h2 id="install-kubectl-on-ubuntu-or-wsl2"><a class="header" href="#install-kubectl-on-ubuntu-or-wsl2">Install kubectl on ubuntu or wsl2</a></h2>
 <pre><code class="language-py">curl -LO &quot;https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl&quot;
