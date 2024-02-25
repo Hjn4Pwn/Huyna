@@ -1,0 +1,609 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Functional Programming - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/job.html">Requirements For Job</a></li><li class="chapter-item "><a href="../../blogs/AWS/EC2.html">Computing Services - EC2</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAM.html">Identity and Access Management -IAM</a></li><li class="chapter-item "><a href="../../blogs/AWS/S3.html">Simple Storage Service - S3</a></li><li class="chapter-item "><a href="../../blogs/AWS/LoadBalancing-Autoscaling.html">Load Balancing and Autoscaling</a></li><li class="chapter-item "><a href="../../blogs/AWS/RDS.html">Relational Database Service - RDS</a></li><li class="chapter-item "><a href="../../blogs/AWS/DynamoDB.html">Database Services - No SQL - DynamoDB</a></li><li class="chapter-item "><a href="../../blogs/AWS/Lambda.html">Serverless Lambda</a></li><li class="chapter-item "><a href="../../blogs/AWS/VPC.html">Networking Service - VPC, Peering, Endpoint</a></li><li class="chapter-item "><a href="../../blogs/AWS/Gateway_Cognito.html">API Gateway & Cognito</a></li><li class="chapter-item "><a href="../../blogs/AWS/CloudFront.html">Content Delivery Service (CDN) - CloudFront</a></li><li class="chapter-item "><a href="../../blogs/AWS/Route_53.html">Domain Name System - Route 53</a></li><li class="chapter-item "><a href="../../blogs/AWS/Monitor_Auditing.html">Monitoring and Auditing - CloudWatch, CloudTrail</a></li><li class="chapter-item "><a href="../../blogs/AWS/Mess.html">Messaging Service - SNS, SQS, SES</a></li><li class="chapter-item "><a href="../../blogs/AWS/Event_Bridge.html">Event Bridge</a></li><li class="chapter-item "><a href="../../blogs/AWS/Elastic_Beanstalk.html">Elastic Beanstalk</a></li><li class="chapter-item "><a href="../../blogs/AWS/Container_Service.html">Container Service - ECS, ECR</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAC_CloudFormation.html">Infra as Code - CloudFormation</a></li><li class="chapter-item "><a href="../../blogs/AWS/Backup_Recovery.html">Backup and Recovery</a></li><li class="chapter-item "><a href="../../blogs/AWS/Sec.html">Security Services</a></li><li class="chapter-item affix "><li class="part-title">Kubernetes</li><li class="chapter-item "><a href="../../blogs/Kubernetes/session1.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/commands.html">Practice on KodeKloud</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/minkube_deployment.html">MiniKube Deployment</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/data_volume.html">Manage Data & Volumes</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/network.html">Network</a></li><li class="chapter-item affix "><li class="part-title">Linux + Git</li><li class="chapter-item "><a href="../../blogs/Linux/bandit.html">Bandit challenge</a></li><li class="chapter-item "><a href="../../blogs/Linux/command_session_1.html">Command session 1</a></li><li class="chapter-item "><a href="../../blogs/Linux/git_command.html">Git command</a></li><li class="chapter-item "><a href="../../blogs/Linux/ssh.html">SSH</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some docker tips for CTF</a></li><li class="chapter-item "><a href="../../blogs/Docker/get_started.html">Basic Docker</a></li><li class="chapter-item "><a href="../../blogs/Docker/image_container.html">Images & Containers: The Core Building Blocks</a></li><li class="chapter-item "><a href="../../blogs/Docker/dockerfile_write.html">Dockerfile</a></li><li class="chapter-item "><a href="../../blogs/Docker/docker_network.html">Docker Network</a></li><li class="chapter-item "><a href="../../blogs/Docker/Volume.html">Volume</a></li><li class="chapter-item "><a href="../../blogs/Docker/Docker_Compose.html">Docker Compose</a></li><li class="chapter-item affix "><li class="part-title">Terraform</li><li class="chapter-item "><a href="../../blogs/Terraform/overview.html">Overview</a></li><li class="chapter-item expanded "><a href="../../blogs/Terraform/functional_pro.html" class="active">Functional Programming</a></li><li class="chapter-item affix "><li class="part-title">Jenkins</li><li class="chapter-item "><a href="../../blogs/Jenkins/install_by_docker.html">Install Jenkins By Docker</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/link_git_jenkins.html">Link git with jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/pipline_github_jenkins.html">Pipeline jenkinsfile with github</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_jenkins.html">Link gitlab with Jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_dockerhub.html">Gitlab-dockerhub-pipeline</a></li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item "><a href="../../blogs/Python/RE.html">Regular Expression</a></li><li class="chapter-item "><a href="../../blogs/Python/Automation_1.html">Automation with Python 1</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item "><a href="../../blogs/Bash_script/Variables_Environment.html">Shell Variables and Environment</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Conditionals_Execution.html">Conditionals Execution</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Bash_Loops.html">Bash Loops & Function</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Shell_Redirection.html">Shell Redirection & Pipes and Filters</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Interactive_Scripts.html">Interactive Scripts</a></li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/basic_network_1.html">Basic Network 1</a></li><li class="chapter-item affix "><li class="part-title">PWN</li><li class="chapter-item "><a href="../../blogs/PWN/Emporium_ROP.html">Rop Emporium</a></li><li class="chapter-item "><a href="../../blogs/PWN/pwnableTW.html">Pwnable.tw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pico_CTF.html">Pwn_PicoCTF</a></li><li class="chapter-item "><a href="../../blogs/PWN/PWN_from_blabla.html">Pwn from blabla</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/ASM.html">ASM</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_PicoCTF</li><li class="chapter-item "><a href="../../blogs/RE/RE.html">RE</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li><li class="chapter-item affix "><li class="part-title">Documents from everywhere</li><li class="chapter-item "><a href="../../blogs/Documents/troubleshooting.html">Troubleshooting</a></li><li class="chapter-item "><a href="../../blogs/Documents/study.html">Study</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="functional-programming"><a class="header" href="#functional-programming">Functional Programming</a></h1>
+<ul>
+<li><a href="#example">Example</a></li>
+<li><a href="#input-variables">Input Variables</a></li>
+<li><a href="#g%C3%A1n-gi%C3%A1-tr%E1%BB%8B-cho-variable">Gán giá trị cho variable</a></li>
+<li><a href="#validating-variables">Validating variables</a></li>
+<li><a href="#output">Output</a></li>
+<li><a href="#count-parameter">Count parameter</a></li>
+<li><a href="#for-expressions">For expressions</a></li>
+<li><a href="#format-function">Format function</a></li>
+<li><a href="#demo">Demo</a></li>
+<li><a href="#file-function">File function</a></li>
+<li><a href="#fileset-function">Fileset function</a></li>
+<li><a href="#local-values">Local values</a></li>
+</ul>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<pre><code class="language-js">provider &quot;aws&quot; {
+  region = &quot;us-west-2&quot;
+}
+
+data &quot;aws_ami&quot; &quot;ubuntu&quot; {
+  most_recent = true
+
+  filter {
+    name   = &quot;name&quot;
+    values = [&quot;ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*&quot;]
+  }
+
+  owners = [&quot;099720109477&quot;]
+}
+
+resource &quot;aws_instance&quot; &quot;hello&quot; {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = &quot;t2.micro&quot;
+}
+
+</code></pre>
+<p>Với file config trên ta phải dùng hardcode, khá bất tiện do đó ta sẽ dùng <strong>variable</strong></p>
+<h2 id="input-variables"><a class="header" href="#input-variables">Input Variables</a></h2>
+<p>Ta có thể định nghĩa trong main.tf hoặc tạo riêng 1 file variable.tf khác:</p>
+<pre><code class="language-js">variable &quot;instance_type&quot; {
+  type = string
+  description = &quot;Instance type of the EC2&quot;
+}
+
+</code></pre>
+<ul>
+<li><strong>Type</strong>: bắt buộc phải khai báo</li>
+<li><strong>Basic type</strong>: string, number, bool</li>
+<li><strong>Complex type</strong>: list(), set(), map(), object(), tuple()</li>
+<li>Trong terraform, <em>type number</em> và <em>type bool</em> sẽ được convert thành <em>type string</em> khi cần thiết. <em>Nghĩa là 1 sẽ thành &quot;1&quot;, true sẽ thành &quot;true&quot;</em></li>
+<li>Thay vì gán cứng =&gt; <strong>instance_type = var.instance_type</strong></li>
+</ul>
+<p>Đây chỉ là mới khởi tạo variable thoi, ta cần gán giá trị cho nó nữa</p>
+<h2 id="gán-giá-trị-cho-variable"><a class="header" href="#gán-giá-trị-cho-variable">Gán giá trị cho variable</a></h2>
+<ul>
+<li>Để gán giá trị cho biến, ta sẽ tạo một file tên là <strong>terraform.tfvars</strong>:</li>
+</ul>
+<pre><code class="language-sh">instance_type = &quot;t2.micro&quot;
+</code></pre>
+<ul>
+<li>Khi ta chạy <strong>terraform apply</strong> thì file <strong>terraform.tfvars</strong> sẽ được terraform sử dụng mặc định để load giá trị cho biến</li>
+<li>Nếu không muốn set mặc định như thế, thì ta tạo 1 file khác ví dụ <strong>production.tfvars</strong> với nội dung tương tự:</li>
+</ul>
+<blockquote>
+<p>terraform apply -var-file=&quot;production.tfvars&quot;</p>
+</blockquote>
+<h2 id="validating-variables"><a class="header" href="#validating-variables">Validating variables</a></h2>
+<p>Ta có thể chỉ định những giá trị <em>được phép</em> của variable bằng cách:</p>
+<pre><code class="language-sh">variable &quot;instance_type&quot; {
+  type = string
+  description = &quot;Instance type of the EC2&quot;
+
+  validation {
+    condition = contains([&quot;t2.micro&quot;, &quot;t3.small&quot;], var.instance_type)
+    error_message = &quot;Value not allow.&quot;
+  }
+}
+
+</code></pre>
+<h2 id="output"><a class="header" href="#output">Output</a></h2>
+<p>Giá trị của output block sẽ được in ra terminal, cú pháp của output như sau.</p>
+<ul>
+<li>Để in được giá trị public IP của EC2, ta thêm vào file main.tf đoạn code sau:</li>
+</ul>
+<pre><code class="language-js">//...
+output &quot;ec2&quot; {
+  value = {
+    public_ip = aws_instance.hello.public_ip
+  }
+}
+</code></pre>
+<h2 id="count-parameter"><a class="header" href="#count-parameter">Count parameter</a></h2>
+<ul>
+<li>Là một thuộc tính trong terraform chứ <strong>không phải</strong> của <strong>Resource type block</strong> thuộc provider</li>
+<li><strong>Resource type block</strong> chỉ có chứa các thuộc tính mà provider cung cấp</li>
+<li><strong>Meta argument</strong> là thuộc tính của terraform =&gt; nghĩa là ta có thể sử dụng nó ở bất kì resource block nào.</li>
+<li>Cập nhật lại file <strong>main.tf</strong> mà sẽ tạo ra <strong>5 EC2</strong> như sau:</li>
+</ul>
+<pre><code class="language-js">provider &quot;aws&quot; {
+  region = &quot;us-west-2&quot;
+}
+
+data &quot;aws_ami&quot; &quot;ubuntu&quot; {
+  most_recent = true
+
+  filter {
+    name   = &quot;name&quot;
+    values = [&quot;ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*&quot;]
+  }
+
+  owners = [&quot;099720109477&quot;]
+}
+
+resource &quot;aws_instance&quot; &quot;hello&quot; {
+  count         = 5
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
+}
+
+output &quot;ec2&quot; {
+  value = {
+    public_ip1 = aws_instance.hello[0].public_ip
+    public_ip2 = aws_instance.hello[1].public_ip
+    public_ip3 = aws_instance.hello[2].public_ip
+    public_ip4 = aws_instance.hello[3].public_ip
+    public_ip5 = aws_instance.hello[4].public_ip
+  }
+}
+
+</code></pre>
+<h2 id="for-expressions"><a class="header" href="#for-expressions">For expressions</a></h2>
+<blockquote>
+<p>for &lt;value&gt; in &lt;list&gt; : &lt;return value&gt;</p>
+</blockquote>
+<ul>
+<li>
+<p>Ví dụ dùng for:</p>
+<ul>
+<li>Tạo ra một array mới với giá trị của array mới sẽ được upper: <strong>[for s in var.words : upper(s)]</strong></li>
+<li>Tạo ra một object mới với value của object được upper: <strong>{ for k, v in var.words : k =&gt; upper(s) }</strong></li>
+</ul>
+</li>
+<li>
+<p>Ta sẽ dùng for để rút gọn phần output IP của EC2. Cập nhật lại file <strong>main.tf</strong>:</p>
+</li>
+</ul>
+<pre><code class="language-js">//...
+resource &quot;aws_instance&quot; &quot;hello&quot; {
+  count         = 5
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
+}
+
+output &quot;ec2&quot; {
+  value = {
+    public_ip = [ for v in aws_instance.hello : v.public_ip ]
+  }
+}
+
+</code></pre>
+<p><em>Phần output trên sẽ in ra cho ta giá trị public_ip là một mảng IP của tất cả EC2 được tạo ra. Còn nếu muốn in output ra theo kiểu { public_ip1: &lt;value&gt;, public_ip2: &lt;value&gt; } thì ta có thể dùng format function.</em></p>
+<h2 id="format-function"><a class="header" href="#format-function">Format function</a></h2>
+<pre><code class="language-js">//...
+resource &quot;aws_instance&quot; &quot;hello&quot; {
+  count         = 5
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
+}
+
+output &quot;ec2&quot; {
+  value = { for i, v in aws_instance.hello : format(&quot;Public_IP %d: &quot;, i + 1) =&gt; v.public_ip }
+}
+
+</code></pre>
+<h2 id="demo"><a class="header" href="#demo">Demo</a></h2>
+<h3 id="maintf"><a class="header" href="#maintf">main.tf</a></h3>
+<pre><code class="language-js">terraform {
+  required_providers {
+    aws = {
+      source  = &quot;hashicorp/aws&quot;
+      version = &quot;~&gt; 5.38&quot;
+    }
+  }
+}
+
+provider &quot;aws&quot; {
+  region = &quot;ap-southeast-1&quot;
+}
+
+data &quot;aws_ami&quot; &quot;ubuntu&quot; {
+  most_recent = true
+
+  filter {
+    name   = &quot;name&quot;
+    values = [&quot;ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*&quot;]
+  }
+
+  owners = [&quot;099720109477&quot;]
+}
+
+resource &quot;aws_instance&quot; &quot;hello&quot; {
+  count         = 3
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
+  tags = {
+    Name = &quot;Hjn4-practice&quot;
+  }
+}
+
+output &quot;ec2&quot; {
+  value = { for i, v in aws_instance.hello : format(&quot;Public_IP%d&quot;, i + 1) =&gt; v.public_ip }
+}
+
+</code></pre>
+<h3 id="variabletf"><a class="header" href="#variabletf">variable.tf</a></h3>
+<pre><code class="language-js">variable &quot;instance_type&quot; {
+  type        = string
+  description = &quot;Instance type of the EC2&quot;
+
+  validation {
+    condition = contains([&quot;t2.micro&quot;], var.instance_type)
+    error_message = &quot;Just allow t2.micro&quot;
+  }
+
+}
+
+</code></pre>
+<h3 id="terraformtfvars"><a class="header" href="#terraformtfvars">terraform.tfvars</a></h3>
+<pre><code class="language-js">instance_type = &quot;t2.micro&quot;
+
+</code></pre>
+<h3 id="result"><a class="header" href="#result">Result</a></h3>
+<pre><code class="language-sh">#...
+aws_instance.hello[0]: Creation complete after 32s [id=i-0f6fede3edd0a9b23]
+aws_instance.hello[2]: Creation complete after 32s [id=i-04be0977e38218fbe]
+aws_instance.hello[1]: Creation complete after 32s [id=i-05cf123cd516073b0]
+
+Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+ec2 = {
+  &quot;Public_IP1&quot; = &quot;18.143.78.17&quot;
+  &quot;Public_IP2&quot; = &quot;54.169.140.195&quot;
+  &quot;Public_IP3&quot; = &quot;18.139.110.75&quot;
+}
+
+</code></pre>
+<p><img src="./image/functional_demo1.png" alt="alt text" /></p>
+<h2 id="file-function"><a class="header" href="#file-function">File function</a></h2>
+<p><em>Ví dụ: ta sẽ tạo một S3 bucket để host một static website</em> <strong>OUTDATE</strong></p>
+<h3 id="non-file-function"><a class="header" href="#non-file-function">Non file function</a></h3>
+<pre><code class="language-js">provider &quot;aws&quot; {
+  region = &quot;us-west-2&quot;
+}
+
+resource &quot;aws_s3_bucket&quot; &quot;static&quot; {
+  bucket = &quot;terraform-series-bai3&quot;
+  acl    = &quot;public-read&quot;
+  policy = &lt;&lt;POLICY
+  {
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+      {
+        &quot;Sid&quot;: &quot;PublicReadGetObject&quot;,
+        &quot;Effect&quot;: &quot;Allow&quot;,
+        &quot;Principal&quot;: &quot;*&quot;,
+        &quot;Action&quot;: [
+          &quot;s3:GetObject&quot;
+        ],
+        &quot;Resource&quot;: [
+          &quot;arn:aws:s3:::terraform-series-bai3/*&quot;
+        ]
+      }
+    ]
+  }
+  POLICY
+
+  website {
+    index_document = &quot;index.html&quot;
+    error_document = &quot;error.html&quot;
+  }
+}
+
+</code></pre>
+<h3 id="use-file-function"><a class="header" href="#use-file-function">Use file function</a></h3>
+<ul>
+<li>Create js file save policy:</li>
+</ul>
+<pre><code class="language-js">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Sid&quot;: &quot;PublicReadGetObject&quot;,
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Principal&quot;: &quot;*&quot;,
+      &quot;Action&quot;: [
+        &quot;s3:GetObject&quot;
+      ],
+      &quot;Resource&quot;: [
+        &quot;arn:aws:s3:::terraform-series-bai3/*&quot;
+      ]
+    }
+  ]
+}
+
+</code></pre>
+<ul>
+<li>Update <strong>main.tf</strong>:</li>
+</ul>
+<pre><code class="language-js">provider &quot;aws&quot; {
+  region = &quot;us-west-2&quot;
+}
+
+resource &quot;aws_s3_bucket&quot; &quot;static&quot; {
+  bucket = &quot;terraform-series-bai3&quot;
+  acl    = &quot;public-read&quot;
+  policy = file(&quot;s3_static_policy.json&quot;)
+
+  website {
+    index_document = &quot;index.html&quot;
+    error_document = &quot;error.html&quot;
+  }
+}
+
+</code></pre>
+<h2 id="fileset-function"><a class="header" href="#fileset-function">Fileset function</a></h2>
+<ul>
+<li>Để upload file lên s3 thì ta sẽ dùng resource type là <strong>aws_s3_bucket_object</strong>. Cập nhật lại file <strong>main.tf</strong>:</li>
+</ul>
+<pre><code class="language-js">provider &quot;aws&quot; {
+  region = &quot;us-west-2&quot;
+}
+
+resource &quot;aws_s3_bucket&quot; &quot;static&quot; {
+  bucket = &quot;terraform-series-bai3&quot;
+  acl    = &quot;public-read&quot;
+  policy = file(&quot;s3_static_policy.json&quot;)
+
+  website {
+    index_document = &quot;index.html&quot;
+    error_document = &quot;error.html&quot;
+  }
+}
+
+locals {
+  mime_types = {
+    html  = &quot;text/html&quot;
+    css   = &quot;text/css&quot;
+    ttf   = &quot;font/ttf&quot;
+    woff  = &quot;font/woff&quot;
+    woff2 = &quot;font/woff2&quot;
+    js    = &quot;application/javascript&quot;
+    map   = &quot;application/javascript&quot;
+    json  = &quot;application/json&quot;
+    jpg   = &quot;image/jpeg&quot;
+    png   = &quot;image/png&quot;
+    svg   = &quot;image/svg+xml&quot;
+    eot   = &quot;application/vnd.ms-fontobject&quot;
+  }
+}
+
+resource &quot;aws_s3_bucket_object&quot; &quot;object&quot; {
+  for_each = fileset(path.module, &quot;static-web/**/*&quot;)
+  bucket = aws_s3_bucket.static.id
+  key    = replace(each.value, &quot;static-web&quot;, &quot;&quot;)
+  source = each.value
+  etag         = filemd5(&quot;${each.value}&quot;)
+  content_type = lookup(local.mime_types, split(&quot;.&quot;, each.value)[length(split(&quot;.&quot;, each.value)) - 1])
+}
+
+</code></pre>
+<ul>
+<li>Tạm thời chưa cần hiểu code phần <strong>aws_s3_bucket_object</strong></li>
+<li>Phần quan trọng ở đây là <strong>fileset function</strong>, thay vì chỉ tải một file, thì <strong>fileset</strong> sẽ tải toàn bộ file trong thư mục đó lên theo dạng <strong>set</strong>.</li>
+</ul>
+<h2 id="local-values"><a class="header" href="#local-values">Local values</a></h2>
+<ul>
+<li>Không giống như variable block, ta cần khai báo type, thì locals block ta sẽ gán thẳng giá trị cho nó. Ví dụ như sau:</li>
+</ul>
+<pre><code class="language-js">locals {
+  one = 1
+  two = 2
+  name = &quot;max&quot;
+  flag = true
+}
+
+</code></pre>
+<ul>
+<li>Để truy cập giá trị local thì ta dùng cú pháp local.&lt;KEY&gt;</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/Terraform/overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/Jenkins/install_by_docker.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/Terraform/overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/Jenkins/install_by_docker.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
