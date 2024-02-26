@@ -175,6 +175,7 @@
 <li><a href="#basic-terraform-configuration">Basic Terraform Configuration</a></li>
 <li><a href="#terraform-provider">Terraform Provider</a></li>
 <li><a href="#resource-drift">Resource drift</a></li>
+<li><a href="#cicd-support">CI/CD support</a></li>
 </ul>
 <h2 id="install-terraform"><a class="header" href="#install-terraform">Install Terraform</a></h2>
 <blockquote>
@@ -281,6 +282,30 @@ resource &quot;aws_instance&quot; &quot;example&quot; {
 <li>Terraform sẽ phát hiện được resource đã bị thay đổi bên ngoài terraform, nó in ra câu <strong>Note: Objects have changed outside of Terraform</strong> để báo ta biết việc đó.
 -Tùy thuộc vào thuộc tính bị thay đổi bên ngoài terraform là <strong>force new</strong> hay <strong>normal update</strong> thì terraform sẽ thực hiện re-create hay update bình thường.</li>
 </ul>
+<h2 id="cicd-support"><a class="header" href="#cicd-support">CI/CD support</a></h2>
+<ul>
+<li>
+<p>Khi ta chạy câu lệnh <em>apply</em>, thì terraform sẽ chạy câu lệnh <em>plan</em> lại trước, cho ta review resource, và nó sẽ hiện chỗ để hỏi ta là có muốn tạo những resource này không, nếu có thì bạn nhập '<em>yes</em>', chỉ khi ta nhập đúng giá trị này thì resource của ta mới được tạo ra.</p>
+</li>
+<li>
+<p>Nếu bạn thấy ủa sao câu lệnh <em>apply</em> cũng chạy <em>plan</em>, thì ta chạy câu lệnh <em>plan</em> trước làm quái gì cho mệt vậy? Thì thật ra những câu lệnh trên được thiết kế cho quá trình CI/CD. Ta có thể chạy câu lệnh <em>plan</em> trước, với <strong>-out</strong> option, để review resource, sau đó ta sẽ chạy câu lệnh <em>apply</em> với kết quả của <em>plan</em> trước đó, như sau:</p>
+</li>
+</ul>
+<blockquote>
+<p>terraform plan -out plan.out</p>
+</blockquote>
+<blockquote>
+<p>terraform apply &quot;plan.out&quot;</p>
+</blockquote>
+<ul>
+<li>Khi ta chạy câu lệnh <strong>apply</strong> hoặc <strong>deploy</strong> nó sẽ có thêm bước xác nhận và bắt ta nhập vào <em>yes</em>, nếu bạn muốn bỏ qua bước xác nhận thì khi chạy ta thêm vào <strong>-auto-approve</strong>:</li>
+</ul>
+<blockquote>
+<p>terraform apply -auto-approve</p>
+</blockquote>
+<blockquote>
+<p>terraform destroy -auto-approve</p>
+</blockquote>
 
                     </main>
 
