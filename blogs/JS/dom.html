@@ -1,0 +1,432 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>DOM - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/job.html">Requirements For Job</a></li><li class="chapter-item "><a href="../../blogs/AWS/EC2.html">Computing Services - EC2</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAM.html">Identity and Access Management -IAM</a></li><li class="chapter-item "><a href="../../blogs/AWS/S3.html">Simple Storage Service - S3</a></li><li class="chapter-item "><a href="../../blogs/AWS/LoadBalancing-Autoscaling.html">Load Balancing and Autoscaling</a></li><li class="chapter-item "><a href="../../blogs/AWS/RDS.html">Relational Database Service - RDS</a></li><li class="chapter-item "><a href="../../blogs/AWS/DynamoDB.html">Database Services - No SQL - DynamoDB</a></li><li class="chapter-item "><a href="../../blogs/AWS/Lambda.html">Serverless Lambda</a></li><li class="chapter-item "><a href="../../blogs/AWS/VPC.html">Networking Service - VPC, Peering, Endpoint</a></li><li class="chapter-item "><a href="../../blogs/AWS/Gateway_Cognito.html">API Gateway & Cognito</a></li><li class="chapter-item "><a href="../../blogs/AWS/CloudFront.html">Content Delivery Service (CDN) - CloudFront</a></li><li class="chapter-item "><a href="../../blogs/AWS/Route_53.html">Domain Name System - Route 53</a></li><li class="chapter-item "><a href="../../blogs/AWS/Monitor_Auditing.html">Monitoring and Auditing - CloudWatch, CloudTrail</a></li><li class="chapter-item "><a href="../../blogs/AWS/Mess.html">Messaging Service - SNS, SQS, SES</a></li><li class="chapter-item "><a href="../../blogs/AWS/Event_Bridge.html">Event Bridge</a></li><li class="chapter-item "><a href="../../blogs/AWS/Elastic_Beanstalk.html">Elastic Beanstalk</a></li><li class="chapter-item "><a href="../../blogs/AWS/Container_Service.html">Container Service - ECS, ECR</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAC_CloudFormation.html">Infra as Code - CloudFormation</a></li><li class="chapter-item "><a href="../../blogs/AWS/Backup_Recovery.html">Backup and Recovery</a></li><li class="chapter-item "><a href="../../blogs/AWS/Sec.html">Security Services</a></li><li class="chapter-item affix "><li class="part-title">PHP</li><li class="chapter-item "><a href="../../blogs/PHP/setup_env.html">Setup Environment</a></li><li class="chapter-item "><a href="../../blogs/PHP/basic.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/PHP/mysqli.html">MySQLi</a></li><li class="chapter-item "><a href="../../blogs/PHP/sort_algorithms.html">Sort Algorithms</a></li><li class="chapter-item "><a href="../../blogs/PHP/hackerrank_algorithms.html">Hackerrank</a></li><li class="chapter-item affix "><li class="part-title">Kubernetes</li><li class="chapter-item "><a href="../../blogs/Kubernetes/session1.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/commands.html">Practice on KodeKloud</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/minkube_deployment.html">MiniKube Deployment</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/data_volume.html">Manage Data & Volumes</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/network.html">Network</a></li><li class="chapter-item affix "><li class="part-title">Linux + Git</li><li class="chapter-item "><a href="../../blogs/Linux/bandit.html">Bandit challenge</a></li><li class="chapter-item "><a href="../../blogs/Linux/command_session_1.html">Command session 1</a></li><li class="chapter-item "><a href="../../blogs/Linux/git_command.html">Git command</a></li><li class="chapter-item "><a href="../../blogs/Linux/ssh.html">SSH</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some docker tips for CTF</a></li><li class="chapter-item "><a href="../../blogs/Docker/get_started.html">Basic Docker</a></li><li class="chapter-item "><a href="../../blogs/Docker/image_container.html">Images & Containers: The Core Building Blocks</a></li><li class="chapter-item "><a href="../../blogs/Docker/dockerfile_write.html">Dockerfile</a></li><li class="chapter-item "><a href="../../blogs/Docker/docker_network.html">Docker Network</a></li><li class="chapter-item "><a href="../../blogs/Docker/Volume.html">Volume</a></li><li class="chapter-item "><a href="../../blogs/Docker/Docker_Compose.html">Docker Compose</a></li><li class="chapter-item affix "><li class="part-title">Terraform</li><li class="chapter-item "><a href="../../blogs/Terraform/overview.html">Overview</a></li><li class="chapter-item "><a href="../../blogs/Terraform/functional_pro.html">Functional Programming</a></li><li class="chapter-item "><a href="../../blogs/Terraform/Module_create_VPC.html">Terraform Module: Create VPC on AWS</a></li><li class="chapter-item affix "><li class="part-title">Jenkins</li><li class="chapter-item "><a href="../../blogs/Jenkins/install_by_docker.html">Install Jenkins By Docker</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/link_git_jenkins.html">Link git with jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/pipline_github_jenkins.html">Pipeline jenkinsfile with github</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_jenkins.html">Link gitlab with Jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_dockerhub.html">Gitlab-dockerhub-pipeline</a></li><li class="chapter-item affix "><li class="part-title">CSS</li><li class="chapter-item "><a href="../../blogs/CSS/basic.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/CSS/flexbox.html">Flexbox CSS</a></li><li class="chapter-item "><a href="../../blogs/CSS/BEM.html">BEM</a></li><li class="chapter-item "><a href="../../blogs/CSS/responsive.html">Resposive</a></li><li class="chapter-item "><a href="../../blogs/CSS/tranform_sitsion_anima.html">Transform - Transition - Animation</a></li><li class="chapter-item affix "><li class="part-title">JS</li><li class="chapter-item "><a href="../../blogs/JS/basic.html">Basic Concepts</a></li><li class="chapter-item expanded "><a href="../../blogs/JS/dom.html" class="active">DOM</a></li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item "><a href="../../blogs/Python/RE.html">Regular Expression</a></li><li class="chapter-item "><a href="../../blogs/Python/Automation_1.html">Automation with Python 1</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item "><a href="../../blogs/Bash_script/Variables_Environment.html">Shell Variables and Environment</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Conditionals_Execution.html">Conditionals Execution</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Bash_Loops.html">Bash Loops & Function</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Shell_Redirection.html">Shell Redirection & Pipes and Filters</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Interactive_Scripts.html">Interactive Scripts</a></li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/basic_network_1.html">Basic Network 1</a></li><li class="chapter-item affix "><li class="part-title">PWN</li><li class="chapter-item "><a href="../../blogs/PWN/Emporium_ROP.html">Rop Emporium</a></li><li class="chapter-item "><a href="../../blogs/PWN/pwnableTW.html">Pwnable.tw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pico_CTF.html">Pwn_PicoCTF</a></li><li class="chapter-item "><a href="../../blogs/PWN/PWN_from_blabla.html">Pwn from blabla</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/ASM.html">ASM</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_PicoCTF</li><li class="chapter-item "><a href="../../blogs/RE/RE.html">RE</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li><li class="chapter-item affix "><li class="part-title">Documents from everywhere</li><li class="chapter-item "><a href="../../blogs/Documents/troubleshooting.html">Troubleshooting</a></li><li class="chapter-item "><a href="../../blogs/Documents/study.html">Study</a></li><li class="chapter-item "><a href="../../blogs/Documents/important_concept.html">Important Concepts</a></li><li class="chapter-item "><a href="../../blogs/Documents/basic_SQL.html">MySQL</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="html-dom"><a class="header" href="#html-dom">HTML DOM</a></h1>
+<p><em><strong>HTML DOM không phải của JS mà nó là 1 quy chuẩn đc W3C định ra, JS có các method, cách thức để có thể tương tác, tuy cập vào cáu trúc của HTML DOM</strong></em></p>
+<p><img src="image.png" alt="alt text" /></p>
+<h2 id="basic-concept"><a class="header" href="#basic-concept">Basic Concept</a></h2>
+<p><strong>DOM -  Document Object Model</strong></p>
+<p><em>DOM được browser tạo ra khi website được load. Browser có html source code sẽ dựa trên quy chuẩn W3C được cài đặt sẵn =&gt; tạo ra DOM</em></p>
+<p>Gồm 3 thành phần</p>
+<ul>
+<li><strong>Element</strong></li>
+<li><strong>Attribute</strong></li>
+<li><strong>Text</strong></li>
+</ul>
+<h2 id="get-element-methods"><a class="header" href="#get-element-methods">Get element methods</a></h2>
+<h3 id="element"><a class="header" href="#element">Element</a></h3>
+<pre><code class="language-js">
+/*--------------------------------------*/
+// ID return thẳng luôn đối tượng đó
+let HeadingNode = document.getElementById('heading');
+
+console.log(HeadingNode)
+
+/*--------------------------------------*/
+// class return mảng chứa nhiều elements bên trong
+let HeadingNodes = document.getElementsByClassName('heading');
+
+console.log(HeadingNodes)
+/*--------------------------------------*/
+// tag name return mảng chứa nhiều elements bên trong
+let HeadingNodes = document.getElementsByTagName('p');
+
+console.log(HeadingNodes)
+
+/*--------------------------------------*/
+// CSS selector return thẳng 1 thằng
+let HeadingNode = document.querySelector('.head .heading-2');
+
+console.log(HeadingNode)
+
+// CCS như nào thì ở đây tương tự -- ở đây chỉ select thằng đầu tiên
+
+// Nếu dùng querySelectorAll thì nó return về 1 list các elements thỏa mãn
+
+/*--------------------------------------*/
+// HTML collection 
+// a(anchors) / form / img(images)
+console.log(document.forms)
+console.log(document.forms['form-1'])
+console.log(document.forms.form_1)
+
+</code></pre>
+<h3 id="attribute"><a class="header" href="#attribute">Attribute</a></h3>
+<pre><code class="language-js">let HeadingELemnt = document.querySelector('h2');
+
+HeadingELemnt.title = &quot;haizzz&quot;; //title
+HeadingELemnt.id = &quot;haizzz&quot;; //id
+HeadingELemnt.className = &quot;haizzz&quot;; //class
+
+// set attribute và value mới cho 1 element
+HeadingELemnt.setAttribute('huyna', 'haha');
+
+console.log(HeadingELemnt.getAttribute('id')); //haizz
+console.log(HeadingELemnt.getAttribute('huyna')); //haha
+
+// chỉ hợp lệ với các attribute hợp lệ, chứ huyna là cái mình tự set, k dùng kiểu syntax này được
+console.log(HeadingELemnt.id); //haizz
+
+</code></pre>
+<h3 id="text"><a class="header" href="#text">Text</a></h3>
+<pre><code class="language-js">let HeadingELemnt = document.querySelector('.heading');
+
+// HeadingELemnt.innerText = &quot;abc&quot;;
+// HeadingELemnt.textContent = &quot;xyz&quot;; //same
+
+console.log(HeadingELemnt.innerText); // in ra những gì nhìn thấy
+console.log(HeadingELemnt.textContent);  // in ra những text thật sự chứa (bỏ qua các tag, chỉ lấy text bên trong tag)
+
+</code></pre>
+<p><img src="./image/text_compare_inner_content.png" alt="alt text" /></p>
+<h2 id="innerhtml-property"><a class="header" href="#innerhtml-property">InnerHTML Property</a></h2>
+<pre><code class="language-js">let boxElement = document.querySelector('.box');
+
+// boxElement.innerHTML = &quot;&lt;h1&gt;haha h2&lt;/h1&gt;&quot;; // thêm vòa bên trong element
+
+boxElement.outerHTML = &quot;&lt;h1&gt;haha h2&lt;/h1&gt;&quot;; // ghi đè luôn thằng cha đã thêm nó
+
+</code></pre>
+<h2 id="dom-event"><a class="header" href="#dom-event">DOM event</a></h2>
+<p>Ví dụ cơ bản: <a href="https://www.w3schools.com/jsref/dom_obj_event.asp">for more</a></p>
+<pre><code class="language-js">let boxElement = document.querySelector('.box');
+
+boxElement.onclick = function () {
+    console.log(&quot;123&quot;)
+}
+
+</code></pre>
+<pre><code class="language-html">&lt;body&gt;
+    &lt;input type=&quot;text&quot; class=&quot;&quot;&gt;
+    &lt;input type=&quot;checkbox&quot; name=&quot;&quot; id=&quot;&quot;&gt;
+
+    &lt;select name=&quot;&quot; id=&quot;&quot;&gt;
+        &lt;option value=&quot;1&quot;&gt;JS&lt;/option&gt;
+        &lt;option value=&quot;2&quot;&gt;PHP&lt;/option&gt;
+        &lt;option value=&quot;3&quot;&gt;Python&lt;/option&gt;
+    &lt;/select&gt;
+
+&lt;/body&gt;
+
+</code></pre>
+<pre><code class="language-js">let inputElement = document.querySelector('input[type=&quot;text&quot;]');
+
+// cần có sự thay đổi tức là focus vào nhập rồi focus ra ngoài
+inputElement.onchange = function (e) { // có thể dùng oninput ...
+    console.log(e.target.value)
+}
+
+/*---------------------------------------*/
+
+let inputElement = document.querySelector('input[type=&quot;checkbox&quot;]');
+
+inputElement.onchange = function (e) {
+    console.log(e.target.checked) // return true/false
+}
+
+/*---------------------------------------*/
+let inputElement = document.querySelector('select');
+
+inputElement.onchange = function (e) {
+    console.log(e.target.value) // return 1/2/3 (value set in option)
+}
+
+
+/*---------------------------------------*/
+// preventDefault: giúp loại bỏ hành vi mặc định của browser trên thẻ html
+// 
+//  &lt;a href=&quot;https://facebook.com&quot; class=&quot;&quot;&gt;facebook&lt;/a&gt;
+//  &lt;br&gt;
+//  &lt;a href=&quot;https://google.com&quot; class=&quot;&quot;&gt;goole&lt;/a&gt;
+//  
+
+
+let aElement = document.links;
+
+for (let i = 0; i &lt; aElement.length; i++) {
+    aElement[i].onclick = function (e) {
+        if (!e.target.href.startsWith('https://face')) {
+            e.preventDefault();
+        }
+    }
+}
+
+/*---------------------------------------*/
+// stopPropagation: giúp loại bỏ sự kiện nổi bọt, event bị trigger từ con =&gt; cha =&gt; ông ....
+
+    // &lt;div&gt;
+    //     DIV
+    //     &lt;button&gt;Click me&lt;/button&gt;
+    // &lt;/div&gt;
+
+document.querySelector('div').onclick =
+    function () {
+        console.log('DIV');
+    }
+
+document.querySelector('button').onclick =
+    function (e) {
+        e.stopPropagation();
+        console.log('button');
+    }
+
+</code></pre>
+<h2 id="event-listener"><a class="header" href="#event-listener">Event listener</a></h2>
+<pre><code class="language-js">let btn = document.getElementById('btn');
+
+
+/**
+ * dùng dom event chỉ muốn catch event và thực hiện trong 3s
+ * sẽ bị ghi đè 
+ */
+
+// btn.onclick = function () {
+//     console.log('viec 1');
+//     console.log('viec 2');
+//     console.log('viec 3');
+// }
+
+// setTimeout(function () {
+//     btn.onclick = function () { }
+// }, 3000);
+
+/**
+ * Không bị ghi đè
+ * tuy nhiên cần để function ở bên ngoài để 
+ * tạo và xóa dễ dàng hơn
+ * cung cấp phương thức remove dễ dàng
+ */
+
+function viec1() {
+    console.log('viec 11');
+}
+
+btn.addEventListener('click', viec1);
+
+btn.addEventListener('click', function () {
+    console.log('viec 22');
+});
+
+btn.addEventListener('click', function () {
+    console.log('viec 33');
+});
+
+setTimeout(function () {
+    btn.removeEventListener('click', viec1)
+}, 3000);
+
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/JS/basic.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/Python/RE.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/JS/basic.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/Python/RE.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

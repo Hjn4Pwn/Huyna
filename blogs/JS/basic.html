@@ -1,0 +1,836 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Basic Concepts - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/job.html">Requirements For Job</a></li><li class="chapter-item "><a href="../../blogs/AWS/EC2.html">Computing Services - EC2</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAM.html">Identity and Access Management -IAM</a></li><li class="chapter-item "><a href="../../blogs/AWS/S3.html">Simple Storage Service - S3</a></li><li class="chapter-item "><a href="../../blogs/AWS/LoadBalancing-Autoscaling.html">Load Balancing and Autoscaling</a></li><li class="chapter-item "><a href="../../blogs/AWS/RDS.html">Relational Database Service - RDS</a></li><li class="chapter-item "><a href="../../blogs/AWS/DynamoDB.html">Database Services - No SQL - DynamoDB</a></li><li class="chapter-item "><a href="../../blogs/AWS/Lambda.html">Serverless Lambda</a></li><li class="chapter-item "><a href="../../blogs/AWS/VPC.html">Networking Service - VPC, Peering, Endpoint</a></li><li class="chapter-item "><a href="../../blogs/AWS/Gateway_Cognito.html">API Gateway & Cognito</a></li><li class="chapter-item "><a href="../../blogs/AWS/CloudFront.html">Content Delivery Service (CDN) - CloudFront</a></li><li class="chapter-item "><a href="../../blogs/AWS/Route_53.html">Domain Name System - Route 53</a></li><li class="chapter-item "><a href="../../blogs/AWS/Monitor_Auditing.html">Monitoring and Auditing - CloudWatch, CloudTrail</a></li><li class="chapter-item "><a href="../../blogs/AWS/Mess.html">Messaging Service - SNS, SQS, SES</a></li><li class="chapter-item "><a href="../../blogs/AWS/Event_Bridge.html">Event Bridge</a></li><li class="chapter-item "><a href="../../blogs/AWS/Elastic_Beanstalk.html">Elastic Beanstalk</a></li><li class="chapter-item "><a href="../../blogs/AWS/Container_Service.html">Container Service - ECS, ECR</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAC_CloudFormation.html">Infra as Code - CloudFormation</a></li><li class="chapter-item "><a href="../../blogs/AWS/Backup_Recovery.html">Backup and Recovery</a></li><li class="chapter-item "><a href="../../blogs/AWS/Sec.html">Security Services</a></li><li class="chapter-item affix "><li class="part-title">PHP</li><li class="chapter-item "><a href="../../blogs/PHP/setup_env.html">Setup Environment</a></li><li class="chapter-item "><a href="../../blogs/PHP/basic.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/PHP/mysqli.html">MySQLi</a></li><li class="chapter-item "><a href="../../blogs/PHP/sort_algorithms.html">Sort Algorithms</a></li><li class="chapter-item "><a href="../../blogs/PHP/hackerrank_algorithms.html">Hackerrank</a></li><li class="chapter-item affix "><li class="part-title">Kubernetes</li><li class="chapter-item "><a href="../../blogs/Kubernetes/session1.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/commands.html">Practice on KodeKloud</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/minkube_deployment.html">MiniKube Deployment</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/data_volume.html">Manage Data & Volumes</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/network.html">Network</a></li><li class="chapter-item affix "><li class="part-title">Linux + Git</li><li class="chapter-item "><a href="../../blogs/Linux/bandit.html">Bandit challenge</a></li><li class="chapter-item "><a href="../../blogs/Linux/command_session_1.html">Command session 1</a></li><li class="chapter-item "><a href="../../blogs/Linux/git_command.html">Git command</a></li><li class="chapter-item "><a href="../../blogs/Linux/ssh.html">SSH</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some docker tips for CTF</a></li><li class="chapter-item "><a href="../../blogs/Docker/get_started.html">Basic Docker</a></li><li class="chapter-item "><a href="../../blogs/Docker/image_container.html">Images & Containers: The Core Building Blocks</a></li><li class="chapter-item "><a href="../../blogs/Docker/dockerfile_write.html">Dockerfile</a></li><li class="chapter-item "><a href="../../blogs/Docker/docker_network.html">Docker Network</a></li><li class="chapter-item "><a href="../../blogs/Docker/Volume.html">Volume</a></li><li class="chapter-item "><a href="../../blogs/Docker/Docker_Compose.html">Docker Compose</a></li><li class="chapter-item affix "><li class="part-title">Terraform</li><li class="chapter-item "><a href="../../blogs/Terraform/overview.html">Overview</a></li><li class="chapter-item "><a href="../../blogs/Terraform/functional_pro.html">Functional Programming</a></li><li class="chapter-item "><a href="../../blogs/Terraform/Module_create_VPC.html">Terraform Module: Create VPC on AWS</a></li><li class="chapter-item affix "><li class="part-title">Jenkins</li><li class="chapter-item "><a href="../../blogs/Jenkins/install_by_docker.html">Install Jenkins By Docker</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/link_git_jenkins.html">Link git with jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/pipline_github_jenkins.html">Pipeline jenkinsfile with github</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_jenkins.html">Link gitlab with Jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_dockerhub.html">Gitlab-dockerhub-pipeline</a></li><li class="chapter-item affix "><li class="part-title">CSS</li><li class="chapter-item "><a href="../../blogs/CSS/basic.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/CSS/flexbox.html">Flexbox CSS</a></li><li class="chapter-item "><a href="../../blogs/CSS/BEM.html">BEM</a></li><li class="chapter-item "><a href="../../blogs/CSS/responsive.html">Resposive</a></li><li class="chapter-item "><a href="../../blogs/CSS/tranform_sitsion_anima.html">Transform - Transition - Animation</a></li><li class="chapter-item affix "><li class="part-title">JS</li><li class="chapter-item expanded "><a href="../../blogs/JS/basic.html" class="active">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/JS/dom.html">DOM</a></li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item "><a href="../../blogs/Python/RE.html">Regular Expression</a></li><li class="chapter-item "><a href="../../blogs/Python/Automation_1.html">Automation with Python 1</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item "><a href="../../blogs/Bash_script/Variables_Environment.html">Shell Variables and Environment</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Conditionals_Execution.html">Conditionals Execution</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Bash_Loops.html">Bash Loops & Function</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Shell_Redirection.html">Shell Redirection & Pipes and Filters</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Interactive_Scripts.html">Interactive Scripts</a></li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/basic_network_1.html">Basic Network 1</a></li><li class="chapter-item affix "><li class="part-title">PWN</li><li class="chapter-item "><a href="../../blogs/PWN/Emporium_ROP.html">Rop Emporium</a></li><li class="chapter-item "><a href="../../blogs/PWN/pwnableTW.html">Pwnable.tw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pico_CTF.html">Pwn_PicoCTF</a></li><li class="chapter-item "><a href="../../blogs/PWN/PWN_from_blabla.html">Pwn from blabla</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/ASM.html">ASM</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_PicoCTF</li><li class="chapter-item "><a href="../../blogs/RE/RE.html">RE</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li><li class="chapter-item affix "><li class="part-title">Documents from everywhere</li><li class="chapter-item "><a href="../../blogs/Documents/troubleshooting.html">Troubleshooting</a></li><li class="chapter-item "><a href="../../blogs/Documents/study.html">Study</a></li><li class="chapter-item "><a href="../../blogs/Documents/important_concept.html">Important Concepts</a></li><li class="chapter-item "><a href="../../blogs/Documents/basic_SQL.html">MySQL</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="basic-concepts"><a class="header" href="#basic-concepts">Basic Concepts</a></h1>
+<h2 id="basic-built-in-function"><a class="header" href="#basic-built-in-function">Basic built-in function</a></h2>
+<ul>
+<li><strong>alert</strong></li>
+<li><strong>console</strong></li>
+</ul>
+<pre><code class="language-js">console.log(&quot;a&quot;);
+console.warn(&quot;b&quot;);
+console.error(&quot;c&quot;);
+</code></pre>
+<ul>
+<li><strong>confirm</strong></li>
+</ul>
+<pre><code class="language-js">confirm(&quot;r u ready???&quot;)
+let isConfirm = confirm(&quot;r u ready???&quot;);
+console.log(isConfirm);
+// hiện msg box có ok - cancle, có thể xử lý lấy value
+</code></pre>
+<ul>
+<li><strong>prompt</strong></li>
+</ul>
+<pre><code class="language-js">prompt(&quot;r u ready???&quot;)
+//ngoài msg còn thêm input, có thể xử lý 
+</code></pre>
+<ul>
+<li><strong>setTimeout</strong></li>
+</ul>
+<pre><code class="language-js">setTimeout(function () {
+    alert(&quot;show this alert after 3s&quot;);
+}, 3000)
+
+</code></pre>
+<ul>
+<li><strong>setInterval</strong></li>
+</ul>
+<pre><code class="language-js">setInterval(function () {
+    alert(&quot;show this alert ever 3s&quot;);
+}, 3000)
+</code></pre>
+<h2 id="string-method"><a class="header" href="#string-method">String method</a></h2>
+<pre><code class="language-js">let myString = &quot;Huy Na&quot;;
+// length
+console.log(myString.length);
+
+// find index
+console.log(myString.indexOf(&quot;y&quot;));
+// find from index 5
+console.log(myString.indexOf(&quot;1&quot;, 5));
+// find last
+console.log(myString.lastIndexOf(&quot;1&quot;));
+
+// support regex
+console.log(myString.search(&quot;1&quot;));
+
+// includes method
+const str = 'Hello, world!';
+
+console.log(str.includes('Hello'));  // true
+console.log(str.includes('world', 5));  // true
+console.log(str.includes('JavaScript'));  // false
+
+
+// cut string from to 
+console.log(myString.slice(4,6));
+
+// replace
+console.log(myString.replace(&quot;1&quot;, &quot;2&quot;));
+
+// convert to upper/lower case 
+console.log(myString.toUpperCase());
+console.log(myString.toLowerCase());
+
+// trim
+console.log(myString.trim());
+
+// split
+console.log(myString.split(&quot; &quot;));
+
+// get a character by index
+console.log(myString.charAt(3));
+
+
+</code></pre>
+<h2 id="number"><a class="header" href="#number">Number</a></h2>
+<pre><code class="language-js">// to string
+let a = 5;
+let strA = a.toString();
+
+// to fixed
+let a = 5.5;
+console.log(a.toFixed()); // 6
+
+let a = 5.5786;
+console.log(a.toFixed(2)); // 5.58
+</code></pre>
+<h2 id="array-method"><a class="header" href="#array-method">Array method</a></h2>
+<pre><code class="language-js">let myArr = [
+    'Javascript',
+    'PHP',
+    'Ruby'
+];
+
+console.log(myArr);
+
+console.log(Array.isArray(myArr)); // check isArray?
+
+// toString
+console.log(myArr.toString()); // Javascript,PHP,Ruby
+
+// Join
+console.log(myArr.join(&quot;--&quot;)); // Javascript--PHP--Ruby
+
+// Pop
+console.log(myArr.pop()); // Ruby 
+
+console.log(myArr); //(2) ['Javascript', 'PHP']
+
+// Push
+console.log(myArr.push('Python')); // 4
+
+console.log(myArr); //(4) ['Javascript', 'PHP', 'Ruby', 'Python']
+
+// Shift
+console.log(myArr.shift()); // Javascript
+
+console.log(myArr); // (2) ['PHP', 'Ruby']
+
+// Unshift
+console.log(myArr.unshift('Python')); // 4
+
+console.log(myArr); // (4) ['Python', 'Javascript', 'PHP', 'Ruby']
+
+// Splice
+console.log(myArr.splice(1, 1)); // ['PHP']
+console.log(myArr); // (2) ['Javascript', 'Ruby']
+//
+console.log(myArr.splice(1, 0, 'Python'));
+console.log(myArr); // (4) ['Javascript', 'Python', 'PHP', 'Ruby']
+//
+console.log(myArr.splice(1, 1, 'C++'));
+console.log(myArr); // (3) ['Javascript', 'C++', 'Ruby']
+
+// concat
+let myArr1 = [
+    'Javascript',
+    'PHP',
+    'Ruby'
+];
+
+let myArr2 = [
+    'Huy Na',
+];
+
+console.log(myArr1.concat(myArr2)); // (4) ['Javascript', 'PHP', 'Ruby', 'Huy Na']
+
+console.log(myArr1); // (3) ['Javascript', 'PHP', 'Ruby']
+
+
+// slice
+console.log(myArr.slice(1, 2)); // ['PHP']
+
+console.log(myArr); // (3) ['Javascript', 'PHP', 'Ruby']
+
+
+/*--------------------------------------*/
+// includes method
+console.log(myArr.includes('PHP')) // return true
+console.log(myArr.includes('PHP', 2)) // return false
+
+</code></pre>
+<h2 id="function"><a class="header" href="#function">Function</a></h2>
+<pre><code class="language-js">/**
+ * function writeLog(arg1, arg2) {
+ * 
+ * }
+*/
+
+function writeLog() {
+    console.log(arguments);
+    for (let param of arguments) {
+        console.log(param);
+    }
+}
+writeLog(&quot;1&quot;, &quot;2&quot;, &quot;huyna&quot;);
+
+</code></pre>
+<ul>
+<li>
+<p><em>Có thể định nghĩa function trùng tên =&gt; overwrite</em></p>
+</li>
+<li>
+<p><em>Có thể định nghĩa function trong function</em></p>
+</li>
+<li>
+<p><strong>Declaration function</strong>: như thông thường, có thể hosting gọi trc khi được định nghĩa</p>
+</li>
+<li>
+<p><strong>Expression function</strong>:</p>
+</li>
+</ul>
+<pre><code class="language-js">// Có thể đặt tên hoặc không, giúp code dễ hiểu hơn
+let myFunct = function() {
+
+}
+
+setTimeout(function() {
+
+});
+
+let myObj = {
+    myfunct: function() {
+
+    }
+}
+</code></pre>
+<ul>
+<li><strong>Arrow function</strong></li>
+</ul>
+<h2 id="object"><a class="header" href="#object">Object</a></h2>
+<pre><code class="language-js">abc = 'sex';
+
+let myInfo = {
+    name: &quot;Huyna&quot;,
+    age: 21,
+    [abc]: 'male',
+    getName: function () {
+        return this.name;
+    }
+}
+
+myInfo.address = 'TP-HCM'; 
+myInfo['my-email'] = 'abc@gmail.com';
+
+check = 'my-email';
+
+console.log(myInfo.address); // TP-HCM
+console.log(myInfo['my-email']); // abc@gmail.com
+
+console.log(myInfo[check]); // abc@gmail.com
+
+console.log(myInfo.getName()); // Huyna
+
+console.log(myInfo);
+</code></pre>
+<h3 id="object-constructor"><a class="header" href="#object-constructor">Object constructor</a></h3>
+<pre><code class="language-js">function User(firstName, lastName, avatar) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.avatar = avatar;
+
+    this.getName = function () {
+        return `${this.firstName} ${this.lastName}`;
+    }
+}
+
+let admin = new User('Huy', 'Na', 'AVT');
+let user = new User('ABC', 'xyz', 'avt');
+
+admin.tittle = &quot;ahihi&quot;;
+user.comment = &quot;so good!!!&quot;;
+
+console.log(admin.getName());
+console.log(user.getName());
+
+</code></pre>
+<h3 id="object-prototype---basic"><a class="header" href="#object-prototype---basic">Object prototype - basic</a></h3>
+<pre><code class="language-js">// giúp thêm thuộc tính, phương thức từ bên ngoài vào đối tượng, sau khi contructor được tạo ra
+
+function User(firstName, lastName, avatar) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.avatar = avatar;
+
+    this.getName = function () {
+        return `${this.firstName} ${this.lastName}`;
+    }
+}
+
+let admin = new User('Huy', 'Na', 'AVT');
+let user = new User('ABC', 'xyz', 'avt');
+
+User.prototype.className = &quot;ANTN2021&quot;;
+User.prototype.getClassName = function () {
+    return this.className;
+}
+
+console.log(admin.className);
+console.log(user.getClassName());
+
+</code></pre>
+<h2 id="date"><a class="header" href="#date">Date</a></h2>
+<pre><code class="language-js">let date = new Date(); //object
+// let date = Date(); //string
+
+
+let year = date.getFullYear();
+let month = date.getMonth(); // +1 (return 0 -&gt; 11)
+let day = date.getDate();
+
+console.log(`${day}/${month}/${year}`);
+
+</code></pre>
+<h2 id="branching-statement"><a class="header" href="#branching-statement">Branching statement</a></h2>
+<pre><code class="language-js">let date = 2;
+
+if ()
+{
+    //
+}
+else if ()
+{
+    //
+}
+else
+{
+    //
+}
+
+/*--------------------------------------*/
+switch (date) {
+    case 1:
+        
+        break;
+
+    case 2:
+        
+        break;
+    case 3: // use ===
+        
+        break;
+
+    default:
+        break;
+}
+/*--------------------------------------*/
+let date = 5;
+
+console.log(date &gt; 2 ? &quot;lt 2&quot; : &quot;gt 2&quot;);
+</code></pre>
+<h2 id="loop"><a class="header" href="#loop">Loop</a></h2>
+<h3 id="for"><a class="header" href="#for">For</a></h3>
+<pre><code class="language-js">// for
+for (let i = 0; i &lt;= 10; i++) {
+    console.log(i);
+}
+
+/*--------------------------------------*/
+// for - in
+let myInfo = {
+    name: 'huyna',
+    age: 21
+}
+
+for (let key in myInfo) {
+    console.log(myInfo[key]);
+}
+
+/*--------------------------------------*/
+// for - of
+let myArr = [
+    &quot;js&quot;,
+    &quot;php&quot;,
+    &quot;ruby&quot;,
+    &quot;php&quot;
+];
+
+for (let value of myArr) {
+    console.log(value);
+}
+
+/*--------------------------------------*/
+// for - of
+let myStr = &quot;huyna&quot;;
+
+for (let char of myStr) {
+    console.log(char);
+}
+
+/*--------------------------------------*/
+// for - of
+let myInfo = {
+    name: 'huyna',
+    age: 21
+}
+
+console.log(Object.keys(myInfo)); // return array of keys
+console.log(Object.values(myInfo)); // return array of values
+
+
+for (let key of Object.keys(myInfo)) {
+    console.log(myInfo[key]);
+}
+
+for (let value of Object.values(myInfo)) {
+    console.log(value);
+}
+
+</code></pre>
+<h3 id="while"><a class="header" href="#while">While</a></h3>
+<pre><code class="language-js">/*--------------------------------------*/
+let i = 1;
+
+while(i &lt;= 1000)
+{
+    i++;
+}
+
+/*--------------------------------------*/
+let i = 1;
+
+do {
+    
+    i++;
+}while (i &lt;= 1000)
+
+/*--------------------------------------*/
+
+// break : thoát khỏi vòng lặp
+// continue: nhảy tới vòng lặp kế tiếp
+</code></pre>
+<h2 id="array-method-with-function"><a class="header" href="#array-method-with-function">Array method with function</a></h2>
+<pre><code class="language-js">let courses = [
+    {
+        id: 1,
+        name: &quot;JS&quot;,
+        coin: 250
+    },
+    {
+        id: 2,
+        name: &quot;HTML-CSS&quot;,
+        coin: 350
+    },
+    {
+        id: 3,
+        name: &quot;PHP&quot;,
+        coin: 200
+    },
+    {
+        id: 4,
+        name: &quot;PHP&quot;,
+        coin: 0
+    }
+];
+
+// return 2 tham số phần tử của arr và index
+// forEach duyệt qua các phần tử của array
+courses.forEach(function (course, index) {
+    console.log(index, course)
+});
+
+/*--------------------------------------*/
+
+/**
+ * Kiểm tra TẤT CẢ các phần tử của mảng ĐỀU phải thỏa 
+ * điều kiện thì sẽ return về true
+ */
+let isFree = courses.every(function (course, index) {
+    return course.coin === 0;
+});
+
+console.log(isFree)
+
+/*--------------------------------------*/
+/**
+ * Kiểm tra các phần tử của mảng chỉ cần MỘT phần tử thỏa 
+ * điều kiện thì sẽ return về true
+ */
+let isFree = courses.some(function (course, index) {
+    return course.coin === 0;
+});
+
+console.log(isFree)
+
+/*--------------------------------------*/
+/**
+ * Kiểm tra các phần tử của mảng return về PHẦN TỬ ĐẦU TIÊN 
+ * thỏa điều kiện
+ */
+let course = courses.find(function (course, index) {
+    return course.name === &quot;PHP&quot;;
+});
+
+console.log(course)
+
+
+/*--------------------------------------*/
+/**
+ * Kiểm tra các phần tử của mảng return TẤT CẢ phần tử
+ * thỏa điều kiện
+ */
+let listCourse = courses.filter(function (course, index) {
+    return course.name === &quot;PHP&quot;;
+});
+
+console.log(listCourse)
+
+
+/*--------------------------------------*/
+/**
+ * Duyệt từng phần tử và callback (function chỉ định) rồi
+ * tiến hành lấy phần tử đó làm tham số, thay đổi, tùy chỉnh tùy ý
+ * trong funct rồi return về. courses có bao nhiêu phần tử
+ * thì newCourses cũng có bấy nhiêu phần tử
+ * 
+ * Chỉ khác là nó đã được chỉnh sửa, thay đổi như nào
+ */
+let newCourses = courses.map(function (course, index, originArray) {
+    return {
+        id: course.id,
+        name: `Course: ${course.name}`,
+        coin: course.coin,
+        index: index,
+        originArray: originArray
+    }
+    // return course.name; return 1 array chứa name of courses
+});
+
+console.log(newCourses);
+
+/*--------------------------------------*/
+
+/**
+ * accmulator: Biến lưu trữ, lưu trữ giá trị return mỗi vòng lặp, được khởi tạo bằng 0 lúc gọi map 
+ * currentValue: Phần tử hiện tại đang duyệt
+ * currentIndex: Index của phần tử hiện tại đang duyệt
+ * originArray: === courses, cùng trỏ đến 1 địa chỉ với courses &lt;=&gt; khi originArray này thay đổi =&gt; courses cũng thay đổi
+ */
+function coinHandler(accmulator, currentValue, currentIndex, originArray) {
+    return accmulator + currentValue.coin
+}
+
+let totalCoin = courses.reduce(coinHandler, 0);  // 0 là giá trị khởi tạo
+
+console.log(totalCoin);
+
+/**
+ * Khi không có giá trị khởi tạo nó sẽ lấy phần tử đầu tiên làm giá trị khởi tạo. 
+ * Lúc này thì thằng currentValue lại là phần tử thứ 2
+ * 
+ * khi dữ liệu mình cần trả về trung với cái dữ liệu đầu tiên của phần tử, khi k cần truyền mà vẫn đúng thì khỏi truyền
+ * / 
+
+</code></pre>
+<h2 id="math-object"><a class="header" href="#math-object">Math object</a></h2>
+<pre><code class="language-js">console.log(Math.PI) // 3.141592653589793
+
+console.log(Math.round(5.789)); // 6
+
+console.log(Math.abs(-5)); // 5
+
+console.log(Math.ceil(5.123)); // làm tròn trên =&gt; 6
+
+console.log(Math.floor(5.99)); // làm tròn dưới =&gt; 5
+
+console.log(Math.random()); // return 1 số thập phân nhỏ hơn 1
+
+console.log(Math.floor(Math.random() * 10)); // random từ 0 =&gt; 9
+
+console.log(Math.min(-100, 2, 34534, 7)); // -100
+
+console.log(Math.max(-100, 2, 34534, 7)); // 34534
+
+</code></pre>
+<h2 id="callback-function"><a class="header" href="#callback-function">Callback function</a></h2>
+<ul>
+<li>Là function</li>
+<li>Là tham số của một hàm khác</li>
+</ul>
+<pre><code class="language-js">function myFunction(param) {
+    if (typeof param === &quot;function&quot;) {
+        param(&quot;haizzz&quot;);
+    }
+}
+
+function myCallback(value) {
+    console.log(&quot;Value: &quot;, value);
+}
+
+myFunction(myCallback);
+
+</code></pre>
+<h3 id="define-prototype"><a class="header" href="#define-prototype">Define Prototype</a></h3>
+<pre><code class="language-js">var courses = [
+    'js',
+    'php',
+    'python'
+]
+
+/**
+ * lặp qua các phần tử trong courses
+ * mỗi lần lặp qua thì tiến hành gọi hàm callback
+ * this =&gt; courses
+ */
+Array.prototype.mapHuyNa = function (callback) {
+    let output = [];
+    arrayLength = this.length;
+
+    for (let i = 0; i &lt; arrayLength; i++) {
+        let result = callback(this[i], i); // định nghĩa hàm return về 2 giá trị, nên ở dưới mới nhận được
+        output.push(result);
+    }
+    return output;
+}
+
+var htmls = courses.mapHuyNa(function (course) {
+    return `&lt;h2&gt;${course}&lt;/h2&gt;`;
+})
+
+console.log(htmls.join(' '))
+
+</code></pre>
+<p><em>Khi mà định nghĩa mapHuyNa như này thì thằng courses sẽ thừa hưởng luôn method này =&gt; nó sẽ có cái key là mapHuyNa nếu ta duyệt qua bằng for-in sẽ thấy</em></p>
+<pre><code class="language-js">for (let index in this)
+{
+    console.log(index, this.hasOwnProperty(index));
+    // check xem index có nằm trong nhóm lớn hay nằm trong nhóm prototype
+}
+
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/CSS/tranform_sitsion_anima.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/JS/dom.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/CSS/tranform_sitsion_anima.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/JS/dom.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
