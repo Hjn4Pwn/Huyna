@@ -375,9 +375,9 @@ Additional .ini files parsed:      /etc/php/8.3/cli/conf.d/10-opcache.ini,
 
 </code></pre>
 <h2 id="container-mysql"><a class="header" href="#container-mysql">Container MySQL</a></h2>
-<pre><code class="language-sh">docker run -d --name mysqlLaravel -e MYSQL_ROOT_PASSWORD=123456 -v mysql_data:/var/lib/mysql -p 3306:3306 mysql/mysql-server
+<pre><code class="language-sh">docker run -d --name e-commerce-project -e MYSQL_ROOT_PASSWORD=123456 -v e-commerce-project:/var/lib/mysql -p 3306:3306 mysql/mysql-server
 
-docker exec -it mysqlLaravel mysql -uroot -p
+docker exec -it e-commerce-project mysql -uroot -p
 
 CREATE USER 'root'@'%' IDENTIFIED BY '123456';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
@@ -388,6 +388,8 @@ mysql -h 127.0.0.1 -u root -p
 php artisan config:cache
 php artisan migrate
 
+# import sql file to running container
+docker exec -i &lt;container-id&gt; mysql -u root -p[password] [database] &lt; file.sql
 </code></pre>
 <h2 id="toast-with-laravel"><a class="header" href="#toast-with-laravel">Toast with Laravel</a></h2>
 <ul>

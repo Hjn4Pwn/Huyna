@@ -165,9 +165,16 @@
                     <main>
                         <h1 id="take-note"><a class="header" href="#take-note">Take note</a></h1>
 <ul>
+<li><a href="#docs">Docs</a></li>
 <li><a href="#seed-data-into-new-table">Seed data into new Table</a></li>
-<li><a href="#add-custom-gaurd">Add Custom Gaurd</a></li>
+<li><a href="#add-custom-gaurd---authen">Add Custom Gaurd - Authen</a></li>
 <li><a href="#valid-request">Valid request</a></li>
+<li><a href="#add-custom-middleware">Add Custom Middleware</a></li>
+<li><a href="#get-all-users---pagination">Get all Users - Pagination</a></li>
+</ul>
+<h2 id="docs"><a class="header" href="#docs">Docs</a></h2>
+<ul>
+<li><a href="https://github.com/fzaninotto/Faker">Faker Repo</a></li>
 </ul>
 <h2 id="seed-data-into-new-table"><a class="header" href="#seed-data-into-new-table">Seed data into new Table</a></h2>
 <ul>
@@ -193,7 +200,7 @@ class AdminFactory extends Factory
     public function definition()
     {
         return [
-            'username' =&gt; $this-&gt;faker-&gt;unique()-&gt;userName,
+            'username' =&gt; $this-&gt;faker-&gt;unique()-&gt;name,
             'password' =&gt; bcrypt('defaultPassword'), // Encrypt the password
         ];
     }
@@ -238,7 +245,7 @@ class DatabaseSeeder extends Seeder
 <ul>
 <li><strong>php artisan db:seed</strong></li>
 </ul>
-<h2 id="add-custom-gaurd"><a class="header" href="#add-custom-gaurd">Add Custom Gaurd</a></h2>
+<h2 id="add-custom-gaurd---authen"><a class="header" href="#add-custom-gaurd---authen">Add Custom Gaurd - Authen</a></h2>
 <ul>
 <li><strong>config/auth.php</strong>:</li>
 </ul>
@@ -348,6 +355,212 @@ class Admin extends Authenticatable
 
         return redirect()-&gt;route('admin.login')-&gt;with('error', 'Username or Password is incorrect');
     }
+
+</code></pre>
+<h2 id="add-custom-middleware"><a class="header" href="#add-custom-middleware">Add Custom Middleware</a></h2>
+<ul>
+<li>
+<p><strong>php artisan make:middleware AdminAuthMiddleware</strong></p>
+</li>
+<li>
+<p><strong>middleware config</strong>:</p>
+</li>
+</ul>
+<pre><code class="language-php">public function handle(Request $request, Closure $next): Response
+{
+    if (!Auth::guard('admin')-&gt;check()) {
+        // Redirect to login page if not admin
+        return redirect()-&gt;route('admin.login')-&gt;with('error', 'Please login to access the admin area.');
+    }
+    return $next($request);
+}
+
+</code></pre>
+<ul>
+<li><strong>bootstrap/app.php</strong>:</li>
+</ul>
+<pre><code class="language-php">return Application::configure(basePath: dirname(__DIR__))
+    -&gt;withRouting(
+        web: __DIR__ . '/../routes/web.php',
+        commands: __DIR__ . '/../routes/console.php',
+        health: '/up',
+    )
+    -&gt;withMiddleware(function (Middleware $middleware) {
+        $middleware-&gt;alias([
+            'AdminAuth' =&gt; AdminAuthMiddleware::class,
+            'AdminLogin' =&gt; AdminLoginMiddleware::class,
+        ]);
+    })
+    -&gt;withExceptions(function (Exceptions $exceptions) {
+        //
+    })-&gt;create();
+
+
+</code></pre>
+<ul>
+<li><strong>Route use middleware</strong>:</li>
+</ul>
+<pre><code class="language-php">Route::get('admin/dashboard', [DashboardController::class, 'index'])
+    -&gt;middleware('AdminAuth')
+    -&gt;name(&quot;admin.dashboard&quot;);
+
+</code></pre>
+<h2 id="get-all-users---pagination"><a class="header" href="#get-all-users---pagination">Get all Users - Pagination</a></h2>
+<h3 id="non-use-service-or-repository"><a class="header" href="#non-use-service-or-repository">Non use Service or Repository</a></h3>
+<p><em>Controller Dashboard call User Model</em></p>
+<ul>
+<li><strong>DashboardController</strong></li>
+</ul>
+<pre><code class="language-php">class DashboardController extends Controller
+{
+    public function index()
+    {
+        $users = User::all(); //-&gt;toArray();
+        // dd($users);
+        return view('admin.user.manageUser', [
+            'users' =&gt; DB::table('users')-&gt;paginate(15),
+        ]);
+        // return view('admin.dashboard.pages.index');
+    }
+}
+
+
+</code></pre>
+<ul>
+<li>View:</li>
+</ul>
+<pre><code class="language-php">@if (isset($users))
+    {{ $i = 0 }}
+    @foreach ($users as $user)
+        &lt;tr&gt;
+            &lt;td&gt;{{ ++$i }}&lt;/td&gt;
+            &lt;td&gt;{{ $user-&gt;name }}&lt;/td&gt;
+            // ...
+            &lt;td&gt;{{ $user-&gt;address }}&lt;/td&gt;
+    @endforeach
+@endif
+
+//-- pagination --
+&lt;div class=&quot;text-center&quot;&gt;
+    {{ $users-&gt;links() }}
+&lt;/div&gt;
+</code></pre>
+<ul>
+<li><strong>App\Providers\AppServiceProvider</strong></li>
+</ul>
+<pre><code class="language-php">use Illuminate\Pagination\Paginator;
+ 
+/**
+ * Bootstrap any application services.
+ */
+public function boot(): void
+{
+    // Paginator::useBootstrapFive();
+    Paginator::useBootstrapFour();
+}
+
+</code></pre>
+<h3 id="use-service-for-pagintion"><a class="header" href="#use-service-for-pagintion">Use Service for Pagintion</a></h3>
+<ul>
+<li>
+<p><strong>composer require getsolaris/laravel-make-service --dev</strong></p>
+</li>
+<li>
+<p><strong>php artisan make:service UserService --i</strong></p>
+</li>
+<li>
+<p><strong>UserServiceInterface</strong>:</p>
+</li>
+</ul>
+<pre><code class="language-php">namespace App\Services\Interfaces;
+
+/**
+ * Interface UserServiceInterface
+ * @package App\Services\Interfaces
+ */
+interface UserServiceInterface
+{
+    public function paginate();
+}
+
+</code></pre>
+<ul>
+<li><strong>ServiceInterface</strong>:</li>
+</ul>
+<pre><code class="language-php">namespace App\Services;
+
+use App\Services\Interfaces\UserServiceInterface;
+use App\Models\User;
+
+/**
+ * Class UserService
+ * @package App\Services
+ */
+class UserService implements UserServiceInterface
+{
+    public function __construct()
+    {
+        //
+    }
+
+    public function paginate()
+    {
+        return User::paginate(15);
+    }
+}
+
+</code></pre>
+<ul>
+<li><strong>App\Providers\AppServiceProvider</strong></li>
+</ul>
+<pre><code class="language-php">namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
+
+class AppServiceProvider extends ServiceProvider
+{
+
+    public $serviceBindings = [
+        'App\Services\Interfaces\UserServiceInterface' =&gt; 'App\Services\UserService',
+    ];
+
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        foreach ($this-&gt;serviceBindings as $key =&gt; $value) {
+            $this-&gt;app-&gt;bind($key, $value);
+        }
+    }
+    // ...
+}
+
+</code></pre>
+<ul>
+<li><strong>ManageUserController</strong>:</li>
+</ul>
+<pre><code class="language-php">use App\Models\User;
+use App\Services\Interfaces\UserServiceInterface as UserService;
+
+class DashboardController extends Controller
+{
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this-&gt;userService = $userService;
+    }
+
+    public function index()
+    {
+        $users = $this-&gt;userService-&gt;paginate();
+        return view('admin.user.manageUser', [
+            'users' =&gt; $users,
+        ]);
+    }
+}
 
 </code></pre>
 
