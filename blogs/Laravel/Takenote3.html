@@ -1,0 +1,613 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Take note 3 - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/job.html">Requirements For Job</a></li><li class="chapter-item "><a href="../../blogs/AWS/EC2.html">Computing Services - EC2</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAM.html">Identity and Access Management -IAM</a></li><li class="chapter-item "><a href="../../blogs/AWS/S3.html">Simple Storage Service - S3</a></li><li class="chapter-item "><a href="../../blogs/AWS/LoadBalancing-Autoscaling.html">Load Balancing and Autoscaling</a></li><li class="chapter-item "><a href="../../blogs/AWS/RDS.html">Relational Database Service - RDS</a></li><li class="chapter-item "><a href="../../blogs/AWS/DynamoDB.html">Database Services - No SQL - DynamoDB</a></li><li class="chapter-item "><a href="../../blogs/AWS/Lambda.html">Serverless Lambda</a></li><li class="chapter-item "><a href="../../blogs/AWS/VPC.html">Networking Service - VPC, Peering, Endpoint</a></li><li class="chapter-item "><a href="../../blogs/AWS/Gateway_Cognito.html">API Gateway & Cognito</a></li><li class="chapter-item "><a href="../../blogs/AWS/CloudFront.html">Content Delivery Service (CDN) - CloudFront</a></li><li class="chapter-item "><a href="../../blogs/AWS/Route_53.html">Domain Name System - Route 53</a></li><li class="chapter-item "><a href="../../blogs/AWS/Monitor_Auditing.html">Monitoring and Auditing - CloudWatch, CloudTrail</a></li><li class="chapter-item "><a href="../../blogs/AWS/Mess.html">Messaging Service - SNS, SQS, SES</a></li><li class="chapter-item "><a href="../../blogs/AWS/Event_Bridge.html">Event Bridge</a></li><li class="chapter-item "><a href="../../blogs/AWS/Elastic_Beanstalk.html">Elastic Beanstalk</a></li><li class="chapter-item "><a href="../../blogs/AWS/Container_Service.html">Container Service - ECS, ECR</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAC_CloudFormation.html">Infra as Code - CloudFormation</a></li><li class="chapter-item "><a href="../../blogs/AWS/Backup_Recovery.html">Backup and Recovery</a></li><li class="chapter-item "><a href="../../blogs/AWS/Sec.html">Security Services</a></li><li class="chapter-item affix "><li class="part-title">PHP</li><li class="chapter-item "><a href="../../blogs/PHP/setup_env.html">Setup Environment</a></li><li class="chapter-item "><a href="../../blogs/PHP/basic.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/PHP/mysqli.html">MySQLi</a></li><li class="chapter-item "><a href="../../blogs/PHP/sort_algorithms.html">Sort Algorithms</a></li><li class="chapter-item "><a href="../../blogs/PHP/hackerrank_algorithms.html">Hackerrank</a></li><li class="chapter-item affix "><li class="part-title">Laravel</li><li class="chapter-item "><a href="../../blogs/Laravel/setup_env.html">Setup Environment</a></li><li class="chapter-item "><a href="../../blogs/Laravel/artisanCommand.html">Artisan Command</a></li><li class="chapter-item "><a href="../../blogs/Laravel/Takenote.html">Take note 1</a></li><li class="chapter-item "><a href="../../blogs/Laravel/Takenote2.html">Take note 2</a></li><li class="chapter-item expanded "><a href="../../blogs/Laravel/Takenote3.html" class="active">Take note 3</a></li><li class="chapter-item "><a href="../../blogs/Laravel/advance_concepts.html">Advance Concepts</a></li><li class="chapter-item "><a href="../../blogs/Laravel/database.html">Database</a></li><li class="chapter-item "><a href="../../blogs/Laravel/explain_functions.html">Explain Functions</a></li><li class="chapter-item affix "><li class="part-title">Kubernetes</li><li class="chapter-item "><a href="../../blogs/Kubernetes/session1.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/commands.html">Practice on KodeKloud</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/minkube_deployment.html">MiniKube Deployment</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/data_volume.html">Manage Data & Volumes</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/network.html">Network</a></li><li class="chapter-item affix "><li class="part-title">Linux + Git</li><li class="chapter-item "><a href="../../blogs/Linux/bandit.html">Bandit challenge</a></li><li class="chapter-item "><a href="../../blogs/Linux/command_session_1.html">Command session 1</a></li><li class="chapter-item "><a href="../../blogs/Linux/git_command.html">Git command</a></li><li class="chapter-item "><a href="../../blogs/Linux/ssh.html">SSH</a></li><li class="chapter-item "><a href="../../blogs/Linux/conda.html">Conda</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some docker tips for CTF</a></li><li class="chapter-item "><a href="../../blogs/Docker/get_started.html">Basic Docker</a></li><li class="chapter-item "><a href="../../blogs/Docker/image_container.html">Images & Containers: The Core Building Blocks</a></li><li class="chapter-item "><a href="../../blogs/Docker/dockerfile_write.html">Dockerfile</a></li><li class="chapter-item "><a href="../../blogs/Docker/docker_network.html">Docker Network</a></li><li class="chapter-item "><a href="../../blogs/Docker/Volume.html">Volume</a></li><li class="chapter-item "><a href="../../blogs/Docker/Docker_Compose.html">Docker Compose</a></li><li class="chapter-item affix "><li class="part-title">Terraform</li><li class="chapter-item "><a href="../../blogs/Terraform/overview.html">Overview</a></li><li class="chapter-item "><a href="../../blogs/Terraform/functional_pro.html">Functional Programming</a></li><li class="chapter-item "><a href="../../blogs/Terraform/Module_create_VPC.html">Terraform Module: Create VPC on AWS</a></li><li class="chapter-item affix "><li class="part-title">Jenkins</li><li class="chapter-item "><a href="../../blogs/Jenkins/install_by_docker.html">Install Jenkins By Docker</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/link_git_jenkins.html">Link git with jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/pipline_github_jenkins.html">Pipeline jenkinsfile with github</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_jenkins.html">Link gitlab with Jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_dockerhub.html">Gitlab-dockerhub-pipeline</a></li><li class="chapter-item affix "><li class="part-title">CSS</li><li class="chapter-item "><a href="../../blogs/CSS/basic.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/CSS/flexbox.html">Flexbox CSS</a></li><li class="chapter-item "><a href="../../blogs/CSS/BEM.html">BEM</a></li><li class="chapter-item "><a href="../../blogs/CSS/responsive.html">Resposive</a></li><li class="chapter-item "><a href="../../blogs/CSS/tranform_sitsion_anima.html">Transform - Transition - Animation</a></li><li class="chapter-item affix "><li class="part-title">JS</li><li class="chapter-item "><a href="../../blogs/JS/basic.html">Basic Concepts 1</a></li><li class="chapter-item "><a href="../../blogs/JS/dom.html">DOM</a></li><li class="chapter-item "><a href="../../blogs/JS/basic2.html">Basic Concepts 2</a></li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item "><a href="../../blogs/Python/RE.html">Regular Expression</a></li><li class="chapter-item "><a href="../../blogs/Python/Automation_1.html">Automation with Python 1</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item "><a href="../../blogs/Bash_script/Variables_Environment.html">Shell Variables and Environment</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Conditionals_Execution.html">Conditionals Execution</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Bash_Loops.html">Bash Loops & Function</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Shell_Redirection.html">Shell Redirection & Pipes and Filters</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Interactive_Scripts.html">Interactive Scripts</a></li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/basic_network_1.html">Basic Network 1</a></li><li class="chapter-item affix "><li class="part-title">PWN</li><li class="chapter-item "><a href="../../blogs/PWN/Emporium_ROP.html">Rop Emporium</a></li><li class="chapter-item "><a href="../../blogs/PWN/pwnableTW.html">Pwnable.tw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pico_CTF.html">Pwn_PicoCTF</a></li><li class="chapter-item "><a href="../../blogs/PWN/PWN_from_blabla.html">Pwn from blabla</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/ASM.html">ASM</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_PicoCTF</li><li class="chapter-item "><a href="../../blogs/RE/RE.html">RE</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li><li class="chapter-item affix "><li class="part-title">Documents from everywhere</li><li class="chapter-item "><a href="../../blogs/Documents/troubleshooting.html">Troubleshooting</a></li><li class="chapter-item "><a href="../../blogs/Documents/study.html">Study</a></li><li class="chapter-item "><a href="../../blogs/Documents/important_concept.html">Important Concepts</a></li><li class="chapter-item "><a href="../../blogs/Documents/basic_SQL.html">MySQL</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="take-note-3"><a class="header" href="#take-note-3">Take note 3</a></h1>
+<h2 id="mainimage---use-nonuse---1n"><a class="header" href="#mainimage---use-nonuse---1n">MainImage - Use-NonUse - 1N</a></h2>
+<ul>
+<li><strong>getMainImageByProduct()</strong>:</li>
+</ul>
+<pre><code class="language-php">public function getMainImageByProduct(Product $product)
+{
+    return $product-&gt;images()-&gt;where('sort_order', 1)-&gt;first();
+}
+
+</code></pre>
+<ul>
+<li><strong>Product Model</strong>:</li>
+</ul>
+<pre><code class="language-php">public function images()
+{
+    return $this-&gt;hasMany(ProductImage::class, 'product_id');
+}
+
+public function flavors()
+{
+    return $this-&gt;hasMany(ProductFlavor::class, 'product_id');
+}
+
+public function carts()
+{
+    return $this-&gt;hasMany(CartItem::class, 'product_id');
+}
+
+public function mainImage()
+{
+    return $this-&gt;hasOne(ProductImage::class)-&gt;where('sort_order', 1);
+}
+
+</code></pre>
+<ul>
+<li><strong>Flavor Model</strong>:</li>
+</ul>
+<pre><code class="language-php">public function productFlavors()
+{
+    return $this-&gt;hasMany(ProductFlavor::class, &quot;flavor_id&quot;);
+}
+
+public function carts()
+{
+    return $this-&gt;hasMany(CartItem::class, 'flavor_id');
+}
+
+</code></pre>
+<ul>
+<li><strong>Cart Model</strong>:</li>
+</ul>
+<pre><code class="language-php">public function items()
+{
+    return $this-&gt;hasMany(CartItem::class);
+}
+
+</code></pre>
+<ul>
+<li><strong>CartItem Model</strong>:</li>
+</ul>
+<pre><code class="language-php">public function cart()
+{
+    return $this-&gt;belongsTo(Cart::class);
+}
+
+public function product()
+{
+    return $this-&gt;belongsTo(Product::class);
+}
+
+public function flavor()
+{
+    return $this-&gt;belongsTo(Flavor::class);
+}
+
+</code></pre>
+<h3 id="không-dùng-quan-hệ-1-n"><a class="header" href="#không-dùng-quan-hệ-1-n">Không dùng quan hệ 1-N</a></h3>
+<ul>
+<li><strong>Dựa vào user_id để lấy ra thông tin cart của user đó:</strong></li>
+</ul>
+<pre><code class="language-php">public function getCartItems($user_id)
+{
+    $cart = Cart::where('user_id', $user_id)
+                -&gt;with(['items.product', 'items.flavor'])
+                -&gt;first();
+
+    if ($cart) {
+        $cartItems = $cart-&gt;items;
+        foreach ($cartItems as $item) {
+            $item-&gt;product-&gt;mainImage = $this-&gt;imageService-&gt;getMainImageByProduct($item-&gt;product);
+        }
+        return $cartItems;
+    }
+    return collect([]);
+}
+
+</code></pre>
+<ul>
+<li><strong>getProductsAndImagesByCategory()</strong></li>
+</ul>
+<pre><code class="language-php">public function getProductsAndImagesByCategory(Category $category)
+{
+    $products = $category-&gt;products()-&gt;with('category')-&gt;get();
+
+    foreach ($products as $product) {
+        $product-&gt;main_image = $this-&gt;imageService-&gt;getMainImageForProduct($product);
+    }
+
+    return $products;
+}
+
+</code></pre>
+<ul>
+<li><strong>getProductsAndImages()</strong>:</li>
+</ul>
+<pre><code class="language-php">public function getProductsAndImages()
+{
+    $products = $this-&gt;getAll();
+
+    foreach ($products as $product) {
+        $product-&gt;main_image = $this-&gt;imageService-&gt;getMainImageForProduct($product);
+    }
+
+    return $products;
+}
+
+</code></pre>
+<h3 id="dùng-quan-hệ-1-n"><a class="header" href="#dùng-quan-hệ-1-n">Dùng quan hệ 1-N</a></h3>
+<ul>
+<li><strong>Dựa vào user_id để lấy ra thông tin cart của user đó:</strong></li>
+</ul>
+<pre><code class="language-php">public function getCartItems($user_id)
+{
+    $cart = Cart::where('user_id', $user_id)
+        -&gt;with(['items.product.mainImage', 'items.flavor'])
+        -&gt;first();
+    return $cart ? $cart-&gt;items : collect([]);
+}
+
+</code></pre>
+<ul>
+<li><strong>getProductsAndImagesByCategory()</strong></li>
+</ul>
+<pre><code class="language-php">public function getProductsAndImagesByCategory(Category $category)
+{
+    $products = $category-&gt;products()-&gt;with(['category', 'mainImage'])-&gt;get();
+
+    return $products;
+}
+
+</code></pre>
+<ul>
+<li><strong>getProductsAndImages()</strong>:</li>
+</ul>
+<pre><code class="language-php"> public function getProductsAndImages()
+{
+    $products = Product::with(['mainImage'])-&gt;get();
+
+    return $products;
+}
+
+</code></pre>
+<h2 id="pivot---products---flavors"><a class="header" href="#pivot---products---flavors">Pivot - Products - Flavors</a></h2>
+<ul>
+<li>Trong trường hợp này ta có 2 bảng <strong>products</strong> và <strong>flavors</strong> tương ứng với model <strong>Product</strong> và <strong>Flavor</strong>. 2 model này có mối quan hệ N-N với nhau:</li>
+</ul>
+<pre><code class="language-php">// product model
+public function flavors()
+{
+    return $this-&gt;belongsToMany(Flavor::class, 'product_flavors')
+        -&gt;withPivot('quantity');
+}
+
+// flavor model
+public function products()
+{
+    return $this-&gt;belongsToMany(Product::class, 'product_flavors')
+        -&gt;withPivot('quantity');
+}
+
+</code></pre>
+<ul>
+<li>
+<p>Trong đó bảng <strong>product_flavors</strong> (model <strong>ProductFlavor</strong>) là bảng trung gian (pivot table) chứa các cột <strong>product_id</strong> và <strong>flavor_id</strong>, và các cột bổ sung thêm như là <strong>quantity</strong></p>
+</li>
+<li>
+<p>Các phương thức dùng pivot:</p>
+</li>
+</ul>
+<pre><code class="language-php">public function storeProductFlavor(Product $product, $flavorId, $quantity)
+{
+    // Thêm flavor mới cùng với quantity vào pivot table
+    $product-&gt;flavors()-&gt;attach($flavorId, ['quantity' =&gt; $quantity]);
+}
+
+public function deleteProductFlavor(Product $product, $flavorId)
+{
+    // $product-&gt;flavors()-&gt;where('flavor_id', $flavorId)-&gt;delete();
+    // Xóa flavor khỏi pivot table
+    $product-&gt;flavors()-&gt;detach($flavorId);
+}
+
+public function updateProductFlavorQuantity(Product $product, $flavorId, $quantity)
+{
+    // Cập nhật quantity của flavor hiện tại trong pivot table
+    $product-&gt;flavors()-&gt;updateExistingPivot($flavorId, ['quantity' =&gt; $quantity]);
+}
+
+public function deleteFlavorByProduct(Product $product)
+{
+    // $product-&gt;flavors()-&gt;delete();
+    // ProductFlavor::where('product_id', $product-&gt;id)-&gt;delete();
+    $product-&gt;flavors()-&gt;detach(); // pivot
+}
+
+</code></pre>
+<ul>
+<li>Cú pháp của attach:</li>
+</ul>
+<pre><code class="language-php">$model-&gt;relation()-&gt;attach($id, ['additional_columns' =&gt; 'value']);
+
+</code></pre>
+<p><em>Ở đây, <strong>$id</strong> là giá trị của khóa ngoại (foreign key), và mảng thứ hai chứa các cột bổ sung cùng giá trị của chúng.</em></p>
+<h2 id="relatived-methods"><a class="header" href="#relatived-methods">Relatived methods</a></h2>
+<h3 id="pivot-quantity"><a class="header" href="#pivot-quantity">Pivot quantity</a></h3>
+<pre><code class="language-php">public function getFlavorsByProduct(Product $product)
+{
+    // Eager load the flavors relation with pivot data
+    $flavors = $product-&gt;flavors()-&gt;get();
+
+    // Collect flavor details along with quantity
+    $flavorDetails = $flavors-&gt;map(function ($flavor) {
+        return [
+            'id' =&gt; $flavor-&gt;id,
+            'name' =&gt; $flavor-&gt;name,
+            'quantity' =&gt; $flavor-&gt;pivot-&gt;quantity, // Truy xuất quantity từ bảng pivot
+        ];
+    });
+
+    return $flavorDetails;
+}
+
+
+</code></pre>
+<h3 id="lấy-toàn-bộ-flavors-ra-và-nếu-product-có-những-flavors-nào-thì-được-đánh-dấu-lại"><a class="header" href="#lấy-toàn-bộ-flavors-ra-và-nếu-product-có-những-flavors-nào-thì-được-đánh-dấu-lại">Lấy toàn bộ flavors ra và nếu product có những flavors nào thì được đánh dấu lại</a></h3>
+<pre><code class="language-php">public function getFlavorsWithCheckedStatus(Product $product)
+{
+    // Lấy tất cả các flavors
+    $allFlavors = Flavor::all();
+
+    // Lấy các id của flavors của sản phẩm
+    $productFlavorIds = $product-&gt;flavors()-&gt;pluck('flavor_id')-&gt;toArray();
+
+    // Lấy các mối quan hệ flavors của sản phẩm cùng với quantity
+    $productFlavors = $product-&gt;flavors()-&gt;get(['flavor_id', 'quantity'])-&gt;keyBy('flavor_id');
+
+    // Ánh xạ các flavors và thêm thông tin quantity
+    $flavorsWithCheckedStatus = $allFlavors-&gt;map(function ($flavor) use ($productFlavorIds, $productFlavors) {
+        return [
+            'id' =&gt; $flavor-&gt;id,
+            'name' =&gt; $flavor-&gt;name,
+            'is_checked' =&gt; in_array($flavor-&gt;id, $productFlavorIds),
+            'quantity' =&gt; $productFlavors-&gt;has($flavor-&gt;id) ? $productFlavors-&gt;get($flavor-&gt;id)-&gt;quantity : 0,
+        ];
+    });
+
+    return $flavorsWithCheckedStatus;
+}
+
+</code></pre>
+<ul>
+<li>
+<p><strong>$allFlavors-&gt;map(...)</strong>:</p>
+<ul>
+<li><em>map</em> được gọi trên <em>$allFlavors</em>, là một collection chứa tất cả các bản ghi từ bảng flavors.</li>
+<li><em>map</em> sẽ lặp qua từng phần tử trong <em>$allFlavors</em> (mỗi phần tử là một đối tượng Flavor).</li>
+</ul>
+</li>
+<li>
+<p><strong>Hàm callback</strong>:</p>
+<ul>
+<li>Hàm callback được truyền vào map có một tham số $flavor đại diện cho từng phần tử trong <em>$allFlavors</em>.</li>
+<li>use (<em>$productFlavorIds</em>, <em>$productFlavors</em>) là cú pháp để sử dụng các biến bên ngoài hàm callback trong hàm callback.</li>
+</ul>
+</li>
+<li>
+<p><strong>Lặp qua từng phần tử ($flavor)</strong>:</p>
+<ul>
+<li>Đối với mỗi flavor, hàm callback sẽ tạo ra một mảng kết hợp với các thông tin:
+<ul>
+<li><em>id</em>: ID của flavor.</li>
+<li><em>name</em>: Tên của flavor.</li>
+<li><em>is_checked</em>: Kiểm tra xem ID của flavor có nằm trong mảng <em>$productFlavorIds</em> hay không. Nếu có, giá trị là true, ngược lại là false.</li>
+<li><em>quantity</em>: Kiểm tra xem flavor có tồn tại trong mảng <em>$productFlavors</em> không. Nếu có, lấy giá trị <em>quantity</em> tương ứng, nếu không, gán giá trị là 0.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Cụ thể:</p>
+<pre><code class="language-php">// $allFlavors:
+[
+    (object) ['id' =&gt; 1, 'name' =&gt; 'Flavor X'],
+    (object) ['id' =&gt; 2, 'name' =&gt; 'Flavor Y'],
+    (object) ['id' =&gt; 3, 'name' =&gt; 'Flavor Z'],
+]
+
+// ------------------------------------------------
+
+// $productFlavorIds:
+[1, 2]
+
+// ------------------------------------------------
+
+// $productFlavors:
+[
+    1 =&gt; (object) ['flavor_id' =&gt; 1, 'quantity' =&gt; 10],
+    2 =&gt; (object) ['flavor_id' =&gt; 2, 'quantity' =&gt; 5],
+]
+
+// ------------------------------------------------
+
+
+</code></pre>
+<h3 id="update-product-flavors"><a class="header" href="#update-product-flavors">update Product-Flavors</a></h3>
+<pre><code class="language-php">public function updateProductFlavors(Product $product, $newFlavors, $quantity)
+{
+    $currentFlavorIds = $this-&gt;getFlavorIDByProduct($product);
+    $newFlavorIds = array_map('intval', $newFlavors); // Chuyển các ID thành integer
+
+    // flavors cần thêm mới
+    $flavorsToAdd = array_diff($newFlavorIds, $currentFlavorIds);
+
+    // flavors cần xóa
+    $flavorsToRemove = array_diff($currentFlavorIds, $newFlavorIds);
+
+    // Cập nhật flavors mới
+    foreach ($flavorsToAdd as $flavorId) {
+        $this-&gt;storeProductFlavor($product, $flavorId, $quantity[$flavorId]);
+    }
+
+    // Xóa flavors không còn trong danh sách mới
+    foreach ($flavorsToRemove as $flavorId) {
+        $this-&gt;deleteProductFlavor($product, $flavorId);
+    }
+
+    // Cập nhật quantity cho flavors hiện tại (nếu có thay đổi)
+    foreach ($newFlavorIds as $flavorId) {
+        if (in_array($flavorId, $currentFlavorIds)) {
+            $this-&gt;updateProductFlavorQuantity($product, $flavorId, $quantity[$flavorId]);
+        }
+    }
+}
+
+</code></pre>
+<h3 id="update-pivot"><a class="header" href="#update-pivot">Update Pivot</a></h3>
+<pre><code class="language-php">public function updateProductFlavorQuantity(Product $product, $flavorId, $quantity)
+{
+    // Lấy số lượng hiện tại của hương vị từ bảng pivot
+    $currentQuantity = $product-&gt;flavors()-&gt;wherePivot('flavor_id', $flavorId)-&gt;first()-&gt;pivot-&gt;quantity;
+
+    // Chỉ cập nhật nếu số lượng mới khác với số lượng hiện tại
+    if ($currentQuantity != $quantity) {
+        $product-&gt;flavors()-&gt;updateExistingPivot($flavorId, ['quantity' =&gt; $quantity]);
+    }
+}
+
+</code></pre>
+<h2 id="accessor"><a class="header" href="#accessor">Accessor</a></h2>
+<ul>
+<li>Product Model</li>
+</ul>
+<pre><code class="language-php">// Accessor để tính tổng quantity
+public function getTotalQuantityAttribute()
+{
+    return $this-&gt;flavors-&gt;sum(function ($productFlavor) {
+        return $productFlavor-&gt;pivot-&gt;quantity;
+    });
+}
+
+</code></pre>
+<ul>
+<li>Service method</li>
+</ul>
+<pre><code class="language-php">public function getProductsAndImages()
+{
+    $products = Product::with(['mainImage', 'flavors'])-&gt;get(); // Thêm 'flavors' vào để preload dữ liệu
+    foreach ($products as $product) {
+        $product-&gt;quantity = $product-&gt;total_quantity; // Sử dụng accessor
+    }
+    return $products;
+}
+
+</code></pre>
+<p>Nếu định nghĩa một phương thức trong model với tên <strong>get&lt;FieldName&gt;Attribute</strong>, có thể truy cập nó như một thuộc tính bằng cách sử dụng tên <strong>field_name</strong>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/Laravel/Takenote2.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/Laravel/advance_concepts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/Laravel/Takenote2.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/Laravel/advance_concepts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
