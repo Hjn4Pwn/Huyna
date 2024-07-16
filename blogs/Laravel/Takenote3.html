@@ -164,6 +164,37 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="take-note-3"><a class="header" href="#take-note-3">Take note 3</a></h1>
+<ul>
+<li><a href="#mainimage---use-nonuse---1n">MainImage - Use-NonUse - 1N</a>
+<ul>
+<li><a href="#kh%C3%B4ng-d%C3%B9ng-quan-h%E1%BB%87-1-n">Không dùng quan hệ 1-N</a></li>
+<li><a href="#d%C3%B9ng-quan-h%E1%BB%87-1-n">Dùng quan hệ 1-N</a></li>
+</ul>
+</li>
+<li><a href="#pivot---products---flavors">Pivot - Products - Flavors</a>
+<ul>
+<li><a href="#pivot-quantity">Pivot quantity</a></li>
+<li><a href="#l%E1%BA%A5y-to%C3%A0n-b%E1%BB%99-flavors-ra-v%C3%A0-n%E1%BA%BFu-product-c%C3%B3-nh%E1%BB%AFng-flavors-n%C3%A0o-th%C3%AC-%C4%91%C6%B0%E1%BB%A3c-%C4%91%C3%A1nh-d%E1%BA%A5u-l%E1%BA%A1i">Lấy toàn bộ flavors ra và nếu product có những flavors nào thì được đánh dấu lại</a></li>
+<li><a href="#update-product-flavors">Update Product-Flavors</a></li>
+<li><a href="#update-pivot">Update Pivot</a></li>
+</ul>
+</li>
+<li><a href="#accessor">Accessor</a></li>
+<li><a href="#order">Order</a>
+<ul>
+<li><a href="#vnpay-online-payment">VNpay online payment</a></li>
+<li><a href="#ghtk---shipping-fee">GHTK - Shipping fee</a></li>
+</ul>
+</li>
+<li><a href="#elasticsearch-config">ElasticSearch Config</a>
+<ul>
+<li><a href="#config">Config</a></li>
+<li><a href="#fix-bug">Fix bug</a></li>
+<li><a href="#code">Code</a></li>
+<li><a href="#tri%E1%BB%83n-khai-search-c%C3%A1c-ph%E1%BA%A7n-nh%E1%BB%8F-h%C6%A1n-c%E1%BB%A7a-t%E1%BB%AB-token">Triển khai search các phần nhỏ hơn của từ (token)</a></li>
+</ul>
+</li>
+</ul>
 <h2 id="mainimage---use-nonuse---1n"><a class="header" href="#mainimage---use-nonuse---1n">MainImage - Use-NonUse - 1N</a></h2>
 <ul>
 <li><strong>getMainImageByProduct()</strong>:</li>
@@ -387,7 +418,6 @@ public function deleteFlavorByProduct(Product $product)
 
 </code></pre>
 <p><em>Ở đây, <strong>$id</strong> là giá trị của khóa ngoại (foreign key), và mảng thứ hai chứa các cột bổ sung cùng giá trị của chúng.</em></p>
-<h2 id="relatived-methods"><a class="header" href="#relatived-methods">Relatived methods</a></h2>
 <h3 id="pivot-quantity"><a class="header" href="#pivot-quantity">Pivot quantity</a></h3>
 <pre><code class="language-php">public function getFlavorsByProduct(Product $product)
 {
@@ -559,6 +589,631 @@ public function getTotalQuantityAttribute()
 
 </code></pre>
 <p>Nếu định nghĩa một phương thức trong model với tên <strong>get&lt;FieldName&gt;Attribute</strong>, có thể truy cập nó như một thuộc tính bằng cách sử dụng tên <strong>field_name</strong>.</p>
+<h2 id="order"><a class="header" href="#order">Order</a></h2>
+<h3 id="vnpay-online-payment"><a class="header" href="#vnpay-online-payment">VNpay online payment</a></h3>
+<ul>
+<li>
+<p>Tham khảo docs:</p>
+<ul>
+<li>[https://viblo.asia/p/tich-hop-cong-thanh-toan-vnpay-voi-laravel-Az45bGD6KxY](bài đọc trên viblo)</li>
+<li><a href="docs">https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html</a></li>
+</ul>
+</li>
+<li>
+<p>Code:</p>
+</li>
+</ul>
+<h4 id="controller"><a class="header" href="#controller">Controller</a></h4>
+<pre><code class="language-php">&lt;?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Order;
+use App\Models\Payment;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+
+use App\Services\Interfaces\CartServiceInterface;
+
+
+class VNPayController extends Controller
+{
+    protected $cartService;
+
+    public function __construct(
+        CartServiceInterface $cartService,
+    ) {
+        $this-&gt;cartService = $cartService;
+    }
+
+    public function createPayment($encryptedOrderId)
+    {
+        $orderId = Crypt::decrypt($encryptedOrderId);
+
+        // Lấy đối tượng Order từ ID
+        $order = Order::findOrFail($orderId);
+
+        // Xác minh người dùng hiện tại có quyền truy cập vào đơn hàng
+        if ($order-&gt;user_id !== Auth::id()) {
+            throw new Exception('Bạn không có quyền truy cập vào đơn hàng này.');
+        }
+
+        // dd((int) $order-&gt;total_amount);
+
+        error_reporting(E_ALL &amp; ~E_NOTICE &amp; ~E_DEPRECATED);
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+
+        $vnp_Url = env('VNP_URL');
+        $vnp_Returnurl = env('VNP_RETURN_URL');
+        $vnp_TmnCode = env('VNP_TMN_CODE');
+        $vnp_HashSecret = env('VNP_HASH_SECRET');
+
+        $vnp_TxnRef = (string) $order-&gt;id; // Sử dụng order_id làm mã đơn hàng
+        $vnp_OrderInfo = &quot;Thanh toán đơn hàng&quot;;
+        $vnp_OrderType = 'billpayment';
+        $vnp_Amount = (int) $order-&gt;total_price * 100; // Giả sử tổng số tiền đơn hàng được lưu trong trường total_amount của bảng orders
+        $vnp_Locale = 'vn';
+        $vnp_BankCode = '';
+        $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+
+        $inputData = array(
+            &quot;vnp_Version&quot; =&gt; &quot;2.1.0&quot;,
+            &quot;vnp_TmnCode&quot; =&gt; $vnp_TmnCode,
+            &quot;vnp_Amount&quot; =&gt; $vnp_Amount,
+            &quot;vnp_Command&quot; =&gt; &quot;pay&quot;,
+            &quot;vnp_CreateDate&quot; =&gt; date('YmdHis'),
+            &quot;vnp_CurrCode&quot; =&gt; &quot;VND&quot;,
+            &quot;vnp_IpAddr&quot; =&gt; $vnp_IpAddr,
+            &quot;vnp_Locale&quot; =&gt; $vnp_Locale,
+            &quot;vnp_OrderInfo&quot; =&gt; $vnp_OrderInfo,
+            &quot;vnp_OrderType&quot; =&gt; $vnp_OrderType,
+            &quot;vnp_ReturnUrl&quot; =&gt; $vnp_Returnurl,
+            &quot;vnp_TxnRef&quot; =&gt; $vnp_TxnRef,
+        );
+
+        if (isset($vnp_BankCode) &amp;&amp; $vnp_BankCode != &quot;&quot;) {
+            $inputData['vnp_BankCode'] = $vnp_BankCode;
+        }
+
+        ksort($inputData);
+        $query = &quot;&quot;;
+        $i = 0;
+        $hashdata = &quot;&quot;;
+
+        foreach ($inputData as $key =&gt; $value) {
+            if ($i == 1) {
+                $hashdata .= '&amp;' . urlencode($key) . &quot;=&quot; . urlencode($value);
+            } else {
+                $hashdata .= urlencode($key) . &quot;=&quot; . urlencode($value);
+                $i = 1;
+            }
+            $query .= urlencode($key) . &quot;=&quot; . urlencode($value) . '&amp;';
+        }
+
+        $vnp_Url = $vnp_Url . &quot;?&quot; . $query;
+        if (isset($vnp_HashSecret)) {
+            $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
+            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+        }
+
+        return redirect($vnp_Url);
+    }
+
+    public function returnPayment(Request $request)
+    {
+        $vnp_HashSecret = env('VNP_HASH_SECRET');
+
+        $inputData = $request-&gt;all();
+        $vnp_SecureHash = $inputData['vnp_SecureHash'];
+        unset($inputData['vnp_SecureHashType']);
+        unset($inputData['vnp_SecureHash']);
+        ksort($inputData);
+        $hashData = &quot;&quot;;
+        foreach ($inputData as $key =&gt; $value) {
+            $hashData .= urlencode($key) . &quot;=&quot; . urlencode($value) . &quot;&amp;&quot;;
+        }
+        $hashData = rtrim($hashData, '&amp;');
+        // dd($hashData);
+
+        $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
+
+        $orderId = (int) $inputData['vnp_TxnRef'];
+        $order = Order::find($orderId);
+
+        try {
+            if ($secureHash == $vnp_SecureHash) {
+                if ($order) {
+                    if ($order-&gt;total_price == $inputData['vnp_Amount'] / 100) {
+                        if ($order-&gt;status == 'pending') {
+                            if ($inputData['vnp_ResponseCode'] == '00' || $inputData['vnp_TransactionStatus'] == '00') {
+                                $this-&gt;savePayment($inputData, true);
+                                $order-&gt;status = 'processing';
+                                $order-&gt;save();
+                                $this-&gt;cartService-&gt;removeCartByUser(Auth::user());
+                                session()-&gt;forget('phone');
+                                session()-&gt;forget('address');
+                                return redirect()-&gt;route('order.show')-&gt;with('success', 'Thanh toán thành công.');
+                            } else {
+                                return redirect()-&gt;route('cart.index')-&gt;with('error', 'Thanh toán thất bại.');
+                            }
+                        } else {
+                            return redirect()-&gt;route('order.show')-&gt;with('info', 'Đơn hàng đã được xác nhận.');
+                        }
+                    } else {
+                        return redirect()-&gt;route('cart.index')-&gt;with('error', 'Số tiền không hợp lệ.');
+                    }
+                } else {
+                    return redirect()-&gt;route('cart.index')-&gt;with('error', 'Không tìm thấy đơn hàng.');
+                }
+            } else {
+                return redirect()-&gt;route('cart.index')-&gt;with('error', 'Chữ ký không hợp lệ.');
+            }
+        } catch (Exception $e) {
+            return redirect()-&gt;route('cart.index')-&gt;with('error', 'Lỗi không xác định.');
+        }
+    }
+
+    protected function savePayment($inputData, $status)
+    {
+        $orderId = (int) $inputData['vnp_TxnRef'];
+
+        Payment::create([
+            'order_id' =&gt; $orderId,
+            'transaction_no' =&gt; $inputData['vnp_TransactionNo'],
+            'response_code' =&gt; $inputData['vnp_ResponseCode'],
+            'amount' =&gt; $inputData['vnp_Amount'] / 100,
+            'bank_code' =&gt; $inputData['vnp_BankCode'],
+            'pay_date' =&gt; $inputData['vnp_PayDate'],
+            'status' =&gt; $status
+        ]);
+    }
+}
+
+</code></pre>
+<ul>
+<li>Route:</li>
+</ul>
+<pre><code class="language-php">Route::get('vnpay-payment/{order}', [VNPayController::class, 'createPayment'])-&gt;name('vnpay.payment');
+Route::get('vnpay-return', [VNPayController::class, 'returnPayment'])-&gt;name('vnpay.return');
+
+</code></pre>
+<h3 id="ghtk---shipping-fee"><a class="header" href="#ghtk---shipping-fee">GHTK - Shipping fee</a></h3>
+<ul>
+<li>
+<p>API: <a href="https://khachhang.giaohangtietkiem.vn/web/thong-tin-shop/tai-khoan">1</a>, <a href="https://docs.giaohangtietkiem.vn/?shell#t-nh-ph-v-n-chuy-n">2</a></p>
+</li>
+<li>
+<p>code:</p>
+</li>
+</ul>
+<pre><code class="language-php">public function calculateShippingFee(): string
+{
+    $orderData = $this-&gt;getTemporaryData();
+    // dd($orderData);
+    $total_price = $orderData['total_price'];
+    $total_weight = 0;
+
+    foreach ($orderData['items'] as $item) {
+        $product = Product::find($item['product_id']);
+        $total_weight += $item['quantity'] * $product-&gt;weight;
+    }
+
+    // Helper function to parse the address
+    function parseAddress(string $address): array
+    {
+        $address_parts = array_map('trim', explode(&quot;,&quot;, $address));
+        $province_name = array_pop($address_parts);
+        $district_name = array_pop($address_parts);
+        $ward_name = array_pop($address_parts);
+        $address_detail = implode(&quot;, &quot;, $address_parts);
+
+        return [
+            'province_name' =&gt; $province_name,
+            'district_name' =&gt; $district_name,
+            'ward_name' =&gt; $ward_name,
+            'address_detail' =&gt; $address_detail
+        ];
+    }
+
+    $to_address = session('address') ?? session('original_address');
+    $from_address = session('shop_address');
+
+    $to_address_parsed = parseAddress($to_address);
+    $from_address_parsed = parseAddress($from_address);
+
+    $data = [
+        &quot;pick_province&quot; =&gt; $from_address_parsed['province_name'],
+        &quot;pick_district&quot; =&gt; $from_address_parsed['district_name'],
+        &quot;province&quot; =&gt; $to_address_parsed['province_name'],
+        &quot;district&quot; =&gt; $to_address_parsed['district_name'],
+        &quot;address&quot; =&gt; $to_address_parsed['address_detail'] . &quot;, &quot; . $to_address_parsed['ward_name'],
+        &quot;weight&quot; =&gt; $total_weight,
+        &quot;value&quot; =&gt; $total_price,
+        &quot;transport&quot; =&gt; &quot;road&quot;,
+        &quot;deliver_option&quot; =&gt; &quot;none&quot;,
+        &quot;tags&quot; =&gt; [1]
+    ];
+
+    try {
+        $response = Http::withHeaders([
+            'Token' =&gt; env('GHTK_TOKEN'),
+        ])-&gt;post(env('GHTK_URL'), $data);
+
+        $responseData = $response-&gt;json();
+
+        if (isset($responseData['success']) &amp;&amp; $responseData['success']) {
+            return (string)$responseData['fee']['fee'];
+        } else {
+            return 'Failed to calculate shipping fee: ' . ($responseData['message'] ?? 'Unknown error');
+        }
+    } catch (\Exception $e) {
+        return 'Error: ' . $e-&gt;getMessage();
+    }
+}
+
+</code></pre>
+<h2 id="elasticsearch-config"><a class="header" href="#elasticsearch-config">ElasticSearch Config</a></h2>
+<h3 id="config"><a class="header" href="#config">Config</a></h3>
+<ul>
+<li>Đầu tiên run elasticeSearch container: <strong>Tuy nhiên hãy kéo xuống dưới phần này để đọc bug http/https về container trước tiên</strong></li>
+</ul>
+<pre><code class="language-sh">docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e &quot;discovery.type=single-node&quot; docker.elastic.co/elasticsearch/elasticsearch:8.7.0
+
+</code></pre>
+<ul>
+<li><strong>Tiến hành cài Laravel Scout và ElasticScoutDriverPlus</strong></li>
+</ul>
+<pre><code class="language-sh">composer require laravel/scout
+composer require babenkoivan/elastic-scout-driver-plus
+
+php artisan vendor:publish --provider=&quot;Laravel\Scout\ScoutServiceProvider&quot;
+</code></pre>
+<ul>
+<li>
+<p><strong>config/scout.php</strong></p>
+</li>
+<li>
+<p>Chỉnh sửa file cấu hình:</p>
+<ul>
+<li>Đổi giá trị driver thành elastic.</li>
+<li>Thêm cấu hình cho Elasticsearch.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-php">return [
+
+    'driver' =&gt; env('SCOUT_DRIVER', 'elastic'),
+
+    // Các cấu hình khác...
+
+    'elasticsearch' =&gt; [
+        'hosts' =&gt; [
+            env('ELASTICSEARCH_HOST', 'localhost:9200'),
+        ],
+    ],
+];
+
+</code></pre>
+<ul>
+<li><strong>.env</strong></li>
+</ul>
+<pre><code class="language-sh">SCOUT_DRIVER=elastic
+ELASTICSEARCH_HOST=localhost:9200
+
+</code></pre>
+<ul>
+<li>Model:</li>
+</ul>
+<pre><code class="language-php">namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
+
+class User extends Model
+{
+    use HasFactory, Searchable;
+
+    //...
+
+    public function searchableAs()
+    {
+        return 'flavors_index';
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' =&gt; $this-&gt;id,
+            'name' =&gt; $this-&gt;name,
+        ];
+    }
+}
+
+
+</code></pre>
+<ul>
+<li><strong>Tạo và đồng bộ chỉ mục:</strong></li>
+</ul>
+<pre><code class="language-sh">php artisan scout:import &quot;App\Models\Flavor&quot;
+
+</code></pre>
+<h3 id="fix-bug"><a class="header" href="#fix-bug">Fix bug</a></h3>
+<ul>
+<li>
+<p>Khi chạy lệnh scout:import mà gặp lỗi: <strong>Call to undefined method App\Models\Flavor::makeAllSearchable()</strong>: Tức là do chưa sử dụng trait <strong>Searchable</strong>: &quot;<em>After installing the libraries, you need to add Elastic\ScoutDriverPlus\Searchable trait to your models. In case some models already use the standard Laravel\Scout\Searchable trait, you should replace it with the one provided by Elastic Scout Driver Plus.</em>&quot; <a href="https://github.com/babenkoivan/elastic-scout-driver-plus/tree/master">from github</a></p>
+</li>
+<li>
+<p>Khi gặp lỗi: <strong>Method Illuminate\Database\Eloquent\Collection::withSearchableRelations does not exist.</strong>. Tiến hành check logs của <strong>elasticsearch</strong> container:</p>
+</li>
+</ul>
+<pre><code class="language-sh">docker logs elasticsearch
+
+</code></pre>
+<p>Và nhận được: <strong>received plaintext http traffic on an https channel, closing connection</strong>: Điều này chỉ ra rằng Elasticsearch đang mong đợi lưu lượng HTTPS nhưng nhận được lưu lượng HTTP. Do đó, nó đóng kết nối.</p>
+<ul>
+<li>Để giải quyết vấn đề này, có thể thực hiện một trong hai cách:
+<ul>
+<li>Kích hoạt HTTP (không bảo mật): Cấu hình Elasticsearch để chấp nhận lưu lượng HTTP.</li>
+<li>Sử dụng HTTPS: Cấu hình ứng dụng Laravel để sử dụng HTTPS khi kết nối với Elasticsearch.</li>
+</ul>
+</li>
+</ul>
+<p>Do đang dev ở local nên sẽ fix bằng cách dùng http như sau:</p>
+<ul>
+<li>****:</li>
+</ul>
+<pre><code class="language-sh">xpack.security.enabled: false
+http.host: 0.0.0.0
+discovery.type: single-node
+
+</code></pre>
+<ul>
+<li><strong>Run container mới</strong>:</li>
+</ul>
+<pre><code class="language-sh">docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e &quot;discovery.type=single-node&quot; -v $(pwd)/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml docker.elastic.co/elasticsearch/elasticsearch:8.7.0
+
+</code></pre>
+<ul>
+<li><strong>Có thể check connect bằng cách:</strong></li>
+</ul>
+<pre><code class="language-sh">curl -X GET 'http://localhost:9200'
+
+{
+  &quot;name&quot; : &quot;8eab380bc62f&quot;,
+  &quot;cluster_name&quot; : &quot;elasticsearch&quot;,
+  &quot;cluster_uuid&quot; : &quot;R8h7DixkSxePTQv085dDbg&quot;,
+  &quot;version&quot; : {
+    &quot;number&quot; : &quot;8.7.0&quot;,
+    &quot;build_flavor&quot; : &quot;default&quot;,
+    &quot;build_type&quot; : &quot;docker&quot;,
+    &quot;build_hash&quot; : &quot;09520b59b6bc1057340b55750186466ea715e30e&quot;,
+    &quot;build_date&quot; : &quot;2023-03-27T16:31:09.816451435Z&quot;,
+    &quot;build_snapshot&quot; : false,
+    &quot;lucene_version&quot; : &quot;9.5.0&quot;,
+    &quot;minimum_wire_compatibility_version&quot; : &quot;7.17.0&quot;,
+    &quot;minimum_index_compatibility_version&quot; : &quot;7.0.0&quot;
+  },
+  &quot;tagline&quot; : &quot;You Know, for Search&quot;
+}
+
+</code></pre>
+<p>Nếu response về là json như trên thì nó đã work</p>
+<p>Thử lại và không còn lỗi:</p>
+<pre><code class="language-sh">➜ e-commerce-project ⚡( master)                  
+▶ php artisan scout:import &quot;App\Models\Flavor&quot;
+
+Imported [App\Models\Flavor] models up to ID: 32
+All [App\Models\Flavor] records have been imported.
+
+</code></pre>
+<h3 id="code"><a class="header" href="#code">Code</a></h3>
+<p><strong>Ví dụ cho Model Flavor</strong></p>
+<ul>
+<li>Model</li>
+</ul>
+<pre><code class="language-php">&lt;?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+// use Laravel\Scout\Searchable;
+use Elastic\ScoutDriverPlus\Searchable;
+
+class Flavor extends Model
+{
+    use HasFactory, Searchable;
+
+    protected $fillable = [
+        'name',
+    ];
+
+    // public function productFlavors()
+    // {
+    //     return $this-&gt;hasMany(ProductFlavor::class, &quot;flavor_id&quot;);
+    // }
+
+    public function carts()
+    {
+        return $this-&gt;hasMany(CartItem::class, 'flavor_id');
+    }
+
+    public function products()
+    {
+        return $this-&gt;belongsToMany(Product::class, 'product_flavors')
+            -&gt;withPivot('quantity');
+    }
+
+    public function searchableAs()
+    {
+        return 'flavors_index';
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' =&gt; $this-&gt;id,
+            'name' =&gt; $this-&gt;name,
+        ];
+    }
+}
+
+
+</code></pre>
+<ul>
+<li>Route</li>
+</ul>
+<pre><code class="language-php">Route::get('flavors', [FlavorController::class, 'index'])-&gt;name('admin.flavors.index');
+
+</code></pre>
+<ul>
+<li>Controller</li>
+</ul>
+<pre><code class="language-php">public function index(Request $request)
+{
+    $search = $request-&gt;input('search');
+    $flavors = $this-&gt;flavorService-&gt;getAll($search);
+    return view('admin.pages.flavor.flavors', [
+        'flavors' =&gt; $flavors,
+        'page' =&gt; 'Flavors',
+        'search' =&gt; $search
+    ]);
+}
+
+</code></pre>
+<ul>
+<li>Service</li>
+</ul>
+<pre><code class="language-php">public function getAll($search = null)
+{
+    if ($search) {
+        return Flavor::search($search)-&gt;get();
+    }
+
+    return Flavor::all();
+}
+
+</code></pre>
+<ul>
+<li>View</li>
+</ul>
+<pre><code class="language-php">&lt;form action=&quot;{{ route('admin.flavors.index') }}&quot; method=&quot;GET&quot;
+    class=&quot;form-material mt-2&quot;&gt;
+    &lt;div class=&quot;form-group form-primary&quot;&gt;
+        &lt;input type=&quot;text&quot; name=&quot;search&quot; class=&quot;form-control&quot;
+            value=&quot;{{ request('search') }}&quot; placeholder=&quot; &quot;&gt;
+
+        &lt;span class=&quot;form-bar&quot;&gt;&lt;/span&gt;
+
+        &lt;label class=&quot;float-label&quot;&gt;&lt;i class=&quot;fa fa-search m-r-10&quot;&gt;&lt;/i&gt; 
+            Search by Name
+        &lt;/label&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+
+</code></pre>
+<h3 id="triển-khai-search-các-phần-nhỏ-hơn-của-từ-token"><a class="header" href="#triển-khai-search-các-phần-nhỏ-hơn-của-từ-token">Triển khai search các phần nhỏ hơn của từ (token)</a></h3>
+<h4 id="cơ-chế-hoạt-động-của-edge-n-grams"><a class="header" href="#cơ-chế-hoạt-động-của-edge-n-grams">Cơ chế hoạt động của <strong>edge n-grams</strong></a></h4>
+<p>Là một phương pháp phân tích từ ngữ trong Elasticsearch. Khi sử dụng <strong>edge n-grams</strong>, Elasticsearch sẽ phân tách các từ thành các đoạn nhỏ hơn (n-grams) từ đầu từ. Ví dụ, từ &quot;Banana&quot; có thể được phân tách thành các n-grams như <em>&quot;Ba&quot;, &quot;Ban&quot;, &quot;Bana&quot;, &quot;Banan&quot;, &quot;Banana&quot;.</em></p>
+<h4 id="tạo-chỉ-mục-với-edge-n-grams-analyzer"><a class="header" href="#tạo-chỉ-mục-với-edge-n-grams-analyzer">Tạo chỉ mục với <strong>edge n-grams</strong> analyzer</a></h4>
+<ul>
+<li>Tạo chỉ mục với cấu hình <strong>edge n-grams</strong>: Trước tiên, cần gửi một yêu cầu HTTP để tạo chỉ mục mới trong Elasticsearch với cấu hình <strong>edge n-grams</strong>. Có thể sử dụng công cụ như curl hoặc một plugin như Sense trong Kibana.</li>
+</ul>
+<pre><code class="language-sh">curl -X PUT &quot;localhost:9200/app_index&quot; -H 'Content-Type: application/json' -d'
+{
+  &quot;settings&quot;: {
+    &quot;analysis&quot;: {
+      &quot;tokenizer&quot;: {
+        &quot;edge_ngram_tokenizer&quot;: {
+          &quot;type&quot;: &quot;edge_ngram&quot;,
+          &quot;min_gram&quot;: 2,
+          &quot;max_gram&quot;: 20,
+          &quot;token_chars&quot;: [
+            &quot;letter&quot;
+          ]
+        }
+      },
+      &quot;analyzer&quot;: {
+        &quot;edge_ngram_analyzer&quot;: {
+          &quot;type&quot;: &quot;custom&quot;,
+          &quot;tokenizer&quot;: &quot;edge_ngram_tokenizer&quot;,
+          &quot;filter&quot;: [
+            &quot;lowercase&quot;
+          ]
+        }
+      }
+    }
+  },
+  &quot;mappings&quot;: {
+    &quot;properties&quot;: {
+      &quot;id&quot;: {
+        &quot;type&quot;: &quot;integer&quot;
+      },
+      &quot;name&quot;: {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;analyzer&quot;: &quot;edge_ngram_analyzer&quot;,
+        &quot;search_analyzer&quot;: &quot;standard&quot;
+      },
+      &quot;type&quot;: {
+        &quot;type&quot;: &quot;keyword&quot;
+      }
+    }
+  }
+}
+'
+
+</code></pre>
+<ul>
+<li><strong>Cấu hình để dùng chung 1 index cho nhiều model:</strong></li>
+</ul>
+<pre><code class="language-php">use Elastic\ScoutDriverPlus\Searchable;
+
+class Flavor extends Model
+{
+    use HasFactory, Searchable;
+
+    protected $fillable = [
+        'name',
+    ];
+
+    public function searchableAs()
+    {
+        return 'app_index';
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' =&gt; $this-&gt;id,
+            'name' =&gt; $this-&gt;name,
+            'type' =&gt; 'flavor',
+        ];
+    }
+}
+
+</code></pre>
+<ul>
+<li><strong>Thêm type khi search để chắc chắn lấy đúng dữ liệu của model</strong>:</li>
+</ul>
+<pre><code class="language-php">public function getAll($search = null)
+{
+    if ($search) {
+        return Flavor::search($search)-&gt;where('type', 'flavor')-&gt;get();
+    }
+
+    return Flavor::all();
+}
+
+</code></pre>
+<ul>
+<li><strong>Đồng bộ dữ liệu</strong>: Sau khi tạo chỉ mục mới, cần đồng bộ dữ liệu từ Laravel vào chỉ mục mới này.</li>
+</ul>
+<pre><code class="language-sh">php artisan scout:import &quot;App\Models\Flavor&quot;
+
+</code></pre>
 
                     </main>
 
