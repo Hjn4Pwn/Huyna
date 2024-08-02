@@ -1,0 +1,863 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Take note 4 - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/job.html">Requirements For Job</a></li><li class="chapter-item "><a href="../../blogs/AWS/EC2.html">Computing Services - EC2</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAM.html">Identity and Access Management -IAM</a></li><li class="chapter-item "><a href="../../blogs/AWS/S3.html">Simple Storage Service - S3</a></li><li class="chapter-item "><a href="../../blogs/AWS/LoadBalancing-Autoscaling.html">Load Balancing and Autoscaling</a></li><li class="chapter-item "><a href="../../blogs/AWS/RDS.html">Relational Database Service - RDS</a></li><li class="chapter-item "><a href="../../blogs/AWS/DynamoDB.html">Database Services - No SQL - DynamoDB</a></li><li class="chapter-item "><a href="../../blogs/AWS/Lambda.html">Serverless Lambda</a></li><li class="chapter-item "><a href="../../blogs/AWS/VPC.html">Networking Service - VPC, Peering, Endpoint</a></li><li class="chapter-item "><a href="../../blogs/AWS/Gateway_Cognito.html">API Gateway & Cognito</a></li><li class="chapter-item "><a href="../../blogs/AWS/CloudFront.html">Content Delivery Service (CDN) - CloudFront</a></li><li class="chapter-item "><a href="../../blogs/AWS/Route_53.html">Domain Name System - Route 53</a></li><li class="chapter-item "><a href="../../blogs/AWS/Monitor_Auditing.html">Monitoring and Auditing - CloudWatch, CloudTrail</a></li><li class="chapter-item "><a href="../../blogs/AWS/Mess.html">Messaging Service - SNS, SQS, SES</a></li><li class="chapter-item "><a href="../../blogs/AWS/Event_Bridge.html">Event Bridge</a></li><li class="chapter-item "><a href="../../blogs/AWS/Elastic_Beanstalk.html">Elastic Beanstalk</a></li><li class="chapter-item "><a href="../../blogs/AWS/Container_Service.html">Container Service - ECS, ECR</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAC_CloudFormation.html">Infra as Code - CloudFormation</a></li><li class="chapter-item "><a href="../../blogs/AWS/Backup_Recovery.html">Backup and Recovery</a></li><li class="chapter-item "><a href="../../blogs/AWS/Sec.html">Security Services</a></li><li class="chapter-item affix "><li class="part-title">PHP</li><li class="chapter-item "><a href="../../blogs/PHP/setup_env.html">Setup Environment</a></li><li class="chapter-item "><a href="../../blogs/PHP/basic.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/PHP/mysqli.html">MySQLi</a></li><li class="chapter-item "><a href="../../blogs/PHP/sort_algorithms.html">Sort Algorithms</a></li><li class="chapter-item "><a href="../../blogs/PHP/hackerrank_algorithms.html">Hackerrank</a></li><li class="chapter-item affix "><li class="part-title">Laravel</li><li class="chapter-item "><a href="../../blogs/Laravel/setup_env.html">Setup Environment</a></li><li class="chapter-item "><a href="../../blogs/Laravel/artisanCommand.html">Artisan Command</a></li><li class="chapter-item "><a href="../../blogs/Laravel/Takenote.html">Take note 1</a></li><li class="chapter-item "><a href="../../blogs/Laravel/Takenote2.html">Take note 2</a></li><li class="chapter-item "><a href="../../blogs/Laravel/Takenote3.html">Take note 3</a></li><li class="chapter-item expanded "><a href="../../blogs/Laravel/Takenote4.html" class="active">Take note 4</a></li><li class="chapter-item "><a href="../../blogs/Laravel/advance_concepts.html">Advance Concepts</a></li><li class="chapter-item "><a href="../../blogs/Laravel/database.html">Database</a></li><li class="chapter-item "><a href="../../blogs/Laravel/explain_functions.html">Explain Functions</a></li><li class="chapter-item affix "><li class="part-title">Kubernetes</li><li class="chapter-item "><a href="../../blogs/Kubernetes/session1.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/commands.html">Practice on KodeKloud</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/minkube_deployment.html">MiniKube Deployment</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/data_volume.html">Manage Data & Volumes</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/network.html">Network</a></li><li class="chapter-item affix "><li class="part-title">Linux + Git</li><li class="chapter-item "><a href="../../blogs/Linux/bandit.html">Bandit challenge</a></li><li class="chapter-item "><a href="../../blogs/Linux/command_session_1.html">Command session 1</a></li><li class="chapter-item "><a href="../../blogs/Linux/git_command.html">Git command</a></li><li class="chapter-item "><a href="../../blogs/Linux/ssh.html">SSH</a></li><li class="chapter-item "><a href="../../blogs/Linux/conda.html">Conda</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some docker tips for CTF</a></li><li class="chapter-item "><a href="../../blogs/Docker/get_started.html">Basic Docker</a></li><li class="chapter-item "><a href="../../blogs/Docker/image_container.html">Images & Containers: The Core Building Blocks</a></li><li class="chapter-item "><a href="../../blogs/Docker/dockerfile_write.html">Dockerfile</a></li><li class="chapter-item "><a href="../../blogs/Docker/docker_network.html">Docker Network</a></li><li class="chapter-item "><a href="../../blogs/Docker/Volume.html">Volume</a></li><li class="chapter-item "><a href="../../blogs/Docker/Docker_Compose.html">Docker Compose</a></li><li class="chapter-item affix "><li class="part-title">Terraform</li><li class="chapter-item "><a href="../../blogs/Terraform/overview.html">Overview</a></li><li class="chapter-item "><a href="../../blogs/Terraform/functional_pro.html">Functional Programming</a></li><li class="chapter-item "><a href="../../blogs/Terraform/Module_create_VPC.html">Terraform Module: Create VPC on AWS</a></li><li class="chapter-item affix "><li class="part-title">Jenkins</li><li class="chapter-item "><a href="../../blogs/Jenkins/install_by_docker.html">Install Jenkins By Docker</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/link_git_jenkins.html">Link git with jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/pipline_github_jenkins.html">Pipeline jenkinsfile with github</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_jenkins.html">Link gitlab with Jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_dockerhub.html">Gitlab-dockerhub-pipeline</a></li><li class="chapter-item affix "><li class="part-title">CSS</li><li class="chapter-item "><a href="../../blogs/CSS/basic.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/CSS/flexbox.html">Flexbox CSS</a></li><li class="chapter-item "><a href="../../blogs/CSS/BEM.html">BEM</a></li><li class="chapter-item "><a href="../../blogs/CSS/responsive.html">Resposive</a></li><li class="chapter-item "><a href="../../blogs/CSS/tranform_sitsion_anima.html">Transform - Transition - Animation</a></li><li class="chapter-item affix "><li class="part-title">JS</li><li class="chapter-item "><a href="../../blogs/JS/basic.html">Basic Concepts 1</a></li><li class="chapter-item "><a href="../../blogs/JS/dom.html">DOM</a></li><li class="chapter-item "><a href="../../blogs/JS/basic2.html">Basic Concepts 2</a></li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item "><a href="../../blogs/Python/RE.html">Regular Expression</a></li><li class="chapter-item "><a href="../../blogs/Python/Automation_1.html">Automation with Python 1</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item "><a href="../../blogs/Bash_script/Variables_Environment.html">Shell Variables and Environment</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Conditionals_Execution.html">Conditionals Execution</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Bash_Loops.html">Bash Loops & Function</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Shell_Redirection.html">Shell Redirection & Pipes and Filters</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Interactive_Scripts.html">Interactive Scripts</a></li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/basic_network_1.html">Basic Network 1</a></li><li class="chapter-item affix "><li class="part-title">PWN</li><li class="chapter-item "><a href="../../blogs/PWN/Emporium_ROP.html">Rop Emporium</a></li><li class="chapter-item "><a href="../../blogs/PWN/pwnableTW.html">Pwnable.tw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pico_CTF.html">Pwn_PicoCTF</a></li><li class="chapter-item "><a href="../../blogs/PWN/PWN_from_blabla.html">Pwn from blabla</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/ASM.html">ASM</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_PicoCTF</li><li class="chapter-item "><a href="../../blogs/RE/RE.html">RE</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li><li class="chapter-item affix "><li class="part-title">Documents from everywhere</li><li class="chapter-item "><a href="../../blogs/Documents/troubleshooting.html">Troubleshooting</a></li><li class="chapter-item "><a href="../../blogs/Documents/study.html">Study</a></li><li class="chapter-item "><a href="../../blogs/Documents/important_concept.html">Important Concepts</a></li><li class="chapter-item "><a href="../../blogs/Documents/basic_SQL.html">MySQL</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="take-note-4"><a class="header" href="#take-note-4">Take note 4</a></h1>
+<h2 id="show-more-comment"><a class="header" href="#show-more-comment">Show more comment</a></h2>
+<h3 id="view"><a class="header" href="#view">View</a></h3>
+<pre><code class="language-php">&lt;div class=&quot;mt-5&quot; id=&quot;reviews-container&quot;&gt;
+    @if ($reviews-&gt;isNotEmpty())
+        @foreach ($reviews as $review)
+            &lt;div class=&quot;per-rating mb-5&quot;&gt;
+                &lt;div class=&quot;d-flex align-items-center&quot;&gt;
+                    &lt;span class=&quot;font-weight-bold mr-2&quot;&gt;{{ $review-&gt;user-&gt;name }}&lt;/span&gt;
+                    &lt;div class=&quot;star-ratings-comment&quot;&gt;
+                        &lt;div class=&quot;fill-ratings&quot;
+                            style=&quot;width: {{ $review-&gt;rating * 20 }}%;&quot;&gt;
+                            &lt;span&gt;★★★★★&lt;/span&gt;
+                        &lt;/div&gt;
+                        &lt;div class=&quot;empty-ratings&quot;&gt;
+                            &lt;span&gt;★★★★★&lt;/span&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;mt-2 mb-2&quot;&gt;
+                    &lt;div class=&quot;comment-content&quot;&gt;{{ $review-&gt;comment }}&lt;/div&gt;
+                    @if (strlen($review-&gt;comment) &gt; 370)
+                        &lt;span class=&quot;read-more&quot; onclick=&quot;toggleReadMore(this)&quot;&gt;Xem
+                            thêm&lt;/span&gt;
+                    @endif
+                &lt;/div&gt;
+                &lt;div&gt;
+                    &lt;ul class=&quot;list-unstyled d-flex align-items-center mb-0 comment-actions&quot;&gt;
+                        &lt;li class=&quot;comment-actions__item mr-3&quot;&gt;
+                            &lt;a href=&quot;#&quot; class=&quot;comment-actions__link&quot;
+                                onclick=&quot;toggleLike(this);&quot;&gt;
+                                &lt;i
+                                    class=&quot;fa-solid fa-thumbs-up comment-actions__icon comment-actions__icon-like&quot;&gt;&lt;/i&gt;
+                                &lt;span class=&quot;comment-actions__text f-16&quot;&gt;0&lt;/span&gt;
+                                &lt;span class=&quot;comment-actions__text f-16&quot;&gt;Hữu ích&lt;/span&gt;
+                            &lt;/a&gt;
+                        &lt;/li&gt;
+                        &lt;li class=&quot;comment-actions__item mr-3&quot;&gt;
+                            &lt;a href=&quot;#&quot; class=&quot;comment-actions__link&quot;&gt;
+                                &lt;i
+                                    class=&quot;fa-solid fa-triangle-exclamation comment-actions__icon comment-actions__icon-report&quot;&gt;&lt;/i&gt;
+                                &lt;span
+                                    class=&quot;comment-actions__text comment-actions__text-report f-16&quot;&gt;Báo
+                                    cáo&lt;/span&gt;
+                            &lt;/a&gt;
+                        &lt;/li&gt;
+                        &lt;li class=&quot;comment-actions__item mr-3&quot;&gt;
+                            &lt;span
+                                class=&quot;comment-actions__time f-16&quot;&gt;{{ $review-&gt;formatted_created_at }}&lt;/span&gt;
+                        &lt;/li&gt;
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        @endforeach
+
+        &lt;div class=&quot;row justify-content-center&quot;&gt;
+            {{ $reviews-&gt;links() }}
+        &lt;/div&gt;
+    @else
+        &lt;div class=&quot;text-center text-info&quot;&gt;
+            &lt;span class=&quot;f-20&quot;&gt;Chưa có đánh giá nào.&lt;/span&gt;
+        &lt;/div&gt;
+    @endif
+&lt;/div&gt;
+
+</code></pre>
+<ul>
+<li><strong>div.comment-content</strong>: chứa nội dung bình luận.</li>
+<li><strong>span.read-more</strong>: chứa dòng chữ &quot;Xem thêm&quot; và có sự kiện onclick gọi đến hàm JavaScript toggleReadMore(this).</li>
+</ul>
+<h3 id="css"><a class="header" href="#css">CSS</a></h3>
+<pre><code class="language-css">.comment-content {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 2; /* Giới hạn hiển thị 2 hàng */
+    text-overflow: ellipsis;
+    max-height: 3em; /* Chiều cao tối đa cho 2 hàng (1.5em mỗi hàng) */
+}
+
+.comment-content.expanded {
+    -webkit-line-clamp: unset; /* Mở rộng khi bấm vào &quot;Xem thêm&quot; */
+    max-height: none; /* Bỏ giới hạn chiều cao */
+}
+
+.read-more {
+    color: blue;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+</code></pre>
+<ul>
+<li><strong>-webkit-line-clamp</strong>: 2: Giới hạn nội dung chỉ hiển thị 2 dòng.</li>
+<li><strong>overflow</strong>: hidden: Ẩn phần nội dung tràn ra ngoài khung.</li>
+<li><strong>text-overflow</strong>: ellipsis: Thêm dấu &quot;...&quot; vào cuối nội dung bị cắt.</li>
+<li><strong>.comment-content.expanded</strong>: Khi thêm class expanded vào div.comment-content, CSS sẽ bỏ giới hạn chiều cao, cho phép hiển thị toàn bộ nội dung.</li>
+<li><strong>.read-more</strong>: Định dạng cho dòng chữ &quot;Xem thêm&quot;.</li>
+</ul>
+<h3 id="js"><a class="header" href="#js">JS</a></h3>
+<pre><code class="language-js">&lt;script&gt;
+    function toggleReadMore(element) {
+        var content = element.previousElementSibling;
+        if (content.classList.contains('expanded')) {
+            content.classList.remove('expanded');
+            element.textContent = '... Xem thêm';
+        } else {
+            content.classList.add('expanded');
+            element.textContent = 'Thu gọn';
+        }
+    }
+&lt;/script&gt;
+</code></pre>
+<ul>
+<li>JavaScript được sử dụng để thêm hoặc xóa class expanded cho div.comment-content khi người dùng bấm vào &quot;Xem thêm&quot; hoặc &quot;Thu gọn&quot;.</li>
+</ul>
+<h2 id="captcha"><a class="header" href="#captcha">Captcha</a></h2>
+<ul>
+<li>
+<p><strong>composer require google/recaptcha</strong></p>
+</li>
+<li>
+<p><strong>composer require anhskohbo/no-captcha</strong></p>
+</li>
+<li>
+<p>truy cập vào <a href="https://www.google.com/recaptcha/admin/create">đây</a> để tạo 2 key là site key và secret key</p>
+</li>
+<li>
+<p><strong>Sau đó thêm 2 key trên vào .env</strong>:</p>
+</li>
+</ul>
+<pre><code class="language-sh">NOCAPTCHA_SITEKEY=6LeVdhzzzzzzHyw-Dzzzzzz7_yyuGorzzzzzz1S
+NOCAPTCHA_SECRET=6LeVdzzzzzzabDzzzzzzNzzzzzz9Ex-5Kdj_
+</code></pre>
+<ul>
+<li><strong>Thêm đoạn mã captcha vào view</strong>:</li>
+</ul>
+<pre><code class="language-php">{!! NoCaptcha::renderJs() !!}
+{!! NoCaptcha::display() !!}
+@if ($errors-&gt;has('g-recaptcha-response'))
+    &lt;span class=&quot;text-danger&quot;&gt;{{ $errors-&gt;first('g-recaptcha-response') }}&lt;/span&gt;
+@endif
+
+</code></pre>
+<ul>
+<li><strong>Xử lý request</strong>:</li>
+</ul>
+<pre><code class="language-php">public function rules(): array
+{
+    return [
+        'current_password' =&gt; 'required',
+        'new_password' =&gt; 'required|confirmed|min:6',
+        'role' =&gt; 'required|string',
+        'code' =&gt; 'required|string',
+        'g-recaptcha-response' =&gt; 'required|captcha',
+
+    ];
+}
+
+public function messages()
+{
+    return [
+        'g-recaptcha-response.required' =&gt; 'Vui lòng xác thực Captcha.',
+        'g-recaptcha-response.captcha' =&gt; 'Xác thực Captcha không thành công.',
+    ];
+}
+
+
+</code></pre>
+<p><a href="https://www.youtube.com/watch?v=UQ72lOS6B2o&amp;t=370s">Tham khảo flow</a></p>
+<h2 id="email-verification"><a class="header" href="#email-verification">Email Verification</a></h2>
+<ul>
+<li><strong>Config file .env để gửi mail</strong>:</li>
+</ul>
+<pre><code class="language-sh">MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=gymstore.foryou@gmail.com
+MAIL_PASSWORD=gzjmnwmvcnxpkkrh
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=&quot;noreply@gmail.com&quot;
+MAIL_FROM_NAME=&quot;${APP_NAME}&quot;
+
+</code></pre>
+<ul>
+<li><strong>Tạo một bảng để xử lý lưu trữ mã xác thực</strong>: php artisan make:migration create_verification_codes_table</li>
+</ul>
+<pre><code class="language-php">public function up(): void
+{
+    Schema::create('verification_codes', function (Blueprint $table) {
+        $table-&gt;id();
+        $table-&gt;string('email');
+        $table-&gt;string('code');
+        $table-&gt;string('role'); // xác định là user/admin thực hiện change/reset/register
+        $table-&gt;timestamp('created_at')-&gt;useCurrent(); // xác định thời gian có giá trị của mã xác thực
+        $table-&gt;timestamp('expires_at');
+    });
+}
+
+/**
+ * Reverse the migrations.
+ */
+public function down(): void
+{
+    Schema::dropIfExists('verification_codes');
+}
+
+</code></pre>
+<ul>
+<li><strong>Model</strong></li>
+</ul>
+<pre><code class="language-php">class VerificationCode extends Model
+{
+    use HasFactory;
+
+    protected $fillable = ['email', 'code', 'role', 'expires_at'];
+
+    public $timestamps = false;
+}
+
+</code></pre>
+<ul>
+<li><strong>file Mail/VerificationCodeMail.php</strong></li>
+</ul>
+<pre><code class="language-php">namespace App\Mail;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
+
+class VerificationCodeMail extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    public $code;
+
+    /**
+     * Create a new message instance.
+     */
+    public function __construct($code)
+    {
+        $this-&gt;code = $code;
+    }
+
+    public function build()
+    {
+        return $this-&gt;subject('Đây là mã xác thực của bạn')
+            -&gt;view('email.verification_code');
+    }
+
+    /**
+     * Get the message envelope.
+     */
+    public function envelope(): Envelope
+    {
+        return new Envelope(
+            subject: 'Xác thực Email',
+        );
+    }
+
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(
+            view: 'email.verification_code',
+        );
+    }
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array&lt;int, \Illuminate\Mail\Mailables\Attachment&gt;
+     */
+    public function attachments(): array
+    {
+        return [];
+    }
+}
+
+</code></pre>
+<ul>
+<li><strong>routes</strong>:</li>
+</ul>
+<pre><code class="language-php">Route::post('/send-verification-code', [AuthUserController::class, 'sendVerificationCode'])-&gt;name('send.verification.code');
+Route::post('/verify-code', [AuthUserController::class, 'verifyCode'])-&gt;name('verify.code');
+
+</code></pre>
+<ul>
+<li><strong>VerificationService</strong>:</li>
+</ul>
+<pre><code class="language-php">class VerificationService implements VerificationServiceInterface
+{
+    public function sendVerificationCode($email, $role)
+    {
+        $code = Str::random(10);
+        $expiresAt = Carbon::now()-&gt;addMinutes(2);
+
+        VerificationCode::create([
+            'email' =&gt; $email,
+            'code' =&gt; $code,
+            'role' =&gt; $role,
+            'expires_at' =&gt; $expiresAt,
+        ]);
+
+        Mail::to($email)-&gt;send(new VerificationCodeMail($code));
+    }
+
+    public function validateVerificationCode($email, $code, $role)
+    {
+        $verificationCode = VerificationCode::where('email', $email)
+            -&gt;where('code', $code)
+            -&gt;where('role', $role)
+            -&gt;where('expires_at', '&gt;', Carbon::now())
+            -&gt;first();
+
+        return $verificationCode !== null;
+    }
+
+    public function emailExists(string $email, string $role): bool
+    {
+        $table = $role === 'admin' ? 'admins' : 'users';
+        return DB::table($table)-&gt;where('email', $email)-&gt;exists();
+    }
+}
+
+</code></pre>
+<ul>
+<li><strong>AuthenUserController</strong>:</li>
+</ul>
+<pre><code class="language-php">public function register(RegisterRequest $request)
+{
+    $validatedData = $request-&gt;validated();
+
+    $isValid = $this-&gt;verificationService-&gt;validateVerificationCode($validatedData['email'], $validatedData['code'], $validatedData['role']);
+
+    if ($isValid) {
+        $user = new User([
+            'name' =&gt; $validatedData['name'],
+            'email' =&gt; $validatedData['email'],
+            'password' =&gt; Hash::make($validatedData['password']),
+        ]);
+
+        $user-&gt;save();
+        return redirect()-&gt;route('login')-&gt;with('success', 'Đăng ký thành công. Hãy đăng nhập.');
+    } else {
+        return back()-&gt;withErrors('Mã xác thực không đúng hoặc đã hết hạn.')-&gt;withInput();
+    }
+}
+
+</code></pre>
+<ul>
+<li><strong>AuthenAdminController</strong>:</li>
+</ul>
+<pre><code class="language-php">public function sendVerificationCode(Request $request)
+{
+    $request-&gt;validate([
+        'role' =&gt; 'required|string',
+    ]);
+
+    $email = null;
+
+    switch ($request-&gt;role) {
+        case 'admin-reset-password':
+            $request-&gt;validate([
+                'email' =&gt; 'required|email',
+            ]);
+
+            if (!$this-&gt;verificationService-&gt;emailExists($request-&gt;email, 'admin')) {
+                return response()-&gt;json(['errors' =&gt; ['email' =&gt; ['Email không tồn tại trong hệ thống.']]], 400);
+            }
+
+            $email = $request-&gt;email;
+            break;
+        case 'admin-change-password':
+            $email = auth()-&gt;guard('admin')-&gt;user()-&gt;email;
+            if (!$email) {
+                return response()-&gt;json(['message' =&gt; 'Email không được tìm thấy cho tài khoản hiện tại.'], 400);
+            }
+            break;
+        default:
+            return response()-&gt;json(['message' =&gt; 'Role không hợp lệ.'], 400);
+    }
+
+    $this-&gt;verificationService-&gt;sendVerificationCode($email, $request-&gt;role);
+
+    return response()-&gt;json(['message' =&gt; 'Mã xác thực đã được gửi.']);
+}
+
+</code></pre>
+<ul>
+<li><strong>AdminController</strong>:</li>
+</ul>
+<pre><code class="language-php">public function resetPassword(ResetPasswordRequest $request)
+{
+    if (!$this-&gt;verificationService-&gt;emailExists($request-&gt;email, 'admin')) {
+        return back()-&gt;withErrors('Email không tồn tại trong hệ thống.')-&gt;withInput();
+    }
+
+    $validatedData = $request-&gt;validated();
+
+    $isValid = $this-&gt;verificationService-&gt;validateVerificationCode($validatedData['email'], $validatedData['code'], $validatedData['role']);
+
+    if ($isValid) {
+        $admin = $this-&gt;adminService-&gt;getAdminByEmail($request-&gt;email);
+        $result = $this-&gt;adminService-&gt;resetPassword($admin, $request-&gt;password);
+        if ($result['status'] == 'error') {
+            return back()-&gt;withErrors([$result['field'] =&gt; $result['message']]);
+        }
+    } else {
+        return back()-&gt;withErrors('Mã xác thực không đúng hoặc đã hết hạn.')-&gt;withInput();
+    }
+
+    return redirect()-&gt;route('admin.login')-&gt;with('success', 'Đã đổi mật khẩu thành công. Hãy đăng nhập');
+}
+
+public function changePassword(ChangePasswordRequest $request)
+{
+    $validatedData = $request-&gt;validated();
+
+    $admin = auth()-&gt;guard('admin')-&gt;user();
+
+    $isValid = $this-&gt;verificationService-&gt;validateVerificationCode($admin-&gt;email, $validatedData['code'], $validatedData['role']);
+
+    if ($isValid) {
+        $result = $this-&gt;adminService-&gt;changePassword($admin, $request-&gt;current_password, $request-&gt;new_password);
+        if ($result['status'] == 'error') {
+            return back()-&gt;withErrors([$result['field'] =&gt; $result['message']]);
+        }
+    } else {
+        return back()-&gt;withErrors('Mã xác thực không đúng hoặc đã hết hạn.');
+    }
+
+    return redirect()-&gt;back()-&gt;with('success', 'Đã đổi mật khẩu thành công.');
+}
+
+</code></pre>
+<ul>
+<li><strong>UserController</strong>:</li>
+</ul>
+<pre><code class="language-php">public function changePassword(ChangePasswordRequest $request)
+{
+
+    $validatedData = $request-&gt;validated();
+
+    $user = Auth::user();
+
+    $isValid = $this-&gt;verificationService-&gt;validateVerificationCode($user-&gt;email, $validatedData['code'], $validatedData['role']);
+
+    if ($isValid) {
+        $result = $this-&gt;userService-&gt;changePassword($request-&gt;user(), $request-&gt;current_password, $request-&gt;new_password);
+        if ($result['status'] == 'error') {
+            return back()-&gt;withErrors([$result['field'] =&gt; $result['message']]);
+        }
+    } else {
+        return back()-&gt;withErrors('Mã xác thực không đúng hoặc đã hết hạn.');
+    }
+
+    return redirect()-&gt;back()-&gt;with('success', 'Đã đổi mật khẩu thành công.');
+}
+
+public function resetPassword(ResetPasswordRequest $request)
+{
+    if (!$this-&gt;verificationService-&gt;emailExists($request-&gt;email, 'user')) {
+        return back()-&gt;withErrors('Email không tồn tại trong hệ thống.');
+    }
+
+    $validatedData = $request-&gt;validated();
+
+    $isValid = $this-&gt;verificationService-&gt;validateVerificationCode($validatedData['email'], $validatedData['code'], $validatedData['role']);
+
+    if ($isValid) {
+        $user = $this-&gt;userService-&gt;getUserByEmail($request-&gt;email);
+        $result = $this-&gt;userService-&gt;resetPassword($user, $request-&gt;password);
+        if ($result['status'] == 'error') {
+            return back()-&gt;withErrors([$result['field'] =&gt; $result['message']]);
+        }
+    } else {
+        return back()-&gt;withErrors('Mã xác thực không đúng hoặc đã hết hạn.');
+    }
+
+    return redirect()-&gt;route('login')-&gt;with('success', 'Đã đổi mật khẩu thành công. Hãy đăng nhập');
+}
+
+</code></pre>
+<h2 id="2fa"><a class="header" href="#2fa">2fa</a></h2>
+<ul>
+<li>
+<p>Thêm cột lưu trữ <strong>google2fa_secret</strong> vào bảng admins (đây là đối tượng sẽ có tính năng 2fa): <strong>php artisan make:migration add_google2fa_secret_to_admins_table --table=admins</strong></p>
+</li>
+<li>
+<p><strong>composer require pragmarx/google2fa-laravel</strong></p>
+</li>
+<li>
+<p><strong>composer require bacon/bacon-qr-code</strong></p>
+</li>
+<li>
+<p><strong>php artisan vendor:publish --provider=&quot;PragmaRX\Google2FALaravel\ServiceProvider&quot;</strong></p>
+</li>
+<li>
+<p>Thêm vào file : <strong>/config/google2fa.php</strong>:</p>
+</li>
+</ul>
+<pre><code class="language-php">'enabled' =&gt; true,
+'service' =&gt; 'BaconQrCode',
+
+</code></pre>
+<ul>
+<li><strong>Cần lưu ý: triển khai múi giờ của server và điện thoại quét mã QR nên đồng nhất, để gen ra cái OTP đúng, và khớp với nhau</strong>:</li>
+</ul>
+<pre><code class="language-php">// Hàm check múi giờ của server
+public function test()
+{
+    echo 'Current server timezone: ' . date_default_timezone_get();
+}
+
+// tiến hành config múi giờ cho server tại /config/app.php
+'timezone' =&gt; 'Asia/Ho_Chi_Minh',
+</code></pre>
+<ul>
+<li><strong>Code controller xử lý bật, tắt, xác thực 2fa</strong>:</li>
+</ul>
+<pre><code class="language-php">namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Validate2faRequest;
+use App\Models\Admin;
+use Illuminate\Support\Facades\Auth;
+
+class Google2FAController extends Controller
+{
+    public function showEnable2faForm(Request $request)
+    {
+        $user = auth()-&gt;guard('admin')-&gt;user();
+        $google2fa = app('pragmarx.google2fa');
+        $google2fa_secret = $user-&gt;google2fa_secret ?: $google2fa-&gt;generateSecretKey();
+        $google2fa_url = $google2fa-&gt;getQRCodeInline('GymStore', $user-&gt;email, $google2fa_secret);
+
+        if (!$user-&gt;google2fa_secret) {
+            $request-&gt;session()-&gt;flash('google2fa_secret', $google2fa_secret);
+        }
+
+        return view('admin.pages.adminInfo.2fa', [
+            'google2fa_url' =&gt; $google2fa_url,
+            'secret' =&gt; $google2fa_secret,
+            'user' =&gt; $user,
+            'enabled' =&gt; (bool) $user-&gt;google2fa_secret,
+        ]);
+    }
+
+    public function showValidate2faForm(Request $request)
+    {
+        if (!$request-&gt;session()-&gt;has('2fa:user:id')) {
+            return redirect()-&gt;route('admin.login')-&gt;withErrors('Phiên đăng nhập không hợp lệ.');
+        }
+
+        return view('admin.pages.2fa-validate');
+    }
+
+    public function verifyEnable2fa(Validate2faRequest $request)
+    {
+        $user = auth()-&gt;guard('admin')-&gt;user();
+        $google2fa_secret = $request-&gt;session()-&gt;get('google2fa_secret');
+        $google2fa = app('pragmarx.google2fa');
+
+        if ($google2fa-&gt;verifyKey($google2fa_secret, $request-&gt;input('one_time_password'))) {
+            $user-&gt;google2fa_secret = $google2fa_secret;
+            $user-&gt;save();
+            return redirect('/admin')-&gt;with('success', &quot;2FA đã được bật thành công.&quot;);
+        }
+
+        return back()-&gt;withErrors(['one_time_password' =&gt; 'Mã OTP không chính xác.']);
+    }
+
+    public function disable2fa(Request $request)
+    {
+        $user = auth()-&gt;guard('admin')-&gt;user();
+        $user-&gt;google2fa_secret = null;
+        $user-&gt;save();
+
+        return redirect('/admin')-&gt;with('success', &quot;2FA đã được tắt thành công.&quot;);
+    }
+
+    public function validate2fa(Request $request)
+    {
+        $adminId = $request-&gt;session()-&gt;get('2fa:user:id');
+        $admin = Admin::find($adminId);
+        $google2fa = app('pragmarx.google2fa');
+
+        if ($google2fa-&gt;verifyKey($admin-&gt;google2fa_secret, $request-&gt;input('one_time_password'))) {
+            Auth::guard('admin')-&gt;login($admin);
+            $request-&gt;session()-&gt;forget(['2fa:user:id']);
+            return redirect()-&gt;intended('admin/')-&gt;with('success', 'Đăng nhập thành công.');
+        }
+
+        return back()-&gt;withErrors(['one_time_password' =&gt; 'Mã OTP không chính xác.']);
+    }
+
+}
+
+</code></pre>
+<ul>
+<li><strong>Code xử lý khi admin đã bật tính năng 2fa thì khi login sẽ check thêm otp, logic như bên dưới</strong>:</li>
+</ul>
+<pre><code class="language-php">public function login(Request $request)
+{
+    $credentials = $request-&gt;only('email', 'password');
+
+    if (Auth::guard('admin')-&gt;attempt($credentials)) {
+        $user = Auth::guard('admin')-&gt;user();
+
+        if ($user-&gt;google2fa_secret) {
+            Auth::guard('admin')-&gt;logout();
+            $request-&gt;session()-&gt;put('2fa:user:id', $user-&gt;id);
+            // $request-&gt;session()-&gt;put('2fa:remember', $request-&gt;has('remember'));
+
+            return redirect()-&gt;route('2fa.validate.form');
+        }
+
+        return redirect()-&gt;intended('admin/')-&gt;with('success', 'Đăng nhập thành công.');
+    }
+
+    return back()-&gt;withErrors([
+        'email' =&gt; 'Thông tin đăng nhập không chính xác.',
+    ])-&gt;withInput();
+}
+
+</code></pre>
+<ul>
+<li>routes:</li>
+</ul>
+<pre><code class="language-php">// authen
+Route::get('2fa/enable', [Google2FAController::class, 'showEnable2faForm'])-&gt;name('2fa.enable.form');
+Route::post('2fa/enable', [Google2FAController::class, 'verifyEnable2fa'])-&gt;name('2fa.enable.verify');
+Route::post('2fa/disable', [Google2FAController::class, 'disable2fa'])-&gt;name('2fa.disable');
+
+// non-auth
+Route::post('2fa/validate', [Google2FAController::class, 'validate2fa'])-&gt;name('2fa.validate');
+Route::get('2fa/validate', [Google2FAController::class, 'showValidate2faForm'])-&gt;name('2fa.validate.form');
+</code></pre>
+<p><a href="https://www.youtube.com/watch?v=2V2YV3fIoxU&amp;t=2s">Tham khảo flow</a></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/Laravel/Takenote3.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/Laravel/advance_concepts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/Laravel/Takenote3.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/Laravel/advance_concepts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
