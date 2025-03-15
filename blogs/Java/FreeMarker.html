@@ -165,6 +165,32 @@
                     <main>
                         <h1 id="freemarker"><a class="header" href="#freemarker">FreeMarker</a></h1>
 <p><a href="https://freemarker.apache.org/docs/">link ref</a></p>
+<ul>
+<li><a href="#assign">assign</a></li>
+<li><a href="#attempt-recover">attempt, recover</a></li>
+<li><a href="#autoesc">autoesc</a></li>
+<li><a href="#compress">compress</a></li>
+<li><a href="#flush">flush</a></li>
+<li><a href="#ftl">ftl</a></li>
+<li><a href="#function-return">function, return</a></li>
+<li><a href="#global">global</a></li>
+<li><a href="#if-else-elseif">if, else, elseif</a></li>
+<li><a href="#import">import</a></li>
+<li><a href="#include">include</a></li>
+<li><a href="#list-else-items-sep-break-continue">list, else, items, sep, break, continue</a></li>
+<li><a href="#local">local</a></li>
+<li><a href="#macro-nested-return">macro, nested, return</a></li>
+<li><a href="#noautoesc">noautoesc</a></li>
+<li><a href="#noparse">noparse</a></li>
+<li><a href="#nt">nt</a></li>
+<li><a href="#outputformat">outputformat</a></li>
+<li><a href="#setting">setting</a></li>
+<li><a href="#stop">stop</a></li>
+<li><a href="#switch-on-case-default-break">switch, on, case, default, break</a></li>
+<li><a href="#t-lt-rt">t, lt, rt</a></li>
+<li><a href="#user-defined-directive-">User-defined directive (&lt;@...&gt;)</a></li>
+<li><a href="#visit-recurse-fallback">visit, recurse, fallback</a></li>
+</ul>
 <h2 id="assign"><a class="header" href="#assign">assign</a></h2>
 <ul>
 <li>
@@ -449,74 +475,496 @@ Chuỗi &quot;Hello FreeMarker&quot; có chứa &quot;FreeMarker&quot; không? $
 </code></pre>
 <h2 id="global"><a class="header" href="#global">global</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li>
+<p><a href="https://freemarker.apache.org/docs/ref_directive_global.html">ref</a></p>
+</li>
+<li>
+<p>Nếu một biến cục bộ có cùng tên với biến global, biến cục bộ sẽ ưu tiên hơn.</p>
+</li>
+<li>
+<p>Để truy cập biến global khi có xung đột tên, dùng ${.globals.varName}.</p>
+</li>
 </ul>
+<pre><code class="language-ftl">&lt;#global siteName = &quot;FreeMarker Guide&quot;&gt;
+&lt;#global version = 2.3&gt;
+
+Tên website: ${siteName}
+Phiên bản: ${version}
+
+&lt;!-- -------------------------------------- --&gt;
+&lt;#global message = &quot;Hello from Global&quot;&gt;
+&lt;#assign message = &quot;Hello from Local&quot;&gt;
+
+Cục bộ: ${message}
+Toàn cục: ${.globals.message}
+
+&lt;!-- -------------------------------------- --&gt;
+&lt;#global content&gt;
+    Nội dung toàn cục này có thể chứa nhiều dòng.
+&lt;/#global&gt;
+
+Nội dung: ${content}
+
+&lt;!-- -------------------------------------- --&gt;
+&lt;#global appName = &quot;MyApp&quot; version = &quot;1.0.0&quot; author = &quot;Gia Huy&quot;&gt;
+
+Ứng dụng: ${appName}
+Phiên bản: ${version}
+Tác giả: ${author}
+
+&lt;!-- -------------------------------------- --&gt;
+&lt;!-- dùng biến global từ template khác --&gt;
+&lt;#import &quot;config.ftl&quot; as cfg&gt;
+
+Tên website: ${.globals.siteName}
+Email admin: ${.globals.adminEmail}
+
+</code></pre>
 <h2 id="if-else-elseif"><a class="header" href="#if-else-elseif">if, else, elseif</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li><a href="https://freemarker.apache.org/docs/ref_directive_if.html">ref</a></li>
 </ul>
+<pre><code class="language-ftl">&lt;#assign x = 5&gt;
+
+&lt;#if x == 1&gt;
+    x là 1
+&lt;#elseif x == 2&gt;
+    x là 2
+&lt;#elseif x == 3&gt;
+    x là 3
+&lt;#elseif x == 4&gt;
+    x là 4
+&lt;#else&gt;
+    x không phải 1, 2, 3 hoặc 4
+&lt;/#if&gt;
+
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th><strong>Tính năng</strong></th><th><strong>Mô tả</strong></th></tr></thead><tbody>
+<tr><td><strong>Điều kiện cơ bản</strong></td><td><code>&lt;#if x == 1&gt;</code>, <code>&lt;#if x gt 10&gt;</code></td></tr>
+<tr><td><strong>Nhiều điều kiện (<code>#elseif</code>)</strong></td><td>Dùng để kiểm tra thêm điều kiện khác</td></tr>
+<tr><td><strong>Mặc định (<code>#else</code>)</strong></td><td>Chạy khi không có điều kiện nào đúng</td></tr>
+<tr><td><strong>Toán tử so sánh</strong></td><td><code>gt</code>, <code>gte</code>, <code>lt</code>, <code>lte</code>, <code>==</code>, <code>!=</code></td></tr>
+<tr><td><strong>Kiểm tra chuỗi rỗng</strong></td><td><code>?has_content</code></td></tr>
+<tr><td><strong>Lồng nhau (<code>nested if</code>)</strong></td><td>Có thể lồng nhiều <code>#if</code> bên trong</td></tr>
+</tbody></table>
+</div>
 <h2 id="import"><a class="header" href="#import">import</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li>
+<p><a href="https://freemarker.apache.org/docs/ref_directive_import.html">ref</a></p>
+</li>
+<li>
+<p>Dùng để nạp một file template vào một namespace riêng, giúp sử dụng biến, macro, function được khai báo trong file đó.</p>
+</li>
 </ul>
+<pre><code class="language-ftl">&lt;#macro hello name=&quot;User&quot;&gt;
+    Chào ${name}!
+&lt;/#macro&gt;
+&lt;!-- ---- --&gt;
+&lt;#import &quot;macros.ftl&quot; as myMacros&gt;
+
+&lt;@myMacros.hello name=&quot;Gia Huy&quot; /&gt;
+&lt;@myMacros.hello /&gt;
+
+&lt;!-- ------------------------------------ --&gt;
+&lt;#global siteName = &quot;FreeMarker Site&quot;&gt;
+&lt;#global adminEmail = &quot;admin@example.com&quot;&gt;
+&lt;!-- ---- --&gt;
+&lt;#import &quot;config.ftl&quot; as cfg&gt;
+
+Tên website: ${cfg.siteName}
+Email admin: ${cfg.adminEmail}
+
+&lt;!-- ------------------------------------ --&gt;
+&lt;#function square x&gt;
+    &lt;#return x * x&gt;
+&lt;/#function&gt;
+&lt;!-- ---- --&gt;
+&lt;#import &quot;functions.ftl&quot; as func&gt;
+
+Bình phương của 5 là: ${func.square(5)}
+
+</code></pre>
 <h2 id="include"><a class="header" href="#include">include</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li><a href="https://freemarker.apache.org/docs/ref_directive_include.html">ref</a></li>
 </ul>
+<pre><code class="language-ftl">&lt;#include &quot;file.ftl&quot;&gt;
+
+&lt;#include &quot;file.ftl&quot; parse=true encoding=&quot;UTF-8&quot; ignore_missing=true&gt;
+
+</code></pre>
+<ul>
+<li>#include file chứa nội dung HTML</li>
+</ul>
+<pre><code class="language-ftl">&lt;hr&gt;
+&lt;p&gt;Bản quyền 2024 - Gia Huy&lt;/p&gt;
+&lt;!-- ------ --&gt;
+&lt;h1&gt;Trang chính&lt;/h1&gt;
+&lt;p&gt;Chào mừng đến với trang chủ.&lt;/p&gt;
+
+&lt;#include &quot;footer.ftl&quot;&gt;
+
+</code></pre>
+<ul>
+<li>#include với biến chia sẻ</li>
+</ul>
+<pre><code class="language-ftl">Bản quyền 2024 ${owner}
+&lt;!-- --------- --&gt;
+&lt;#assign owner = &quot;Công ty ABC&quot;&gt;
+
+&lt;h1&gt;Giới thiệu&lt;/h1&gt;
+&lt;#include &quot;copyright.ftl&quot;&gt;
+
+</code></pre>
 <h2 id="list-else-items-sep-break-continue"><a class="header" href="#list-else-items-sep-break-continue">list, else, items, sep, break, continue</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li><a href="https://freemarker.apache.org/docs/ref_directive_list.html">ref</a></li>
 </ul>
+<h3 id="list"><a class="header" href="#list">list</a></h3>
+<pre><code class="language-ftl">&lt;#assign users = [&quot;Alice&quot;, &quot;Bob&quot;, &quot;Charlie&quot;]&gt;
+
+&lt;#list users as user&gt;
+    ${user}
+&lt;/#list&gt;
+
+&lt;!-- ---------------------------------------- --&gt;
+
+&lt;#assign products = { &quot;Apple&quot;: 5, &quot;Banana&quot;: 10, &quot;Cherry&quot;: 15 }&gt;
+
+&lt;#list products as name, price&gt;
+    ${name}: ${price}
+&lt;/#list&gt;
+
+</code></pre>
+<h3 id="else"><a class="header" href="#else">else</a></h3>
+<ul>
+<li>Nếu danh sách trống, có thể dùng #else để hiển thị nội dung mặc định.</li>
+</ul>
+<pre><code class="language-ftl">&lt;#assign users = []&gt;
+
+&lt;#list users as user&gt;
+    ${user}
+&lt;#else&gt;
+    Không có người dùng.
+&lt;/#list&gt;
+
+</code></pre>
+<h3 id="items"><a class="header" href="#items">items</a></h3>
+<ul>
+<li>Dùng để tách phần trước và sau danh sách khỏi vòng lặp.</li>
+<li>Không dùng items: <strong><em>có thể tạo ra list rỗng</em></strong></li>
+</ul>
+<pre><code class="language-tft">
+&lt;#assign users = []&gt;
+
+&lt;ul&gt;
+    &lt;#list users as user&gt;
+        &lt;li&gt;${user}&lt;/li&gt;
+    &lt;/#list&gt;
+&lt;/ul&gt;
+
+</code></pre>
+<ul>
+<li>Dùng items:</li>
+</ul>
+<pre><code class="language-tft">&lt;#assign users = [&quot;Alice&quot;, &quot;Bob&quot;, &quot;Charlie&quot;]&gt;
+
+&lt;#list users&gt;
+    &lt;ul&gt;
+        &lt;#items as user&gt;
+            &lt;li&gt;${user}&lt;/li&gt;
+        &lt;/#items&gt;
+    &lt;/ul&gt;
+&lt;#else&gt;
+    &lt;p&gt;Không có người dùng.&lt;/p&gt;
+&lt;/#list&gt;
+
+</code></pre>
+<h3 id="sep"><a class="header" href="#sep">sep</a></h3>
+<ul>
+<li>Thêm dấu phân tách giữa các phần tử</li>
+</ul>
+<pre><code class="language-ftl">&lt;#assign users = [&quot;Alice&quot;, &quot;Bob&quot;, &quot;Charlie&quot;]&gt;
+
+&lt;#list users as user&gt;
+    ${user}&lt;#sep&gt;, &lt;/#sep&gt;
+&lt;/#list&gt;
+
+&lt;!-- Alice, Bob, Charlie --&gt;
+</code></pre>
+<h3 id="break"><a class="header" href="#break">break</a></h3>
+<pre><code class="language-ftl">&lt;#list 1..5 as num&gt;
+    ${num}
+    &lt;#if num == 3&gt;
+        &lt;#break&gt;
+    &lt;/#if&gt;
+&lt;/#list&gt;
+
+</code></pre>
+<h3 id="continue"><a class="header" href="#continue">continue</a></h3>
+<pre><code class="language-ftl">&lt;#list 1..5 as num&gt;
+    &lt;#if num == 3&gt;
+        &lt;#continue&gt;
+    &lt;/#if&gt;
+    ${num}
+&lt;/#list&gt;
+
+</code></pre>
 <h2 id="local"><a class="header" href="#local">local</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li>
+<p><a href="https://freemarker.apache.org/docs/ref_directive_local.html">ref</a></p>
+</li>
+<li>
+<p>Dùng để khai báo biến cục bộ (local variable).</p>
+</li>
+<li>
+<p>Chỉ hoạt động bên trong macro hoặc function.</p>
+</li>
 </ul>
+<pre><code class="language-ftl">&lt;#macro demoAssign&gt;
+    &lt;#assign globalVar = &quot;Tôi là biến toàn cục&quot;&gt;
+&lt;/#macro&gt;
+
+&lt;@demoAssign /&gt;
+Biến bên ngoài macro: ${globalVar}
+
+
+&lt;#macro demoLocal&gt;
+    &lt;#local localVar = &quot;Tôi là biến cục bộ&quot;&gt;
+&lt;/#macro&gt;
+
+&lt;@demoLocal /&gt;
+Biến bên ngoài macro: ${localVar} &lt;!-- Lỗi --&gt;
+</code></pre>
 <h2 id="macro-nested-return"><a class="header" href="#macro-nested-return">macro, nested, return</a></h2>
+<h3 id="macro"><a class="header" href="#macro">macro</a></h3>
 <ul>
-<li><a href="">ref</a></li>
+<li>
+<p><a href="https://freemarker.apache.org/docs/ref_directive_macro.html">ref</a></p>
+</li>
+<li>
+<p>Tương tự như hàm (function) trong lập trình, nhưng nó không trả về giá trị mà chỉ tạo ra một đoạn nội dung có thể tái sử dụng trong template.</p>
+</li>
 </ul>
+<pre><code class="language-ftl">&lt;#macro hello&gt;
+    Xin chào FreeMarker!
+&lt;/#macro&gt;
+
+&lt;@hello/&gt;
+
+&lt;!-- ---------------------------- --&gt;
+
+&lt;#macro greet name&gt;
+    Xin chào, ${name}!
+&lt;/#macro&gt;
+
+&lt;@greet name=&quot;Gia Huy&quot;/&gt;
+
+&lt;!-- ---------------------------- --&gt;
+
+&lt;#macro greet name=&quot;bạn&quot;&gt;
+    Xin chào, ${name}!
+&lt;/#macro&gt;
+
+&lt;@greet/&gt;
+&lt;@greet name=&quot;Huy&quot;/&gt;
+
+</code></pre>
+<h3 id="nested"><a class="header" href="#nested">nested</a></h3>
+<ul>
+<li>Dùng để gọi lại nội dung được truyền vào macro.</li>
+</ul>
+<pre><code class="language-ftl">&lt;#macro ten_macro&gt;
+    Nội dung trước
+    &lt;#nested&gt;
+    Nội dung sau
+&lt;/#macro&gt;
+
+&lt;@ten_macro&gt;Đây là nội dung nested&lt;/@ten_macro&gt;
+
+&lt;!-- ---------------- --&gt;
+Nội dung trước
+Đây là nội dung nested
+Nội dung sau
+
+</code></pre>
+<p>``ftl
+&lt;#macro repeat&gt; 1. &lt;#nested&gt; 2. &lt;#nested&gt;
+&lt;/#macro&gt;</p>
+<p><a href="mailto:@repeat">@repeat</a>Xin chào FreeMarker!<a href="mailto:/@repeat">/@repeat</a></p>
+<pre><code>
+```ftl
+&lt;#macro displayProducts products&gt;
+    &lt;#list products as item&gt;
+        &lt;#nested item.name, item.price&gt;
+    &lt;/#list&gt;
+&lt;/#macro&gt;
+
+&lt;@displayProducts products=[{&quot;name&quot;:&quot;Laptop&quot;, &quot;price&quot;:1000}, {&quot;name&quot;:&quot;Phone&quot;, &quot;price&quot;:500}]; pName, pPrice&gt;
+    Sản phẩm: ${pName} - Giá: $${pPrice}
+&lt;/@displayProducts&gt;
+
+</code></pre>
+<h3 id="return"><a class="header" href="#return">return</a></h3>
+<ul>
+<li>Dừng macro ngay lập tức.</li>
+<li>Bỏ qua tất cả nội dung sau #return.</li>
+</ul>
+<pre><code class="language-ftl">&lt;#macro checkAge age&gt;
+    &lt;#if age &lt; 18&gt;
+        Bạn chưa đủ tuổi.
+        &lt;#return&gt;
+    &lt;/#if&gt;
+    Chào mừng bạn!
+&lt;/#macro&gt;
+
+&lt;@checkAge age=16/&gt;
+&lt;@checkAge age=20/&gt;
+
+</code></pre>
 <h2 id="noautoesc"><a class="header" href="#noautoesc">noautoesc</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li>
+<p><a href="">ref</a></p>
+</li>
+<li>
+<p>Để tắt auto-escaping cho một phần cụ thể trong template.</p>
+</li>
 </ul>
+<pre><code class="language-ftl">&lt;#ftl output_format=&quot;XML&quot;&gt;
+${&quot;&amp;&quot;}
+&lt;#noautoesc&gt;
+  ${&quot;&amp;&quot;}
+&lt;/#noautoesc&gt;
+${&quot;&amp;&quot;}
+
+</code></pre>
 <h2 id="noparse"><a class="header" href="#noparse">noparse</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li>
+<p><a href="">ref</a></p>
+</li>
+<li>
+<p>Giúp hiển thị nội dung template nguyên bản mà không để FreeMarker xử lý nó.</p>
+</li>
 </ul>
+<pre><code class="language-ftl">&lt;#noparse&gt;
+  &lt;#list animals as animal&gt;
+  &lt;tr&gt;&lt;td&gt;${animal.name}&lt;td&gt;${animal.price} Euros
+  &lt;/#list&gt;
+&lt;/#noparse&gt;
+
+</code></pre>
 <h2 id="nt"><a class="header" href="#nt">nt</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li><a href="https://freemarker.apache.org/docs/ref_directive_nt.html">ref</a></li>
 </ul>
 <h2 id="outputformat"><a class="header" href="#outputformat">outputformat</a></h2>
 <ul>
 <li><a href="">ref</a></li>
 </ul>
+<pre><code class="language-ftl">&lt;#ftl output_format=&quot;XML&quot;&gt;
+XML escaping: ${&quot;&amp;{}&quot;}
+
+&lt;#outputformat &quot;RTF&quot;&gt;
+  RTF escaping: ${&quot;&amp;{}&quot;}
+&lt;/#outputformat&gt;
+
+&lt;#outputformat &quot;plainText&quot;&gt;
+  No escaping: ${&quot;&amp;{}&quot;}
+&lt;/#outputformat&gt;
+
+XML escaping again: ${&quot;&amp;{}&quot;}
+
+</code></pre>
 <h2 id="setting"><a class="header" href="#setting">setting</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li><a href="https://freemarker.apache.org/docs/ref_directive_setting.html">ref</a></li>
 </ul>
+<pre><code class="language-ftl">&lt;#-- Thiết lập ngôn ngữ và múi giờ --&gt;
+&lt;#setting locale=&quot;en_US&quot;&gt;
+&lt;#setting time_zone=&quot;Asia/Ho_Chi_Minh&quot;&gt;
+
+&lt;#-- Thiết lập định dạng số --&gt;
+&lt;#setting number_format=&quot;0.00&quot;&gt;
+
+&lt;#-- Thiết lập định dạng Boolean --&gt;
+&lt;#setting boolean_format=&quot;Yes,No&quot;&gt;
+
+&lt;#-- Thiết lập định dạng ngày tháng --&gt;
+&lt;#setting date_format=&quot;dd/MM/yyyy&quot;&gt;
+&lt;#setting time_format=&quot;HH:mm:ss&quot;&gt;
+&lt;#setting datetime_format=&quot;dd/MM/yyyy HH:mm:ss&quot;&gt;
+
+&lt;#-- Gán giá trị để hiển thị --&gt;
+&lt;#assign number = 12345.6789&gt;
+&lt;#assign isAdmin = true&gt;
+&lt;#assign today = .now&gt;
+
+
+- Ngôn ngữ: ${.locale}
+- Múi giờ: ${.time_zone}
+
+
+- Số gốc: 12345.6789
+- Số sau khi format: ${number}
+
+
+- Trạng thái Admin: ${isAdmin}
+
+- Ngày: ${today?date}
+- Giờ: ${today?time}
+- Ngày &amp; Giờ: ${today?datetime}
+
+</code></pre>
 <h2 id="stop"><a class="header" href="#stop">stop</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li><a href="https://freemarker.apache.org/docs/ref_directive_stop.html">ref</a></li>
 </ul>
 <h2 id="switch-on-case-default-break"><a class="header" href="#switch-on-case-default-break">switch, on, case, default, break</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li><a href="https://freemarker.apache.org/docs/ref_directive_switch.html">ref</a></li>
 </ul>
+<pre><code class="language-ftl">&lt;#assign size = &quot;large&quot;&gt;
+
+&lt;#switch size&gt;
+  &lt;#on &quot;small&quot;&gt;
+    Kích thước: Nhỏ
+  &lt;#on &quot;medium&quot;&gt;
+    Kích thước: Vừa
+  &lt;#on &quot;large&quot;, &quot;extra large&quot;&gt;
+    Kích thước: Lớn
+    &lt;#break&gt;
+  &lt;#default&gt;
+    Kích thước: Không xác định
+&lt;/#switch&gt;
+
+</code></pre>
 <h2 id="t-lt-rt"><a class="header" href="#t-lt-rt">t, lt, rt</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li>
+<p><a href="https://freemarker.apache.org/docs/ref_directive_t.html">ref</a></p>
+</li>
+<li>
+<p><strong>&lt;#t&gt;</strong> (trim): Xóa tất cả khoảng trắng ở đầu và cuối dòng chứa nó.</p>
+</li>
+<li>
+<p><strong>&lt;#lt&gt;</strong> (left trim): Xóa khoảng trắng đầu dòng.</p>
+</li>
+<li>
+<p><strong>&lt;#rt&gt;</strong> (right trim): Xóa khoảng trắng cuối dòng.</p>
+</li>
 </ul>
 <h2 id="user-defined-directive-"><a class="header" href="#user-defined-directive-">User-defined directive (&lt;@...&gt;)</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li><a href="https://freemarker.apache.org/docs/ref_directive_userDefined.html">ref</a></li>
 </ul>
 <h2 id="visit-recurse-fallback"><a class="header" href="#visit-recurse-fallback">visit, recurse, fallback</a></h2>
 <ul>
-<li><a href="">ref</a></li>
+<li><a href="https://freemarker.apache.org/docs/ref_directive_visit.html">ref</a></li>
 </ul>
-<h2 id=""><a class="header" href="#"></a></h2>
-<h2 id="-1"><a class="header" href="#-1"></a></h2>
 
                     </main>
 
