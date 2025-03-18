@@ -164,6 +164,395 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="unit-test"><a class="header" href="#unit-test">Unit Test</a></h1>
+<h2 id="pomxml"><a class="header" href="#pomxml">pom.xml</a></h2>
+<pre><code class="language-xml">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
+  xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+  xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;com.example&lt;/groupId&gt;
+  &lt;artifactId&gt;UnitTest&lt;/artifactId&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  &lt;name&gt;UnitTest&lt;/name&gt;
+  &lt;url&gt;http://maven.apache.org&lt;/url&gt;
+  &lt;dependencies&gt;
+
+    &lt;!-- API để viết test --&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
+      &lt;artifactId&gt;junit-jupiter-api&lt;/artifactId&gt;
+      &lt;version&gt;5.12.1&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+
+    &lt;!-- Engine để chạy test --&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
+      &lt;artifactId&gt;junit-jupiter-engine&lt;/artifactId&gt;
+      &lt;version&gt;5.12.1&lt;/version&gt;
+    &lt;/dependency&gt;
+
+  &lt;/dependencies&gt;
+&lt;/project&gt;
+</code></pre>
+<ul>
+<li>Chạy lệnh để xem có version mới cho dependencies không: <strong>mvn versions:display-dependency-updates</strong></li>
+</ul>
+<h2 id="simple-example"><a class="header" href="#simple-example">Simple example</a></h2>
+<pre><code class="language-java">package com.example;
+
+public class Calculator {
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    public int subtract(int a, int b) {
+        return a - b;
+    }
+}
+
+// ------------------------------------------
+
+package com.example;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class CalculatorTest {
+    Calculator calc = new Calculator();
+
+    @Test
+    void testAdd() {
+        assertEquals(5, calc.add(2, 3)); // Kiểm tra 2 + 3 có bằng 5 không
+    }
+
+    @Test
+    void testSubtract() {
+        assertEquals(1, calc.subtract(3, 2)); // Kiểm tra 3 - 2 có bằng 1 không
+    }
+}
+
+
+</code></pre>
+<ul>
+<li>Chạy lệnh test: <strong>mvn test</strong>, thì maven sẽ thực hiện chạy trên tất cả các test cases trong <strong>/src/test/java/</strong>.</li>
+</ul>
+<h2 id="annotation"><a class="header" href="#annotation">Annotation</a></h2>
+<ul>
+<li><a href="https://junit.org/junit5/docs/current/user-guide/#writing-tests-annotations">link</a></li>
+</ul>
+<div class="table-wrapper"><table><thead><tr><th><strong>Annotation</strong></th><th><strong>Chức năng</strong></th></tr></thead><tbody>
+<tr><td><strong><code>@Test</code></strong></td><td>Đánh dấu một method là test case.</td></tr>
+<tr><td><strong><code>@ParameterizedTest</code></strong></td><td>Đánh dấu method là test với dữ liệu tham số.</td></tr>
+<tr><td><strong><code>@RepeatedTest</code></strong></td><td>Chạy một test nhiều lần.</td></tr>
+<tr><td><strong><code>@TestFactory</code></strong></td><td>Tạo test <strong>động</strong> thay vì test tĩnh.</td></tr>
+<tr><td><strong><code>@TestTemplate</code></strong></td><td>Dùng cho test được chạy nhiều lần theo context khác nhau.</td></tr>
+<tr><td><strong><code>@TestClassOrder</code></strong></td><td>Quy định thứ tự chạy các test class <strong>@Nested</strong>.</td></tr>
+<tr><td><strong><code>@TestMethodOrder</code></strong></td><td>Quy định thứ tự chạy <strong>test method</strong> trong class.</td></tr>
+<tr><td><strong><code>@TestInstance</code></strong></td><td>Xác định vòng đời của test instance.</td></tr>
+<tr><td><strong><code>@DisplayName</code></strong></td><td>Định nghĩa tên test case thân thiện hơn.</td></tr>
+<tr><td><strong><code>@DisplayNameGeneration</code></strong></td><td>Tự động sinh tên test case.</td></tr>
+<tr><td><strong><code>@BeforeEach</code></strong></td><td>Chạy <strong>trước mỗi test method</strong> (tương tự <code>@Before</code> trong JUnit 4).</td></tr>
+<tr><td><strong><code>@AfterEach</code></strong></td><td>Chạy <strong>sau mỗi test method</strong> (tương tự <code>@After</code> trong JUnit 4).</td></tr>
+<tr><td><strong><code>@BeforeAll</code></strong></td><td>Chạy <strong>trước tất cả test</strong> trong class (tương tự <code>@BeforeClass</code>).</td></tr>
+<tr><td><strong><code>@AfterAll</code></strong></td><td>Chạy <strong>sau tất cả test</strong> trong class (tương tự <code>@AfterClass</code>).</td></tr>
+<tr><td><strong><code>@Nested</code></strong></td><td>Dùng để tạo <strong>test class lồng nhau</strong>.</td></tr>
+<tr><td><strong><code>@Tag</code></strong></td><td>Gán nhãn test để filter khi chạy.</td></tr>
+<tr><td><strong><code>@Disabled</code></strong></td><td>Vô hiệu hóa test method hoặc test class.</td></tr>
+<tr><td><strong><code>@Timeout</code></strong></td><td>Fail test nếu thời gian chạy vượt quá giới hạn.</td></tr>
+<tr><td><strong><code>@ExtendWith</code></strong></td><td>Dùng để tích hợp extension vào JUnit.</td></tr>
+</tbody></table>
+</div>
+<ul>
+<li><strong><em>Mặc định mỗi test method chạy trên một instance mới của test class</em></strong></li>
+<li><strong><em>Có thể cấu hình JUnit để chỉ tạo một instance duy nhất của test class, thay vì tạo một instance mới cho mỗi test method. Dùng @TestInstance(Lifecycle.PER_CLASS), JUnit chỉ tạo một instance duy nhất của test class,</em></strong></li>
+</ul>
+<pre><code class="language-java">@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class SampleTest {
+    //
+}
+
+</code></pre>
+<h3 id="beforeeach---aftereach"><a class="header" href="#beforeeach---aftereach">@BeforeEach - @AfterEach</a></h3>
+<pre><code class="language-java">@BeforeEach
+void setup() {
+    System.out.println(&quot;Chạy trước mỗi test!&quot;);
+}
+
+@AfterEach
+void cleanup() {
+    System.out.println(&quot;Chạy sau mỗi test!&quot;);
+}
+
+</code></pre>
+<h3 id="beforeall---afterall"><a class="header" href="#beforeall---afterall">@BeforeAll - @AfterAll</a></h3>
+<ul>
+<li>JUnit 5 mặc định tạo một instance mới của test class cho mỗi test method, nếu một method không phải <strong><em>static</em></strong>, nó sẽ gắn với một instance cụ thể.</li>
+<li>Nhưng <strong>@BeforeAll</strong> và <strong>@AfterAll</strong> chỉ chạy một lần cho cả test class → JUnit không thể gán chúng vào một instance cụ thể nếu nó không static.</li>
+</ul>
+<pre><code class="language-java">@BeforeAll
+static void init() {
+    System.out.println(&quot;Chạy trước tất cả test!&quot;);
+}
+
+@AfterAll
+static void tearDown() {
+    System.out.println(&quot;Chạy sau tất cả test!&quot;);
+    }
+</code></pre>
+<ul>
+<li>Nếu không muốn dùng static cho <strong>@BeforeAll</strong> và <strong>@AfterAll</strong>, bạn có thể cấu hình JUnit để chỉ tạo một instance duy nhất của test class, thay vì tạo một instance mới cho mỗi test method.</li>
+<li>Dùng <strong>@TestInstance(Lifecycle.PER_CLASS)</strong>, JUnit chỉ tạo một instance duy nhất của test class, giúp bạn bỏ static trong <strong>@BeforeAll</strong> và <strong>@AfterAll</strong>.</li>
+</ul>
+<pre><code class="language-java">import org.junit.jupiter.api.TestInstance;
+
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class CalculatorTest {
+    @BeforeAll
+    void init() {
+        System.out.println(&quot;Chạy trước tất cả test!&quot;);
+    }
+
+    @AfterAll
+    void tearDown() {
+        System.out.println(&quot;Chạy sau tất cả test!&quot;);
+    }
+}
+
+</code></pre>
+<ul>
+<li>Việc dùng <strong>TestInstance</strong> hay không dùng, phụ thuộc vào việc có muốn giữ trạng thái giữa các test method không.;</li>
+</ul>
+<h3 id="disabled"><a class="header" href="#disabled">@Disabled</a></h3>
+<ul>
+<li><a href="https://junit.org/junit5/docs/current/user-guide/#writing-tests-disabling">link</a></li>
+</ul>
+<pre><code class="language-java">@Disabled(&quot;Disabled until bug #99 has been fixed&quot;)
+class DisabledClassDemo {
+
+    @Test
+    void testWillBeSkipped() {
+    }
+
+}
+
+// -------------------------------------------------
+
+@Disabled(&quot;Disabled until bug #42 has been resolved&quot;)
+@Test
+void testWillBeSkipped() {
+}
+</code></pre>
+<h3 id="repeatedtest"><a class="header" href="#repeatedtest">@RepeatedTest</a></h3>
+<pre><code class="language-java">@RepeatedTest(5)
+void testAdd() {
+    assertEquals(5, calc.add(2, 3)); // Kiểm tra 2 + 3 có bằng 5 không
+}
+
+</code></pre>
+<h3 id="parameterizedtest"><a class="header" href="#parameterizedtest">@ParameterizedTest</a></h3>
+<pre><code class="language-java">package com.example;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.apache.commons.lang3.StringUtils;
+
+class CalculatorTest {
+    Calculator calc = new Calculator();
+
+    CalculatorTest() {
+        System.out.println(&quot;Khởi tạo một instance mới của CalculatorTest&quot;);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { &quot;racecar&quot;, &quot;radarr&quot;, &quot;able was I ere I saw elba&quot; })
+    void palindromes(String candidate) {
+        assertTrue(StringUtils.reverse(candidate).equalsIgnoreCase(candidate),
+                   &quot;Chuỗi '&quot; + candidate + &quot;' không phải palindrome&quot;);
+    }
+
+}
+
+</code></pre>
+<h3 id="tag"><a class="header" href="#tag">@Tag</a></h3>
+<ul>
+<li>
+<p>Gán <strong>tag</strong> cho test để có thể chạy một nhóm test nhất định bằng Maven hoặc IntelliJ.</p>
+</li>
+<li>
+<p><strong>mvn test -Dgroups=fast</strong></p>
+</li>
+</ul>
+<pre><code class="language-java">@Tag(&quot;fast&quot;)
+@Test
+void testAdd() {
+    assertEquals(4, calc.add(2, 2));
+}
+</code></pre>
+<h3 id="timeout"><a class="header" href="#timeout">@Timeout</a></h3>
+<ul>
+<li>Giới hạn thời gian chạy test, nếu quá thời gian thì test fail.</li>
+</ul>
+<pre><code class="language-java">@Test
+@Timeout(value = 2, unit = TimeUnit.SECONDS)
+void testTimeout() throws InterruptedException {
+    Thread.sleep(3000); // Test này sẽ fail vì mất 3s để chạy
+}
+</code></pre>
+<h3 id="testmethodorder"><a class="header" href="#testmethodorder">@TestMethodOrder</a></h3>
+<ul>
+<li>Xác định thứ tự chạy của các phương thức test trong cùng một class.</li>
+</ul>
+<pre><code class="language-java">import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.TestMethodOrder;
+
+@TestMethodOrder(OrderAnnotation.class)
+class CalculatorTest {
+
+    @Order(3)
+    @Test
+    void palindromes(String candidate) {
+        //
+    }
+
+    @Order(1)
+    @Test
+    void testAdd() {
+        //
+    }
+
+    @Order(2)
+    @Test
+    void testTimeout() throws InterruptedException {
+        //
+    }
+
+}
+
+</code></pre>
+<h3 id="testclassorder"><a class="header" href="#testclassorder">@TestClassOrder</a></h3>
+<ul>
+<li>Sắp xếp các class con theo thứ tự @Order</li>
+</ul>
+<pre><code class="language-java">import org.junit.jupiter.api.*;
+
+@TestClassOrder(ClassOrderer.OrderAnnotation.class) // ✅ Sắp xếp class con theo @Order
+class ParentTest {
+
+    @Nested
+    @Order(2)
+    class SecondTest {
+        @Test
+        void testB() {
+            System.out.println(&quot;Test B - chạy thứ hai&quot;);
+        }
+    }
+
+    @Nested
+    @Order(1)
+    class FirstTest {
+        @Test
+        void testA() {
+            System.out.println(&quot;Test A - chạy đầu tiên&quot;);
+        }
+    }
+}
+
+</code></pre>
+<h3 id="testfactory"><a class="header" href="#testfactory">@TestFactory</a></h3>
+<ul>
+<li>
+<p>@TestFactory dùng để tạo test động (Dynamic Test) thay vì test cố định.</p>
+</li>
+<li>
+<p>Tạo test dựa vào giá trị động, phụ thuộc vào runtime, tức là test sẽ không cố định</p>
+</li>
+<li>
+<p>Các phương thức phải trả về Collection<DynamicTest> hoặc Stream<DynamicTest>.</p>
+<ul>
+<li>Collection<DynamicTest>
+<ul>
+<li>Là một tập hợp (list, set, v.v.) chứa nhiều DynamicTest.</li>
+<li>Dùng khi số lượng test đã biết trước và không cần xử lý theo luồng (stream).</li>
+</ul>
+</li>
+<li>Stream<DynamicTest>:
+<ul>
+<li>Dùng khi số lượng test chưa biết trước (lấy từ API, file, database, v.v.).</li>
+<li>Dùng .map() để biến đổi dữ liệu thành test động.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Test API lấy danh sách user từ server</strong></p>
+</li>
+</ul>
+<pre><code class="language-java">import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DynamicTest;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
+import java.util.stream.Stream;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ApiTest {
+
+    // Giả sử đây là API call thực tế (thay bằng logic thực tế của bạn)
+    List&lt;String&gt; getUsersFromApi() {
+        return List.of(&quot;alice&quot;, &quot;bob&quot;, &quot;charlie&quot;); // Dữ liệu có thể thay đổi mỗi lần chạy
+    }
+
+    @TestFactory
+    Stream&lt;DynamicTest&gt; testUserApi() {
+        List&lt;String&gt; users = getUsersFromApi();
+
+        return users.stream()
+                .map(user -&gt; DynamicTest.dynamicTest(&quot;Kiểm tra user: &quot; + user,
+                        () -&gt; assertTrue(user.length() &gt; 2, &quot;User quá ngắn: &quot; + user)));
+    }
+}
+
+</code></pre>
+<ul>
+<li>Test với dữ liệu từ Database</li>
+</ul>
+<pre><code class="language-java">import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DynamicTest;
+import java.util.List;
+import java.util.stream.Stream;
+import static org.junit.jupiter.api.Assertions.*;
+
+class DatabaseTest {
+
+    // Giả sử đây là phương thức lấy dữ liệu từ DB (thay bằng truy vấn thực tế)
+    List&lt;String&gt; getUsernamesFromDatabase() {
+        return List.of(&quot;admin&quot;, &quot;guest&quot;, &quot;root&quot;); // Dữ liệu có thể thay đổi mỗi lần test
+    }
+
+    @TestFactory
+    Stream&lt;DynamicTest&gt; validateDatabaseUsers() {
+        List&lt;String&gt; usernames = getUsernamesFromDatabase();
+
+        return usernames.stream()
+                .map(username -&gt; DynamicTest.dynamicTest(&quot;Kiểm tra username: &quot; + username,
+                        () -&gt; assertFalse(username.isEmpty(), &quot;Username không được rỗng&quot;)));
+    }
+}
+
+</code></pre>
+<h3 id="testtemplate"><a class="header" href="#testtemplate">@TestTemplate</a></h3>
+<h3 id="testinstance"><a class="header" href="#testinstance">@TestInstance</a></h3>
+<h3 id="displayname"><a class="header" href="#displayname">@DisplayName</a></h3>
+<h3 id="displaynamegeneration"><a class="header" href="#displaynamegeneration">@DisplayNameGeneration</a></h3>
+<h3 id="nested"><a class="header" href="#nested">@Nested</a></h3>
+<h3 id="autoclose"><a class="header" href="#autoclose">@AutoClose</a></h3>
+<h3 id="tempdir"><a class="header" href="#tempdir">@TempDir</a></h3>
+<h3 id="extendwith"><a class="header" href="#extendwith">@ExtendWith</a></h3>
+<h3 id="registerextension"><a class="header" href="#registerextension">@RegisterExtension</a></h3>
 
                     </main>
 

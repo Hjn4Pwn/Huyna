@@ -178,8 +178,16 @@ mvn versions:display-plugin-updates
 
 mvn clean package
 
-</code></pre>
+mvn clean install # sau khi update version trong pom.xml
 
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th><strong>Lệnh</strong></th><th><strong>Chức năng</strong></th><th><strong>Khi nào dùng?</strong></th><th><strong>Khác biệt chính</strong></th></tr></thead><tbody>
+<tr><td><code>mvn clean install -U</code></td><td>Xóa build cũ, biên dịch lại toàn bộ, chạy test, đóng gói, cài vào local repo, và tải lại dependencies mới nhất</td><td>Khi muốn làm mới toàn bộ project và cập nhật dependencies</td><td>Giúp <strong>làm sạch</strong> và <strong>cập nhật dependency mới nhất</strong></td></tr>
+<tr><td><code>mvn dependency:tree</code></td><td>Hiển thị cây dependency</td><td>Khi debug xung đột version hoặc kiểm tra dependency nào kéo theo thư viện nào</td><td>Chỉ hiển thị thông tin, không build code</td></tr>
+<tr><td><code>mvn install</code></td><td>Biên dịch, chạy test, đóng gói, cài vào local repo</td><td>Khi muốn tái sử dụng thư viện trong local project khác</td><td>Không xóa <code>target/</code>, không tải lại dependencies mới nhất</td></tr>
+<tr><td><code>mvn test</code></td><td>Chạy tất cả unit test</td><td>Khi chỉ muốn kiểm tra unit test mà không build lại code</td><td>Không biên dịch lại, không tạo JAR/WAR</td></tr>
+</tbody></table>
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
