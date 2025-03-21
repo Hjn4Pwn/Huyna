@@ -192,7 +192,50 @@
       &lt;version&gt;5.12.1&lt;/version&gt;
     &lt;/dependency&gt;
 
+    &lt;!-- Hỗ trợ test tham số hóa --&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
+      &lt;artifactId&gt;junit-jupiter-params&lt;/artifactId&gt;
+      &lt;version&gt;5.12.1&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;!-- Thư viện commons-lang3 là một phần của Apache Commons, cung cấp nhiều tiện ích cho Java
+    giúp xử lý chuỗi (String), số (Number), mảng (Array), đối tượng (Object), thời gian (Date/Time)
+    một cách dễ dàng. --&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
+      &lt;artifactId&gt;commons-lang3&lt;/artifactId&gt;
+      &lt;version&gt;3.17.0&lt;/version&gt;
+    &lt;/dependency&gt;
+
+
   &lt;/dependencies&gt;
+
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.5.2&lt;/version&gt;
+        &lt;dependencies&gt;
+          &lt;dependency&gt;
+            &lt;groupId&gt;me.fabriciorby&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-surefire-junit5-tree-reporter&lt;/artifactId&gt;
+            &lt;version&gt;0.1.0&lt;/version&gt;
+          &lt;/dependency&gt;
+        &lt;/dependencies&gt;
+        &lt;configuration&gt;
+          &lt;reportFormat&gt;plain&lt;/reportFormat&gt;
+          &lt;consoleOutputReporter&gt;
+            &lt;disable&gt;true&lt;/disable&gt;
+          &lt;/consoleOutputReporter&gt;
+          &lt;statelessTestsetInfoReporter
+            implementation=&quot;org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter&quot; /&gt;
+        &lt;/configuration&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+
 &lt;/project&gt;
 </code></pre>
 <ul>
@@ -545,14 +588,243 @@ class DatabaseTest {
 
 </code></pre>
 <h3 id="testtemplate"><a class="header" href="#testtemplate">@TestTemplate</a></h3>
-<h3 id="testinstance"><a class="header" href="#testinstance">@TestInstance</a></h3>
+<ul>
+<li>@TestTemplate không phải là một test đơn lẻ, mà là một mẫu (template) để chạy nhiều test động.</li>
+<li>Không tự chạy, mà cần một Provider (<strong>TestTemplateInvocationContextProvider</strong>) để quyết định số lần chạy và dữ liệu nào sẽ dùng trong mỗi lần chạy.</li>
+</ul>
+<pre><code class="language-java">package com.example;
+
+import org.junit.jupiter.api.TestTemplate;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.Extension;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.ParameterResolver;
+import org.junit.jupiter.api.extension.TestTemplateInvocationContext;
+import org.junit.jupiter.api.extension.TestTemplateInvocationContextProvider;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class FruitTest {
+
+    // Danh sách trái cây hợp lệ
+    private final List&lt;String&gt; fruits = Arrays.asList(&quot;apple&quot;, &quot;banana&quot;, &quot;lemon&quot;);
+
+    @TestTemplate
+    @ExtendWith(MyTestTemplateInvocationContextProvider.class)
+    void testTemplate(String fruit) {
+        System.out.println(&quot;🔍 Kiểm tra: &quot; + fruit);
+        assertTrue(fruits.contains(fruit), &quot;⚠️ Lỗi: &quot; + fruit + &quot; không có trong danh sách!&quot;);
+    }
+}
+
+// Provider cung cấp dữ liệu test
+// Đây là một JUnit 5 Extension dùng để tạo test động.
+// Xác định test chạy bao nhiêu lần và dữ liệu test là gì
+class MyTestTemplateInvocationContextProvider implements TestTemplateInvocationContextProvider {
+    // Xác nhận test có thể chạy
+    // Cho phép JUnit chạy @TestTemplate.
+    @Override
+    public boolean supportsTestTemplate(ExtensionContext context) {
+        return true;
+    }
+
+    // Quyết định số lần chạy test
+    @Override
+    public Stream&lt;TestTemplateInvocationContext&gt; provideTestTemplateInvocationContexts(
+            ExtensionContext context) {
+        return Stream.of(invocationContext(&quot;apple&quot;), invocationContext(&quot;banana&quot;));
+    }
+    //  Định nghĩa test context
+    //  Tạo một lần chạy test với giá trị parameter (apple hoặc banana).
+    private TestTemplateInvocationContext invocationContext(String parameter) {
+        return new TestTemplateInvocationContext() {
+            // JUnit sẽ gọi getDisplayName để lấy tên cho mỗi lần chạy của test.
+            @Override
+            public String getDisplayName(int invocationIndex) {
+                return parameter; // Đặt tên test theo loại trái cây
+            }
+
+//           JUnit gọi getAdditionalExtensions() để lấy các extension cần thiết.
+            // Vì testTemplate(String fruit) có một tham số String fruit.
+            // JUnit cần biết làm sao để truyền giá trị vào tham số fruit.
+            // ParameterResolver sẽ giúp inject giá trị vào tham số fruit.
+            @Override
+            public List&lt;Extension&gt; getAdditionalExtensions() {
+                return Collections.singletonList(new ParameterResolver() {
+                    // Kiểm tra xem test có cần tham số kiểu String không.
+                    @Override
+                    public boolean supportsParameter(ParameterContext parameterContext,
+                                                     ExtensionContext extensionContext) {
+                        return parameterContext.getParameter().getType().equals(String.class);
+                    }
+
+                    // Trả về parameter (&quot;apple&quot;, &quot;banana&quot;) để inject vào test.
+                    @Override
+                    public Object resolveParameter(ParameterContext parameterContext,
+                                                   ExtensionContext extensionContext) {
+                        return parameter; // Truyền giá trị cho test
+                    }
+                });
+            }
+        };
+    }
+}
+
+</code></pre>
 <h3 id="displayname"><a class="header" href="#displayname">@DisplayName</a></h3>
+<ul>
+<li>Không có displayName: nó show method name</li>
+<li><a href="https://maven.apache.org/surefire/maven-surefire-plugin/examples/junit-platform.html">plugin</a></li>
+</ul>
+<pre><code class="language-sh">
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] |
+[INFO] +-- com.example.CalculatorTest
+[INFO] | +-- [OK] testAdd - 0.037 ss
+[INFO] | +-- [OK] testAddWithNegativeNumbers - 0.001 ss
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.572 s
+[INFO] Finished at: 2025-03-20T14:52:28+07:00
+[INFO] ------------------------------------------------------------------------
+</code></pre>
+<ul>
+<li>Có thì:</li>
+</ul>
+<pre><code class="language-sh">[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] |
+[INFO] +-- com.example.CalculatorTest
+[INFO] | +-- [OK] My Test Case 1 - 0.029 ss
+[INFO] | +-- [OK] My Test Case 2 - 0.002 ss
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.634 s
+[INFO] Finished at: 2025-03-20T14:53:30+07:00
+[INFO] ------------------------------------------------------------------------
+
+</code></pre>
 <h3 id="displaynamegeneration"><a class="header" href="#displaynamegeneration">@DisplayNameGeneration</a></h3>
+<pre><code class="language-java">import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+class CalculatorTest {
+
+    @Test
+    void test_addition() {
+        // Đây sẽ tự động trở thành &quot;test addition&quot;
+    }
+
+    @Test
+    void test_subtraction() {
+        // Đây sẽ tự động trở thành &quot;test subtraction&quot;
+    }
+}
+
+</code></pre>
+<ul>
+<li>Giúp thay thế các dấu gạch dưới (_) trong tên method bằng dấu cách ( ).</li>
+<li>Như vậy, tên method test_addition() sẽ được hiển thị là &quot;test addition&quot;.</li>
+</ul>
 <h3 id="nested"><a class="header" href="#nested">@Nested</a></h3>
+<ul>
+<li>@Nested được dùng để nhóm các test case vào trong các class con.</li>
+</ul>
+<pre><code class="language-java">import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+class CalculatorTest {
+
+    @Nested
+    class AdditionTests {
+
+        @Test
+        void test_addition() {
+            int result = 1 + 1;
+            assert(result == 2);
+        }
+    }
+
+    @Nested
+    class SubtractionTests {
+
+        @Test
+        void test_subtraction() {
+            int result = 2 - 1;
+            assert(result == 1);
+        }
+    }
+}
+
+</code></pre>
 <h3 id="autoclose"><a class="header" href="#autoclose">@AutoClose</a></h3>
+<ul>
+<li>Giúp tự động đóng tài nguyên khi test hoàn thành, tránh rò rỉ tài nguyên.</li>
+</ul>
+<pre><code class="language-java">import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.AutoClose;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AutoCloseDemo {
+
+    @AutoClose
+    WebClient webClient = new WebClient(); // WebClient sẽ được tự động đóng
+
+    String serverUrl = &quot;http://example.com&quot;; // Địa chỉ của server
+
+    @Test
+    void getProductList() {
+        // Dùng WebClient để kết nối với server và kiểm tra phản hồi
+        assertEquals(200, webClient.get(serverUrl + &quot;/products&quot;).getResponseStatus());
+    }
+}
+
+
+</code></pre>
 <h3 id="tempdir"><a class="header" href="#tempdir">@TempDir</a></h3>
+<ul>
+<li>Annotation này tạo thư mục tạm thời (temporary directory) dành riêng cho mỗi test. Dùng để tạo file tạm mà không cần tự quản lý.</li>
+</ul>
+<pre><code class="language-java">@Test
+void writeItemsToFile(@TempDir Path tempDir) throws IOException {
+    Path file = tempDir.resolve(&quot;test.txt&quot;);
+
+    new ListWriter(file).write(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+
+    assertEquals(singletonList(&quot;a,b,c&quot;), Files.readAllLines(file));
+}
+</code></pre>
 <h3 id="extendwith"><a class="header" href="#extendwith">@ExtendWith</a></h3>
+<ul>
+<li>Annotation này mở rộng khả năng của JUnit bằng cách cho phép sử dụng extensions (các tiện ích mở rộng như mock, logging, hay rule).</li>
+</ul>
 <h3 id="registerextension"><a class="header" href="#registerextension">@RegisterExtension</a></h3>
+<ul>
+<li>RegisterExtension nó chỉ apply cho những instance của các test cụ thể chứ không apply cho toàn bộ class với tất cả các test.</li>
+</ul>
 
                     </main>
 
