@@ -1,0 +1,930 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Mockito - Hjn4 Blog</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/additional.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../homepage.html">HOME - Huy Na</a></li><li class="chapter-item affix "><li class="part-title">AWS</li><li class="chapter-item "><a href="../../blogs/AWS/job.html">Requirements For Job</a></li><li class="chapter-item "><a href="../../blogs/AWS/EC2.html">Computing Services - EC2</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAM.html">Identity and Access Management -IAM</a></li><li class="chapter-item "><a href="../../blogs/AWS/S3.html">Simple Storage Service - S3</a></li><li class="chapter-item "><a href="../../blogs/AWS/LoadBalancing-Autoscaling.html">Load Balancing and Autoscaling</a></li><li class="chapter-item "><a href="../../blogs/AWS/RDS.html">Relational Database Service - RDS</a></li><li class="chapter-item "><a href="../../blogs/AWS/DynamoDB.html">Database Services - No SQL - DynamoDB</a></li><li class="chapter-item "><a href="../../blogs/AWS/Lambda.html">Serverless Lambda</a></li><li class="chapter-item "><a href="../../blogs/AWS/VPC.html">Networking Service - VPC, Peering, Endpoint</a></li><li class="chapter-item "><a href="../../blogs/AWS/Gateway_Cognito.html">API Gateway & Cognito</a></li><li class="chapter-item "><a href="../../blogs/AWS/CloudFront.html">Content Delivery Service (CDN) - CloudFront</a></li><li class="chapter-item "><a href="../../blogs/AWS/Route_53.html">Domain Name System - Route 53</a></li><li class="chapter-item "><a href="../../blogs/AWS/Monitor_Auditing.html">Monitoring and Auditing - CloudWatch, CloudTrail</a></li><li class="chapter-item "><a href="../../blogs/AWS/Mess.html">Messaging Service - SNS, SQS, SES</a></li><li class="chapter-item "><a href="../../blogs/AWS/Event_Bridge.html">Event Bridge</a></li><li class="chapter-item "><a href="../../blogs/AWS/Elastic_Beanstalk.html">Elastic Beanstalk</a></li><li class="chapter-item "><a href="../../blogs/AWS/Container_Service.html">Container Service - ECS, ECR</a></li><li class="chapter-item "><a href="../../blogs/AWS/IAC_CloudFormation.html">Infra as Code - CloudFormation</a></li><li class="chapter-item "><a href="../../blogs/AWS/Backup_Recovery.html">Backup and Recovery</a></li><li class="chapter-item "><a href="../../blogs/AWS/Sec.html">Security Services</a></li><li class="chapter-item affix "><li class="part-title">Javascript</li><li class="chapter-item "><a href="../../blogs/JS/eng.html">Eng</a></li><li class="chapter-item "><a href="../../blogs/JS/basic.html">Basic Concepts 1</a></li><li class="chapter-item "><a href="../../blogs/JS/dom.html">DOM</a></li><li class="chapter-item "><a href="../../blogs/JS/basic2.html">Basic Concepts 2</a></li><li class="chapter-item "><a href="../../blogs/JS/jquery.html">jQuery</a></li><li class="chapter-item affix "><li class="part-title">Java</li><li class="chapter-item "><a href="../../blogs/Java/setup_env.html">Setup Environment</a></li><li class="chapter-item "><a href="../../blogs/Java/basic.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/Java/Maven.html">Maven</a></li><li class="chapter-item "><a href="../../blogs/Java/FreeMarker.html">FreeMarker</a></li><li class="chapter-item "><a href="../../blogs/Java/UnitTest.html">Unit Test</a></li><li class="chapter-item expanded "><a href="../../blogs/Java/Mockito.html" class="active">Mockito</a></li><li class="chapter-item affix "><li class="part-title">Others</li><li class="chapter-item "><a href="../../blogs/Others/Netconf_Yang.html">Netconf/YANG protocol</a></li><li class="chapter-item affix "><li class="part-title">PHP</li><li class="chapter-item "><a href="../../blogs/PHP/setup_env.html">Setup Environment</a></li><li class="chapter-item "><a href="../../blogs/PHP/basic.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/PHP/mysqli.html">MySQLi</a></li><li class="chapter-item "><a href="../../blogs/PHP/sort_algorithms.html">Sort Algorithms</a></li><li class="chapter-item "><a href="../../blogs/PHP/hackerrank_algorithms.html">Hackerrank</a></li><li class="chapter-item "><a href="../../blogs/PHP/Interview.html">Interview</a></li><li class="chapter-item "><a href="../../blogs/PHP/oop.html">OOP</a></li><li class="chapter-item "><a href="../../blogs/PHP/dsa.html">DSA</a></li><li class="chapter-item affix "><li class="part-title">Laravel</li><li class="chapter-item "><a href="../../blogs/Laravel/setup_env.html">Setup Environment</a></li><li class="chapter-item "><a href="../../blogs/Laravel/artisanCommand.html">Artisan Command</a></li><li class="chapter-item "><a href="../../blogs/Laravel/Takenote.html">Take note 1</a></li><li class="chapter-item "><a href="../../blogs/Laravel/Takenote2.html">Take note 2</a></li><li class="chapter-item "><a href="../../blogs/Laravel/Takenote3.html">Take note 3</a></li><li class="chapter-item "><a href="../../blogs/Laravel/Takenote4.html">Take note 4</a></li><li class="chapter-item "><a href="../../blogs/Laravel/advance_concepts.html">Advance Concepts</a></li><li class="chapter-item "><a href="../../blogs/Laravel/database.html">Database</a></li><li class="chapter-item "><a href="../../blogs/Laravel/explain_functions.html">Explain Functions</a></li><li class="chapter-item "><a href="../../blogs/Laravel/Interview.html">Basic Concepts</a></li><li class="chapter-item affix "><li class="part-title">WordPress</li><li class="chapter-item "><a href="../../blogs/Wordpress/basic.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/Wordpress/plugin_dev.html">Plugin Development</a></li><li class="chapter-item affix "><li class="part-title">Kubernetes</li><li class="chapter-item "><a href="../../blogs/Kubernetes/session1.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/commands.html">Practice on KodeKloud</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/minkube_deployment.html">MiniKube Deployment</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/data_volume.html">Manage Data & Volumes</a></li><li class="chapter-item "><a href="../../blogs/Kubernetes/network.html">Network</a></li><li class="chapter-item affix "><li class="part-title">Linux + Git</li><li class="chapter-item "><a href="../../blogs/Linux/bandit.html">Bandit challenge</a></li><li class="chapter-item "><a href="../../blogs/Linux/command_session_1.html">Command session 1</a></li><li class="chapter-item "><a href="../../blogs/Linux/git_command.html">Git command</a></li><li class="chapter-item "><a href="../../blogs/Linux/ssh.html">SSH</a></li><li class="chapter-item "><a href="../../blogs/Linux/conda.html">Conda</a></li><li class="chapter-item affix "><li class="part-title">Docker</li><li class="chapter-item "><a href="../../blogs/Docker/tips.html">Some docker tips for CTF</a></li><li class="chapter-item "><a href="../../blogs/Docker/get_started.html">Basic Docker</a></li><li class="chapter-item "><a href="../../blogs/Docker/image_container.html">Images & Containers: The Core Building Blocks</a></li><li class="chapter-item "><a href="../../blogs/Docker/dockerfile_write.html">Dockerfile</a></li><li class="chapter-item "><a href="../../blogs/Docker/docker_network.html">Docker Network</a></li><li class="chapter-item "><a href="../../blogs/Docker/Volume.html">Volume</a></li><li class="chapter-item "><a href="../../blogs/Docker/Docker_Compose.html">Docker Compose</a></li><li class="chapter-item affix "><li class="part-title">Terraform</li><li class="chapter-item "><a href="../../blogs/Terraform/overview.html">Overview</a></li><li class="chapter-item "><a href="../../blogs/Terraform/functional_pro.html">Functional Programming</a></li><li class="chapter-item "><a href="../../blogs/Terraform/Module_create_VPC.html">Terraform Module: Create VPC on AWS</a></li><li class="chapter-item affix "><li class="part-title">Jenkins</li><li class="chapter-item "><a href="../../blogs/Jenkins/install_by_docker.html">Install Jenkins By Docker</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/link_git_jenkins.html">Link git with jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/pipline_github_jenkins.html">Pipeline jenkinsfile with github</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_jenkins.html">Link gitlab with Jenkins</a></li><li class="chapter-item "><a href="../../blogs/Jenkins/gitlab_dockerhub.html">Gitlab-dockerhub-pipeline</a></li><li class="chapter-item affix "><li class="part-title">CSS</li><li class="chapter-item "><a href="../../blogs/CSS/basic.html">Basic Concepts</a></li><li class="chapter-item "><a href="../../blogs/CSS/flexbox.html">Flexbox CSS</a></li><li class="chapter-item "><a href="../../blogs/CSS/BEM.html">BEM</a></li><li class="chapter-item "><a href="../../blogs/CSS/responsive.html">Resposive</a></li><li class="chapter-item "><a href="../../blogs/CSS/tranform_sitsion_anima.html">Transform - Transition - Animation</a></li><li class="chapter-item affix "><li class="part-title">Client-side scripting</li><li class="chapter-item "><a href="../../blogs/Intern/HTML.html">HTML</a></li><li class="chapter-item "><a href="../../blogs/Intern/CSS.html">CSS</a></li><li class="chapter-item affix "><li class="part-title">Python</li><li class="chapter-item "><a href="../../blogs/Python/RE.html">Regular Expression</a></li><li class="chapter-item "><a href="../../blogs/Python/Automation_1.html">Automation with Python 1</a></li><li class="chapter-item affix "><li class="part-title">Bash script</li><li class="chapter-item "><a href="../../blogs/Bash_script/Variables_Environment.html">Shell Variables and Environment</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Conditionals_Execution.html">Conditionals Execution</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Bash_Loops.html">Bash Loops & Function</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Shell_Redirection.html">Shell Redirection & Pipes and Filters</a></li><li class="chapter-item "><a href="../../blogs/Bash_script/Interactive_Scripts.html">Interactive Scripts</a></li><li class="chapter-item affix "><li class="part-title">System and Network Administration</li><li class="chapter-item "><a href="../../blogs/Network/basic_network_1.html">Basic Network 1</a></li><li class="chapter-item affix "><li class="part-title">PWN</li><li class="chapter-item "><a href="../../blogs/PWN/Emporium_ROP.html">Rop Emporium</a></li><li class="chapter-item "><a href="../../blogs/PWN/pwnableTW.html">Pwnable.tw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pico_CTF.html">Pwn_PicoCTF</a></li><li class="chapter-item "><a href="../../blogs/PWN/PWN_from_blabla.html">Pwn from blabla</a></li><li class="chapter-item affix "><li class="part-title">ROP Emporium</li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2win_challenge.html">ret2win - chall 1</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/split_challenge.html">split - chall 2</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/callme_challenge.html">callme - chall 3</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/write4_challenge.html">write4 - chall 4</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/badchars_challenge.html">badchars - chall 5</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/pivot_challenge.html">pivot - chall 7</a></li><li class="chapter-item "><a href="../../blogs/PWN/ROP_Emporium/ret2csu_challenge.html">ret2csu - chall 8</a></li><li class="chapter-item affix "><li class="part-title">Pwnable.tw</li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/start_challenge.html">start</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/orw_challenge.html">orw</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/calc_challenge.html">calc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/3x17_challenge.html">3x17</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/dubblesort_challenge.html">dubblesort</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/silver_bullet_challenge.html">silver_bullet</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwnable_tw/applestore_challenge.html">applestore</a></li><li class="chapter-item affix "><li class="part-title">Pwn_Pico</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/herelibc_challenge.html">Here's a libc</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/hijacking_challenge.html">hijacking</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/fermat_strins_challenge.html">fermat_strings</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_Pico/Guessgame_challenge.html">Guessgame</a></li><li class="chapter-item affix "><li class="part-title">Pwn from blabla</li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/handy_shellcode_challenge.html">handy shellcode</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/pwn07_challenge.html">pwn07 - ret2libc vs ROP</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/got_formatstring_challenge.html">GOT overwrite with format string</a></li><li class="chapter-item "><a href="../../blogs/PWN/Pwn_from_blabla/training.html">training</a></li><li class="chapter-item affix "><li class="part-title">Assembly</li><li class="chapter-item "><a href="../../blogs/Assembly/ASM.html">ASM</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_1.html">Session 1</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_2.html">Session 2</a></li><li class="chapter-item "><a href="../../blogs/Assembly/Session_3.html">Session 3</a></li><li class="chapter-item affix "><li class="part-title">RE_PicoCTF</li><li class="chapter-item "><a href="../../blogs/RE/RE.html">RE</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_0.html">ARMssembly 0</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_1.html">ARMssembly 1</a></li><li class="chapter-item "><a href="../../blogs/RE_Pico/ARMssembly_2.html">ARMssembly 2</a></li><li class="chapter-item affix "><li class="part-title">Documents from everywhere</li><li class="chapter-item "><a href="../../blogs/Documents/troubleshooting.html">Troubleshooting</a></li><li class="chapter-item "><a href="../../blogs/Documents/study.html">Study</a></li><li class="chapter-item "><a href="../../blogs/Documents/important_concept.html">Important Concepts</a></li><li class="chapter-item "><a href="../../blogs/Documents/basic_SQL.html">MySQL</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Hjn4 Blog</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="mockito"><a class="header" href="#mockito">Mockito</a></h1>
+<ul>
+<li>
+<p><a href="https://www.baeldung.com/mockito-series">ref</a></p>
+</li>
+<li>
+<p><a href="https://www.baeldung.com/mockito-junit-5-extension">ref</a></p>
+</li>
+<li>
+<p><strong>pom.xml</strong></p>
+</li>
+</ul>
+<pre><code class="language-xml">&lt;!-- mockito-core --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.mockito&lt;/groupId&gt;
+    &lt;artifactId&gt;mockito-core&lt;/artifactId&gt;
+    &lt;version&gt;5.11.0&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+
+&lt;!-- cầu nối giữa Mockito và JUnit 5. --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.mockito&lt;/groupId&gt;
+    &lt;artifactId&gt;mockito-junit-jupiter&lt;/artifactId&gt;
+    &lt;version&gt;5.12.0&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="simple-example"><a class="header" href="#simple-example">Simple Example</a></h2>
+<ul>
+<li><strong>UserDao Interface</strong>:</li>
+</ul>
+<pre><code class="language-java">package com.example;
+
+//  Data Access Object (DAO) interface for User
+public interface UserDao {
+    boolean createUser(String email);
+}
+
+</code></pre>
+<ul>
+<li><strong>UserService Interface</strong>:</li>
+</ul>
+<pre><code class="language-java">package com.example;
+
+public interface UserService {
+    String createUser(String email);
+}
+
+</code></pre>
+<ul>
+<li><strong>UserServiceImpl class implement</strong>:</li>
+</ul>
+<pre><code class="language-java">package com.example;
+
+class UserServiceImpl implements UserService {
+    private final UserDao userDao;
+
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    @Override
+    public String createUser(String email) {
+        boolean created = userDao.createUser(email);
+        return created ? &quot;SUCCESS&quot; : &quot;FAILED&quot;;
+    }
+}
+
+</code></pre>
+<ul>
+<li>
+<p>Cả 2 Interface: <strong>UserDao</strong> và <strong>UserService</strong> đều có một method là <strong>createUser</strong> tuy nhiên nó khác vai trò nhau, <strong><em>dù cùng &quot;một việc&quot; → vẫn cần tách theo vai trò</em></strong></p>
+<ul>
+<li><strong>UserDao</strong> sẽ làm việc với database, chịu trách nhiệm <em>insert/update</em> với DB, chỉ chạy câu lệnh SQL.</li>
+<li><strong>UserService</strong> sẽ thực hiện xử lý logic (<em>Có thể kiểm tra email, gửi mail, log, gọi service khác</em>) → rồi gọi DAO → rồi xử lý kết quả.</li>
+</ul>
+</li>
+<li>
+<p><strong>Dùng interface như biến:</strong> Đây là nguyên tắc lập trình hướng interface – rất quan trọng trong Java. Viết code không phụ thuộc vào class cụ thể, giúp code dễ thay đổi, dễ test, dễ mở rộng</p>
+</li>
+</ul>
+<pre><code class="language-java">UserDao userDao = new MySQLUserDao(); // ✅ OK nếu MySQLUserDao implements UserDao
+
+
+// ----------------------------------------------------
+// trong code này UserDao sẽ được truyền từ bên ngoài vào
+public class UserServiceImpl implements UserService {
+    private final UserDao userDao;
+
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
+}
+// ------
+
+// Có class nào đó implement interface UserDao
+UserDao dao = new MySQLUserDao();
+
+// Truyền vào constructor
+UserService service = new UserServiceImpl(dao);
+
+</code></pre>
+<ul>
+<li><strong>UserServiceImplTest</strong>:</li>
+</ul>
+<pre><code class="language-java">package com.example;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class UserServiceImplTest {
+
+    @Mock
+    private UserDao userDao;
+
+    @InjectMocks
+    private UserServiceImpl userService;
+
+    @Test
+    void createUser_shouldReturnSuccess_whenUserCreatedSuccessfully() {
+        when(userDao.createUser(&quot;test@example.com&quot;)).thenReturn(true);
+        assertEquals(&quot;SUCCESS&quot;, userService.createUser(&quot;test@example.com&quot;));
+    }
+
+    @Test
+    void createUser_shouldReturnFailed_whenUserAlreadyExists() {
+        when(userDao.createUser(&quot;existing@example.com&quot;)).thenReturn(false);
+        assertEquals(&quot;FAILED&quot;, userService.createUser(&quot;existing@example.com&quot;));
+    }
+}
+
+</code></pre>
+<ul>
+<li>
+<p><strong>@ExtendWith(MockitoExtension.class)</strong>: Nói với JUnit 5 rằng: “Tôi muốn dùng Mockito trong file test này”</p>
+</li>
+<li>
+<p>Tạo một object giả (mock) để thay cho class hoặc interface thật, Giúp bạn không cần implement UserDao, nhưng vẫn có thể gọi createUser():</p>
+</li>
+</ul>
+<pre><code class="language-java">@Mock
+private UserDao userDao;
+</code></pre>
+<ul>
+<li>Tạo object thật (UserServiceImpl), tự động inject các mock như userDao vào constructor hoặc field:
+InjectMocks tạo userService và inject mock userDao vào constructor</li>
+</ul>
+<pre><code class="language-java">@InjectMocks
+private UserServiceImpl userService;
+
+// userService = new UserServiceImpl(userDao); // 👈 userDao là mock
+
+</code></pre>
+<ul>
+<li><strong>when(userDao.createUser(&quot;test@example.com&quot;)).thenReturn(true);</strong>: giả lập logic trả về true</li>
+</ul>
+<h2 id="test-doubles-in-unit-testing"><a class="header" href="#test-doubles-in-unit-testing">Test Doubles in Unit Testing</a></h2>
+<ul>
+<li>
+<p><strong>Dummy Object</strong>:</p>
+<ul>
+<li>Là object chỉ để truyền cho đủ tham số, không dùng đến</li>
+<li>Không có annotation nào</li>
+<li>Tự nhận biết nó là dummy</li>
+<li>Mockito, JUnit không thể biết đó là dummy</li>
+</ul>
+</li>
+<li>
+<p><strong>Fake Object</strong>:</p>
+<ul>
+<li>Là class tự viết, có logic thật đơn giản</li>
+<li>Framework không tự nhận ra đó là &quot;fake&quot;</li>
+<li>Được sử dụng trong môi trường test, không phù hợp cho môi trường thật.</li>
+</ul>
+</li>
+<li>
+<p><strong>Stub Object</strong>:</p>
+<ul>
+<li>Stub là object được lập trình trả về một kết quả cố định khi gọi một method — không có logic phức tạp.</li>
+<li>Stub là cách dùng, Mock là loại object → <strong>Một mock có thể dùng để stub hoặc để verify</strong></li>
+<li><strong><em>when(userDao.createUser(&quot;abc@gmail.com&quot;)).thenReturn(true);</em></strong>: Đây là hành vi stub, nhưng object userDao vẫn là mock</li>
+</ul>
+</li>
+<li>
+<p><strong>Mock Object</strong>:</p>
+<ul>
+<li>Là object giả dùng để kiểm tra hành vi: có được gọi đúng không, với đúng tham số không.</li>
+<li>Có thể được framework nhận biết</li>
+<li>Dùng @Mock hoặc Mockito.mock(...)</li>
+<li>Có thể verify được hành vi: verify(...)</li>
+<li>Có thể stub: when(...).thenReturn(...)</li>
+</ul>
+</li>
+<li>
+<p><strong>Spy Object</strong>:</p>
+<ul>
+<li>Spy là bản lai giữa object thật và mock, nghĩa là nó gọi được method thật, nhưng vẫn có thể ghi đè 1 phần hành vi nếu muốn.</li>
+<li>Dùng @Spy hoặc spy(obj)</li>
+<li>Framework nhận biết rõ ràng</li>
+<li>Cho phép gọi method thật, nhưng vẫn có thể stub hoặc verify</li>
+</ul>
+</li>
+</ul>
+<h2 id="basic"><a class="header" href="#basic">Basic</a></h2>
+<h3 id="enable-mockito-annotations"><a class="header" href="#enable-mockito-annotations">Enable Mockito Annotations</a></h3>
+<pre><code class="language-java">@ExtendWith(MockitoExtension.class)
+public class MockitoAnnotationUnitTest {
+    ...
+}
+
+// ---------------------
+</code></pre>
+<h3 id="mock"><a class="header" href="#mock">@Mock</a></h3>
+<ul>
+<li>@Mock tự động tạo một đối tượng giả lập của List.</li>
+</ul>
+<pre><code class="language-java">@Mock
+List&lt;String&gt; mockedList;
+
+@Test
+public void whenUseMockAnnotation_thenMockIsInjected() {
+    mockedList.add(&quot;one&quot;);
+    Mockito.verify(mockedList).add(&quot;one&quot;);
+    assertEquals(0, mockedList.size());
+
+    Mockito.when(mockedList.size()).thenReturn(100);
+    assertEquals(100, mockedList.size());
+}
+
+</code></pre>
+<h3 id="donotmock"><a class="header" href="#donotmock">@DoNotMock</a></h3>
+<ul>
+<li>Được sử dụng để chỉ ra rằng một lớp hoặc giao diện không nên bị mock trong quá trình kiểm thử.</li>
+</ul>
+<pre><code class="language-java">import org.mockito.exceptions.misusing.DoNotMock;
+
+@DoNotMock(reason = &quot;Use a real instance instead&quot;)
+public abstract class NotToMock {
+    // Lớp này không nên bị mock trong các kiểm thử.
+}
+
+</code></pre>
+<h3 id="spy"><a class="header" href="#spy">@Spy</a></h3>
+<ul>
+<li>Được sử dụng để theo dõi (spy) một đối tượng thật và có thể thay đổi hành vi của các phương thức cụ thể mà không ảnh hưởng đến các phương thức khác.</li>
+</ul>
+<pre><code class="language-java">@Test
+public void whenNotUseSpyAnnotation_thenCorrect() {
+    List&lt;String&gt; spyList = Mockito.spy(new ArrayList&lt;String&gt;());
+
+    spyList.add(&quot;one&quot;);
+    spyList.add(&quot;two&quot;);
+
+    Mockito.verify(spyList).add(&quot;one&quot;);
+    Mockito.verify(spyList).add(&quot;two&quot;);
+
+    assertEquals(2, spyList.size());
+
+    Mockito.doReturn(100).when(spyList).size();
+    assertEquals(100, spyList.size());
+}
+
+// ------------------------------------------------------
+@Spy
+List&lt;String&gt; spiedList = new ArrayList&lt;String&gt;();
+
+@Test
+public void whenUseSpyAnnotation_thenSpyIsInjectedCorrectly() {
+    spiedList.add(&quot;one&quot;);
+    spiedList.add(&quot;two&quot;);
+
+    Mockito.verify(spiedList).add(&quot;one&quot;);
+    Mockito.verify(spiedList).add(&quot;two&quot;);
+
+    assertEquals(2, spiedList.size());
+
+    Mockito.doReturn(100).when(spiedList).size();
+    assertEquals(100, spiedList.size());
+}
+
+</code></pre>
+<h3 id="captor"><a class="header" href="#captor">@Captor</a></h3>
+<ul>
+<li>Được sử dụng để tạo ra một ArgumentCaptor, giúp bắt các đối số truyền vào trong các phương thức gọi.</li>
+<li>@Captor tự động tạo một ArgumentCaptor, giúp việc kiểm tra đối số của phương thức dễ dàng hơn.</li>
+</ul>
+<pre><code class="language-java">@Test
+public void whenNotUseCaptorAnnotation_thenCorrect() {
+    List mockList = Mockito.mock(List.class);
+    ArgumentCaptor&lt;String&gt; arg = ArgumentCaptor.forClass(String.class);
+
+    mockList.add(&quot;one&quot;);
+    Mockito.verify(mockList).add(arg.capture());
+
+    assertEquals(&quot;one&quot;, arg.getValue());
+}
+
+// -------------------------------------------
+@Mock
+List mockedList;
+
+@Captor
+ArgumentCaptor&lt;String&gt; argCaptor;
+
+@Test
+public void whenUseCaptorAnnotation_thenTheSame() {
+    mockedList.add(&quot;one&quot;);
+    Mockito.verify(mockedList).add(argCaptor.capture());
+
+    assertEquals(&quot;one&quot;, argCaptor.getValue());
+}
+
+</code></pre>
+<h3 id="injectmocks"><a class="header" href="#injectmocks">@InjectMocks</a></h3>
+<ul>
+<li>
+<p>@InjectMocks được sử dụng để tự động chèn các đối tượng mock vào đối tượng được kiểm thử. Đây là một cách rất hữu ích để kiểm tra các lớp có sự phụ thuộc vào các đối tượng mock.</p>
+</li>
+<li>
+<p>Trong khi kiểm thử, các lớp thường phụ thuộc vào các đối tượng khác (gọi là dependency) để thực hiện các hành động của chúng.</p>
+</li>
+</ul>
+<pre><code class="language-java">public class MyDictionary {
+    private Map&lt;String, String&gt; wordMap;
+
+    public MyDictionary() {
+        wordMap = new HashMap&lt;&gt;(); // Tạo map mới trong constructor
+    }
+
+    public void add(String word, String meaning) {
+        wordMap.put(word, meaning);
+    }
+
+    public String getMeaning(String word) {
+        return wordMap.get(word);
+    }
+}
+// ------------------------------------------------\
+@Mock
+Map&lt;String, String&gt; wordMap;  // Tạo mock cho Map
+
+@InjectMocks
+MyDictionary dic = new MyDictionary();  // Tạo đối tượng cần kiểm thử và tự động chèn mock vào
+
+@Test
+public void whenUseInjectMocksAnnotation_thenCorrect() {
+    // Khi gọi phương thức get trên mock, mock sẽ trả về &quot;aMeaning&quot;
+    Mockito.when(wordMap.get(&quot;aWord&quot;)).thenReturn(&quot;aMeaning&quot;);
+
+    // Kiểm tra phương thức getMeaning trong MyDictionary
+    assertEquals(&quot;aMeaning&quot;, dic.getMeaning(&quot;aWord&quot;));
+}
+
+</code></pre>
+<h3 id="injecting-a-mock-into-a-spy"><a class="header" href="#injecting-a-mock-into-a-spy">Injecting a Mock Into a Spy</a></h3>
+<ul>
+<li>Mockito không hỗ trợ tự động tiêm các mock vào đối tượng spy thông qua @InjectMocks, như trong trường hợp với @Mock.</li>
+<li>Cần phải tiêm (inject) các mock vào spy một cách thủ công.</li>
+</ul>
+<pre><code class="language-java">import java.util.Map;
+
+public class MyDictionary {
+    private Map&lt;String, String&gt; wordMap;
+
+    // Constructor để tiêm dependency
+    public MyDictionary(Map&lt;String, String&gt; wordMap) {
+        this.wordMap = wordMap;
+    }
+
+    // Phương thức thêm từ và nghĩa vào map
+    public void add(String word, String meaning) {
+        wordMap.put(word, meaning);
+    }
+
+    // Phương thức lấy nghĩa của từ
+    public String getMeaning(String word) {
+        return wordMap.get(word);
+    }
+}
+
+</code></pre>
+<pre><code class="language-java">import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class MyDictionaryTest {
+
+    @Mock
+    Map&lt;String, String&gt; wordMap;  // Mock đối tượng Map
+
+    @Spy
+    MyDictionary spyDic;  // Đối tượng MyDictionary sẽ được spy
+
+    // Trước khi chạy các test, khởi tạo các mock và spy
+    @BeforeEach
+    public void init() {
+        MockitoAnnotations.openMocks(this);  // Khởi tạo Mockito annotations
+
+        // Tạo đối tượng spy của MyDictionary và tiêm mock vào thông qua constructor
+        spyDic = Mockito.spy(new MyDictionary(wordMap));
+    }
+
+    @Test
+    public void whenUseSpyAndMock_thenCorrect() {
+        // Định nghĩa hành vi mock, khi gọi wordMap.get(&quot;aWord&quot;) sẽ trả về &quot;aMeaning&quot;
+        Mockito.when(wordMap.get(&quot;aWord&quot;)).thenReturn(&quot;aMeaning&quot;);
+
+        // Kiểm tra phương thức getMeaning trong MyDictionary
+        String meaning = spyDic.getMeaning(&quot;aWord&quot;);
+
+        // Kiểm tra xem kết quả có đúng không
+        assertEquals(&quot;aMeaning&quot;, meaning);
+    }
+}
+
+
+</code></pre>
+<h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
+<h3 id="mockitoany"><a class="header" href="#mockitoany">Mockito.any()</a></h3>
+<ul>
+<li>Khớp bất kỳ đối số nào</li>
+</ul>
+<pre><code class="language-java">package com.example;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@ExtendWith(MockitoExtension.class)
+public class MethodTest {
+
+    @Mock
+    List&lt;String&gt; mockList;
+
+    @Test
+    public void testAnyMethod() {
+        // Stubbing phương thức add với bất kỳ đối số nào
+        when(mockList.add(any(String.class))).thenReturn(true);
+
+        // Kiểm tra
+        assertTrue(mockList.add(&quot;Test&quot;));
+        assertTrue(mockList.add(&quot;Another Test&quot;));
+    }
+}
+
+
+</code></pre>
+<h3 id="mockitodoreturnwhen"><a class="header" href="#mockitodoreturnwhen">Mockito.doReturn().when()</a></h3>
+<ul>
+<li>
+<p>Dùng cho spy để tránh lỗi <strong>NullPointerException</strong></p>
+</li>
+<li>
+<p><strong>NullPointerException</strong>: là một loại lỗi trong Java xảy ra khi cố gắng thực hiện một thao tác trên một đối tượng có giá trị là null.</p>
+</li>
+<li>
+<p>Ví dụ như với <strong>when(...).thenReturn(...)</strong> với Spy: nó sẽ gọi phương thức thật của đối tượng spy trước khi áp dụng hành vi giả lập (stubbing). Điều này có thể gây ra lỗi NullPointerException nếu phương thức thật đang stub có thao tác với các đối tượng hoặc dữ liệu có giá trị null hoặc chưa được khởi tạo đầy đủ.</p>
+</li>
+<li>
+<p>Do đó sử dụng <strong>doReturn().when()</strong> với spy thay vì <strong>when(...).thenReturn(...)</strong>. Lý do là <strong>doReturn().when()</strong> sẽ không gọi phương thức thực mà chỉ thay đổi hành vi của phương thức mà không thực thi bất kỳ logic nào bên trong phương thức đó.</p>
+</li>
+</ul>
+<pre><code class="language-java">import org.junit.jupiter.api.Test;
+import org.mockito.Spy;
+import static org.mockito.Mockito.*;
+
+public class SpyTest {
+
+    @Spy
+    OrderService orderService = new OrderService();
+
+    @Test
+    public void testCalculateTotal() {
+        // Khi gọi calculateTotal(), spy sẽ gọi phương thức thật
+        when(orderService.calculateTotal()).thenReturn(10);  // Sẽ gây NPE nếu không khởi tạo 'items'
+
+        // Lỗi: NullPointerException vì items chưa được khởi tạo
+        System.out.println(orderService.calculateTotal());
+    }
+}
+
+// -------------------------------------------------------------------
+import org.junit.jupiter.api.Test;
+import org.mockito.Spy;
+import static org.mockito.Mockito.*;
+
+public class SpyTest {
+
+    @Spy
+    OrderService orderService = new OrderService();
+
+    @Test
+    public void testCalculateTotal() {
+        // Đảm bảo không gọi phương thức thật, tránh NPE
+        doReturn(10).when(orderService).calculateTotal();
+
+        // Kiểm tra phương thức đã trả về giá trị giả lập
+        System.out.println(orderService.calculateTotal());  // Output: 10
+    }
+}
+
+</code></pre>
+<h3 id="mockitotimes"><a class="header" href="#mockitotimes">Mockito.times()</a></h3>
+<ul>
+<li>Kiểm tra số lần gọi một phương thức</li>
+</ul>
+<pre><code class="language-java">import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.*;
+import java.util.List;
+
+@ExtendWith(MockitoExtension.class)
+public class TimesMethodTest {
+
+    @Mock
+    List&lt;String&gt; mockList;
+
+    @Test
+    public void testTimes() {
+        mockList.add(&quot;one&quot;);
+        mockList.add(&quot;two&quot;);
+
+        // Kiểm tra phương thức add() đã được gọi 2 lần
+        verify(mockList, times(2)).add(anyString());
+    }
+}
+
+</code></pre>
+<h3 id="mockitoatleast"><a class="header" href="#mockitoatleast">Mockito.atLeast()</a></h3>
+<ul>
+<li>Kiểm tra phương thức được gọi ít nhất một số lần</li>
+</ul>
+<pre><code class="language-java">import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.*;
+import java.util.List;
+
+@ExtendWith(MockitoExtension.class)
+public class AtLeastMethodTest {
+
+    @Mock
+    List&lt;String&gt; mockList;
+
+    @Test
+    public void testAtLeast() {
+        mockList.add(&quot;one&quot;);
+        mockList.add(&quot;two&quot;);
+
+        // Kiểm tra phương thức add() đã được gọi ít nhất 1 lần
+        verify(mockList, atLeast(1)).add(anyString());
+    }
+}
+
+</code></pre>
+<h3 id="mockitoatmost"><a class="header" href="#mockitoatmost">Mockito.atMost()</a></h3>
+<ul>
+<li>Kiểm tra phương thức không được gọi quá một số lần</li>
+</ul>
+<pre><code class="language-java">package com.example;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+
+@ExtendWith(MockitoExtension.class)
+public class MethodTest {
+
+    @Mock
+    List&lt;String&gt; mockList;
+
+    @Test
+    public void testAtMost() {
+        mockList.add(&quot;one&quot;);
+        mockList.add(&quot;two&quot;);
+        mockList.add(&quot;three&quot;);
+
+        // Kiểm tra phương thức add() không được gọi quá 3 lần
+        verify(mockList, atMost(3)).add(anyString());
+    }
+}
+
+</code></pre>
+<h3 id="mockitonever"><a class="header" href="#mockitonever">Mockito.never()</a></h3>
+<pre><code class="language-java">// Kiểm tra phương thức không được gọi
+verify(mockList, never()).add(anyString());
+</code></pre>
+<h3 id="mockitotimeout"><a class="header" href="#mockitotimeout">Mockito.timeout()</a></h3>
+<ul>
+<li>Kiểm tra số lần gọi phương thức trong một khoảng thời gian nhất định</li>
+</ul>
+<pre><code class="language-java">verify(mockList, timeout(100).times(1)).add(anyString());
+
+</code></pre>
+<h3 id="mockitoreset"><a class="header" href="#mockitoreset">Mockito.reset()</a></h3>
+<ul>
+<li>Reset lại mock để sử dụng lại trong các kiểm thử khác</li>
+</ul>
+<pre><code class="language-java">public void testReset() {
+    mockList.add(&quot;one&quot;);
+
+    // Reset lại mock, không còn tương tác nào
+    reset(mockList);
+
+    // Sau khi reset, mockList không giữ lại trạng thái cũ
+    verify(mockList, never()).add(&quot;one&quot;);
+}
+</code></pre>
+<h3 id="mockitoverifynomoreinteractions"><a class="header" href="#mockitoverifynomoreinteractions">Mockito.verifyNoMoreInteractions()</a></h3>
+<ul>
+<li>Kiểm tra không có tương tác nào khác ngoài các phương thức đã xác nhận</li>
+</ul>
+<pre><code class="language-java">package com.example;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+
+@ExtendWith(MockitoExtension.class)
+public class MethodTest {
+
+    @Mock
+    List&lt;String&gt; mockList;
+
+    @Test
+    public void testNoMoreInteractions() {
+        mockList.add(&quot;one&quot;);
+        mockList.add(&quot;two&quot;);
+
+        // Kiểm tra rằng không có tương tác nào khác ngoài các phương thức add
+        verify(mockList).add(&quot;one&quot;);
+        verify(mockList).add(&quot;two&quot;);
+
+        verifyNoMoreInteractions(mockList);
+    }
+}
+
+</code></pre>
+<h3 id="mockitodothrow"><a class="header" href="#mockitodothrow">Mockito.doThrow()</a></h3>
+<ul>
+<li>Định nghĩa hành vi ném ngoại lệ khi phương thức của mock được gọi</li>
+<li>Mô phỏng hành vi ném ngoại lệ (exception) khi gọi phương thức trên đối tượng mock bằng cách sử dụng <strong>doThrow()</strong> trong Mockito. Cụ thể, trong ví dụ này, phương thức <strong>remove()</strong> của List sẽ ném ra một ngoại lệ <strong>UnsupportedOperationException</strong> khi được gọi.</li>
+</ul>
+<pre><code class="language-java">package com.example;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+
+@ExtendWith(MockitoExtension.class)
+public class MethodTest {
+
+    @Mock
+    List&lt;String&gt; mockList;
+
+    @Test
+    public void testDoThrow() {
+        // Định nghĩa rằng khi gọi phương thức remove() trên mockList sẽ ném ngoại lệ
+        doThrow(new UnsupportedOperationException(&quot;Unsupported operation&quot;)).when(mockList).remove(anyInt());
+
+        // Kiểm tra ngoại lệ
+        UnsupportedOperationException thrown = assertThrows(UnsupportedOperationException.class, () -&gt; {
+            mockList.remove(0);
+        });
+
+        assertEquals(&quot;Unsupported operation&quot;, thrown.getMessage());
+    }
+}
+
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../blogs/Java/UnitTest.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../blogs/Others/Netconf_Yang.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../blogs/Java/UnitTest.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../blogs/Others/Netconf_Yang.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
