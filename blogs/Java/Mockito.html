@@ -172,9 +172,45 @@
 <p><a href="https://www.baeldung.com/mockito-junit-5-extension">ref</a></p>
 </li>
 <li>
-<p><strong>pom.xml</strong></p>
+<p><a href="#pomxml">pom.xml</a></p>
+</li>
+<li>
+<p><a href="#simple-example">Simple Example</a></p>
+</li>
+<li>
+<p><a href="#test-doubles-in-unit-testing">Test Doubles in Unit Testing</a></p>
+</li>
+<li>
+<p><a href="#basic">Basic</a></p>
+<ul>
+<li><a href="#enable-mockito-annotations">Enable Mockito Annotations</a></li>
+<li><a href="#mock">@Mock</a></li>
+<li><a href="#donotmock">@DoNotMock</a></li>
+<li><a href="#spy">@Spy</a></li>
+<li><a href="#captor">@Captor</a></li>
+<li><a href="#injectmocks">@InjectMocks</a></li>
+<li><a href="#assertion">Assertion</a></li>
+<li><a href="#injecting-a-mock-into-a-spy">Injecting a Mock Into a Spy</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#functions">Functions</a></p>
+<ul>
+<li><a href="#whenthenreturn">when().thenReturn()</a></li>
+<li><a href="#mockitoany">Mockito.any()</a></li>
+<li><a href="#mockitodoreturnwhen">Mockito.doReturn().when()</a></li>
+<li><a href="#mockitotimes">Mockito.times()</a></li>
+<li><a href="#mockitoatleast">Mockito.atLeast()</a></li>
+<li><a href="#mockitoatmost">Mockito.atMost()</a></li>
+<li><a href="#mockitonever">Mockito.never()</a></li>
+<li><a href="#mockitotimeout">Mockito.timeout()</a></li>
+<li><a href="#mockitoreset"> Mockito.reset()</a></li>
+<li><a href="#mockitoverifynomoreinteractions">Mockito.verifyNoMoreInteractions()</a></li>
+<li><a href="#mockitodothrow">Mockito.doThrow()</a></li>
+</ul>
 </li>
 </ul>
+<h2 id="pomxml"><a class="header" href="#pomxml">pom.xml</a></h2>
 <pre><code class="language-xml">&lt;!-- mockito-core --&gt;
 &lt;dependency&gt;
     &lt;groupId&gt;org.mockito&lt;/groupId&gt;
@@ -484,6 +520,90 @@ public void whenUseCaptorAnnotation_thenTheSame() {
 }
 
 </code></pre>
+<ul>
+<li><strong><em>Ví dụ:</em></strong></li>
+</ul>
+<pre><code class="language-java">// ---------------------capture() - getValue()
+package com.example;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+public class MethodTest {
+
+    @Mock
+    List&lt;String&gt; mockList;
+
+    @Captor
+    ArgumentCaptor&lt;String&gt; captor;
+
+    @Test
+    public void testCaptureAndGetValue() {
+        // Gọi phương thức add() với đối số &quot;Test&quot;
+        mockList.add(&quot;Test&quot;);
+
+        // Bắt đối số được truyền vào phương thức add()
+        verify(mockList).add(captor.capture());
+
+        // Lấy giá trị của đối số đã được bắt
+        assertEquals(&quot;Test&quot;, captor.getValue());
+    }
+}
+
+// ------------------getAllValues()
+
+package com.example;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+public class MethodTest {
+
+    @Mock
+    List&lt;String&gt; mockList;
+
+    @Captor
+    ArgumentCaptor&lt;String&gt; captor;
+
+    @Test
+    public void testGetAllValues() {
+        // Gọi phương thức add() nhiều lần với các đối số khác nhau
+        mockList.add(&quot;First&quot;);
+        mockList.add(&quot;Second&quot;);
+
+        // Bắt tất cả các đối số được truyền vào phương thức add()
+        verify(mockList, times(2)).add(captor.capture());
+
+        // Lấy tất cả các giá trị đã bắt được
+        assertEquals(2, captor.getAllValues().size());
+        assertEquals(&quot;First&quot;, captor.getAllValues().get(0));
+        assertEquals(&quot;Second&quot;, captor.getAllValues().get(1));
+    }
+}
+
+</code></pre>
 <h3 id="injectmocks"><a class="header" href="#injectmocks">@InjectMocks</a></h3>
 <ul>
 <li>
@@ -522,6 +642,98 @@ public void whenUseInjectMocksAnnotation_thenCorrect() {
 
     // Kiểm tra phương thức getMeaning trong MyDictionary
     assertEquals(&quot;aMeaning&quot;, dic.getMeaning(&quot;aWord&quot;));
+}
+
+</code></pre>
+<h3 id="assertion"><a class="header" href="#assertion">Assertion</a></h3>
+<ul>
+<li>Kiểm tra rằng kết quả thực tế của phương thức kiểm thử khớp với kết quả kỳ vọng.</li>
+</ul>
+<pre><code class="language-java">package com.example;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class MethodTest {
+
+    @Test
+    public void testAddition() {
+        int result = 2 + 3;
+        assertEquals(5, result);
+    }
+
+    @Test
+    public void testPositiveCondition() {
+        int result = 5 + 5;
+        assertTrue(result &gt; 0);
+    }
+
+    @Test
+    public void testNotNull() {
+        String str = &quot;Hello, JUnit!&quot;;
+        assertNotNull(str);
+    }
+
+    @Test
+    public void testNull() {
+        String str = null;
+        assertNull(str);
+    }
+
+    // Phương thức test để kiểm tra ngoại lệ
+    @Test
+    public void testDivideByZero() {
+        Calculator calculator = new Calculator();
+
+        // Kiểm tra phương thức khi chia cho 0 có ném ra ArithmeticException không
+        ArithmeticException exception = assertThrows(ArithmeticException.class, () -&gt; {
+            calculator.divide(10, 0); // Phương thức chia cho 0
+        });
+
+        // Kiểm tra thông điệp của ngoại lệ
+        assertEquals(&quot;Cannot divide by zero&quot;, exception.getMessage());
+    }
+
+    // Phương thức test để kiểm tra mảng có giống nhau không
+    @Test
+    public void testArrayEquality() {
+        int[] expected = {1, 2, 3};
+        int[] actual = {1, 2, 3};
+
+        // Kiểm tra xem hai mảng có giống nhau không
+        assertArrayEquals(expected, actual);
+    }
+
+    // Phương thức test để kiểm tra danh sách (Iterable) có giống nhau không
+    @Test
+    public void testIterableEquality() {
+        List&lt;String&gt; expected = Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+        List&lt;String&gt; actual = Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+
+        assertIterableEquals(expected, actual);
+    }
+
+    // Phương thức test để kiểm tra ngoại lệ ném ra khi chia cho 0
+    @Test
+    public void testThrowException() {
+        // Kiểm tra xem khi chia cho 0 có ném ra ngoại lệ không
+        assertThrows(ArithmeticException.class, () -&gt; {
+            int result = 10 / 0; // Chia cho 0 sẽ gây ra ArithmeticException
+        });
+    }
+}
+
+// Lớp Calculator để kiểm thử
+class Calculator {
+    public int divide(int a, int b) {
+        if (b == 0) {
+            throw new ArithmeticException(&quot;Cannot divide by zero&quot;);
+        }
+        return a / b;
+    }
 }
 
 </code></pre>
@@ -595,6 +807,7 @@ public class MyDictionaryTest {
 
 </code></pre>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
+<h3 id="whenthenreturn"><a class="header" href="#whenthenreturn">when().thenReturn()</a></h3>
 <h3 id="mockitoany"><a class="header" href="#mockitoany">Mockito.any()</a></h3>
 <ul>
 <li>Khớp bất kỳ đối số nào</li>
